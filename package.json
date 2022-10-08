@@ -8,7 +8,8 @@
   "scripts": {
     "start": "nodemon src/index.ts --exec ts-node",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:create": "yarn typeorm migration:generate -n"
   },
   "keywords": [
     "redis",

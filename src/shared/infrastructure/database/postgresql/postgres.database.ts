@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { DataSource, LoggerOptions } from "typeorm";
 import { DatabaseConnection } from "../../../domain/interfaces/database.interface";
 import config from "../../config";
 
@@ -10,7 +10,7 @@ type PostgresConfig = {
   password: any;
   database: any;
   rol: any;
-  logging: string;
+  logging: LoggerOptions;
   maxQueryExecutionTime: number;
 };
 
@@ -35,8 +35,7 @@ export class PostgresDatabase implements DatabaseConnection {
     this.appDataSource = new DataSource({
       ...this.postgresConfig,
       type: "postgres",
-      synchronize: true,
-      logging: false,
+      synchronize: false,
       entities: ["src/**/**.entity{.ts,.js}"],
       migrations: [
         "src/shared/infrastructure/database/postgresql/migrations/**/*{.ts,.js}",
