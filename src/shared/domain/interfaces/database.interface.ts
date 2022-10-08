@@ -1,3 +1,5 @@
-export interface DatabaseConnection {
+export interface DatabaseConnection<T> {
   connect(): any;
+
+  getConnection(): T;
 }

@@ -8,16 +8,23 @@
   "scripts": {
     "start": "nodemon src/index.ts --exec ts-node",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "migration:create": "yarn typeorm migration:generate -n"
+    "setup": "docker-compose up -d",
+    "typeorm": "ts-node $(yarn bin typeorm) -d src/shared/infrastructure/database/postgresql/postgres.database.ts",
+    "db:migrate": "yarn typeorm migration:run",
+    "db:migrate:revert": "yarn typeorm migration:revert",
+    "db:migration:generate": "yarn typeorm migration:generate"
   },
   "keywords": [
+    "typescript",
+    "clean",
+    "architecture",
+    "DDD",
+    "TDD",
     "redis",
     "typeorm",
     "postgres"
   ],
   "dependencies": {
-    "body-parser": "^1.19.1",
     "dotenv": "^16.0.3",
     "envalid": "^7.3.1",
     "express": "^4.17.2",

@@ -6,3 +6,4 @@ tmp/
 temp/
 .yarn-error.log
 .env
+migrations/

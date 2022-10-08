@@ -8,13 +8,11 @@ module.exports = {
   synchronize: false,
   logging: "all",
   entities: ["src/**/**.entity{.ts,.js}"],
-  migrations: [
-    "src/shared/infrastructure/database/postgresql/migrations/**/*{.ts,.js}",
-  ],
+  migrations: ["migrations/*{.ts,.js}"],
   subscribers: [
     "src/shared/infrastructure/database/postgresql/subscribers/**/*{.ts,.js}",
   ],
   cli: {
-    migrationsDir: "src/shared/infrastructure/database/postgresql/migrations/",
+    migrationsDir: "migrations/",
   },
 };
