@@ -36,7 +36,7 @@ export class PostgresDatabase implements DatabaseConnection {
     this.appDataSource = new DataSource({
       ...this.postgresConfig,
       type: "postgres",
-      synchronize: false,
+      synchronize: true,
       logging: false,
       entities: [User],
       migrations: [

@@ -52,7 +52,7 @@ services:
     restart: always
 
   redis:
-    container_name: redis_container
+    container_name: redis-${PROJECT_NAME}
     image: bitnami/redis:6.2.7
     restart: always
     environment:
@@ -66,11 +66,12 @@ services:
     networks:
       - postgres
   redis-commander:
-    container_name: redis_commander_container
+    container_name: redis-commander-${PROJECT_NAME}
     image: rediscommander/redis-commander:latest
     restart: always
     environment:
-      REDIS_HOSTS: redis_container
+      REDIS_HOSTS: redis-${PROJECT_NAME}
+      REDIS_HOST: redis-${PROJECT_NAME}
       REDIS_PORT: redis:${REDIS_PORT}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       HTTP_USER: ${REDIS_COMMANDER_USER}

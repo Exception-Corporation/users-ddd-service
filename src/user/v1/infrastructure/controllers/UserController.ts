@@ -6,7 +6,8 @@ export class UserController {
 
   static async all(request: Request, response: Response) {
     try {
-      return User.find();
+      const users = await User.find();
+      return response.send(users);
     } catch (error) {
       console.info(error);
       return response.send(error);
@@ -15,7 +16,8 @@ export class UserController {
 
   static async one(request: Request, response: Response) {
     try {
-      return User.findOne(request.params.id as any);
+      const user = await User.findOneBy({ id: Number(request.params.id) });
+      return response.send({ user });
     } catch (error) {
       console.info(error);
       return response.send(error);
@@ -24,7 +26,8 @@ export class UserController {
 
   static async save(request: Request, response: Response) {
     try {
-      return User.save(request.body);
+      const user = await User.save(request.body);
+      return response.send(user);
     } catch (error) {
       console.info(error);
       return response.send(error);
@@ -34,9 +37,11 @@ export class UserController {
   static async remove(request: Request, response: Response) {
     try {
       let userToRemove = await User.findOneBy({
-        id: request.params.id as any,
+        id: Number(request.params.id),
       });
       if (userToRemove) await User.remove(userToRemove);
+
+      return response.send("User deleted");
     } catch (error) {
       console.info(error);
       return response.send(error);
