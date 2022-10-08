@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "../../../../user/v1/infrastructure/models/user.entity";
 import { DatabaseConnection } from "../../../domain/interfaces/database.interface";
 import config from "../../config";
 
@@ -38,7 +37,7 @@ export class PostgresDatabase implements DatabaseConnection {
       type: "postgres",
       synchronize: true,
       logging: false,
-      entities: [User],
+      entities: ["src/**/**.entity{.ts,.js}"],
       migrations: [
         "src/shared/infrastructure/database/postgresql/migrations/**/*{.ts,.js}",
       ],

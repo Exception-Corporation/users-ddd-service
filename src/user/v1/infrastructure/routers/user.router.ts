@@ -13,7 +13,7 @@ export class UserRouter extends RouterC<Router> {
     this.router.get(`${this.path}/getAll`, UserController.all);
     this.router.get(`${this.path}/get/:id`, UserController.one);
     this.router.post(`${this.path}`, UserController.save);
-    //this.router.put(`${this.path}/update/:id`, UserController.update);
+    this.router.put(`${this.path}/update/:id`, UserController.update);
     this.router.delete(`${this.path}/delete/:id`, UserController.remove);
   }
 
