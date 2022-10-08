@@ -6,6 +6,8 @@ import config from "../config";
 export class WatchLogger {
   // constructor
   private static logger: Logger = new LoggerMock();
+  //private static airBrake: AirBrakeLogger;
+  //private static dataDog: DataDogLogger = new DataDogLogger();
   // Logs
   static registerLog(logErrorMessage: logError) {
     this.logger.error(logErrorMessage);
