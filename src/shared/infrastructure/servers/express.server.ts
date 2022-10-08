@@ -7,11 +7,12 @@ import express, {
 import { Server } from "../../domain/interfaces/server.interface";
 import { UserRouter } from "../../../user/v1/infrastructure/routers/user.router";
 import config from "../config";
+import { Logger } from "../../domain/logger";
 
 export class Application implements Server<app> {
   private app: app;
 
-  constructor() {
+  constructor(private logger: Logger) {
     this.app = express();
     this.app.use(express.json());
     this.app.use((_req: Request, res: Response, next: NextFunction) => {
@@ -38,7 +39,7 @@ export class Application implements Server<app> {
       initialize: async () => {
         const { project } = config;
         this.app.listen(project.port, () => {
-          console.info(
+          this.logger.info(
             `Server [Express] listen on port: [${project.host}:${project.port}] in mode: ${project.mode}`
           );
         });

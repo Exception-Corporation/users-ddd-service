@@ -1,56 +1,55 @@
 import { Request, Response } from "express";
+import { BaseController } from "../../../../shared/infrastructure/config/base.controller";
 import { User } from "../models/user.entity";
 
-export class UserController {
-  private constructor() {}
+export class UserController extends BaseController {
+  constructor() {
+    super();
+  }
 
-  static async all(_req: Request, res: Response) {
+  async all(req: Request, res: Response) {
     try {
       const users = await User.find();
       return res.send(users);
     } catch (error) {
-      console.info(error);
-      return res.send(error);
+      return this.mapperException(res, error, req.body, [], "Users v1");
     }
   }
 
-  static async one(req: Request, res: Response) {
+  async one(req: Request, res: Response) {
     try {
       const user = await User.findOneBy({ id: Number(req.params.id) });
       return res.send({ user });
     } catch (error) {
-      console.info(error);
-      return res.send(error);
+      return this.mapperException(res, error, req.body, [], "Users v1");
     }
   }
 
-  static async save(req: Request, res: Response) {
+  async save(req: Request, res: Response) {
     try {
       const user = await User.save(req.body);
       return res.send(user);
     } catch (error) {
-      console.info(error);
-      return res.send(error);
+      return this.mapperException(res, error, req.body, [], "Users v1");
     }
   }
 
-  static async update(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-      const user = await User.findOneBy({ id: parseInt(id) });
+      const user = await User.findOneBy({ id: Number(id) });
       if (!user) return res.status(404).json({ message: "Not user found" });
 
-      const userUpdated = await User.update({ id: parseInt(id) }, req.body);
+      const userUpdated = await User.update({ id: Number(id) }, req.body);
 
       return res.status(200).send(userUpdated);
     } catch (error) {
-      console.info(error);
-      return res.status(500).json({ message: error });
+      return this.mapperException(res, error, req.body, [], "Users v1");
     }
   }
 
-  static async remove(req: Request, res: Response) {
+  async remove(req: Request, res: Response) {
     try {
       let userToRemove = await User.findOneBy({
         id: Number(req.params.id),
@@ -59,8 +58,7 @@ export class UserController {
 
       return res.send("User deleted");
     } catch (error) {
-      console.info(error);
-      return res.send(error);
+      return this.mapperException(res, error, req.body, [], "Users v1");
     }
   }
 }

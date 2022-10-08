@@ -1,5 +1,6 @@
 import { createClient, RedisClientType } from "redis";
 import { ICacheServer } from "../../domain/interfaces/cache.server";
+import { Logger } from "../../domain/logger";
 import config from "../config";
 
 const CACHE = config.cache.redis;
@@ -7,11 +8,11 @@ const CACHE = config.cache.redis;
 export class CacheService implements ICacheServer {
   private static instance: CacheService;
   private clients: Array<RedisClientType | undefined> = [];
-  private constructor() {}
+  private constructor(private logger: Logger) {}
 
-  static getInstance(): CacheService {
+  static getInstance(logger: Logger): CacheService {
     if (!CacheService.instance) {
-      CacheService.instance = new CacheService();
+      CacheService.instance = new CacheService(logger);
     }
     return CacheService.instance;
   }
@@ -27,18 +28,25 @@ export class CacheService implements ICacheServer {
       });
 
       this.clients[redisDB]?.on("ready", () =>
-        console.info(`Redis clients connected on port ${CACHE.port}`)
+        this.logger.info(`Redis clients connected on port ${CACHE.port}`)
       );
       this.clients[redisDB]?.on("reconnecting", () =>
-        console.warn("Redis clients reconnecting")
+        this.logger.warn("Redis clients reconnecting")
       );
       this.clients[redisDB]?.on("error", (err) =>
-        console.error("Redis clients error", err)
+        this.logger.error({
+          entityinfo: { class: `[${CacheService.name}]` },
+          level: "error",
+          message: "Redis client error",
+          module: "Redis",
+          type: "",
+          params: { redisDB },
+        })
       );
 
       await this.clients[redisDB]?.connect();
     } else {
-      console.warn("Redis clients already connected");
+      this.logger.warn("Redis clients already connected");
     }
   }
 
