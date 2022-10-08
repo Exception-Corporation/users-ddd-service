@@ -1,0 +1,92 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_ROL=${POSTGRES_ROL}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    networks:
+      - postgres
+    restart: always
+
+  postgres-test:
+    container_name: postgres_test_container
+    image: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_ROL=${POSTGRES_ROL}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/data/postgres
+    volumes:
+      - postgres-test:/data/postgres
+    ports:
+      - "${POSTGRES_PORT_TEST}:5432"
+    networks:
+      - postgres
+    restart: always
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+    ports:
+      - "${PGADMIN_PORT}:80"
+    networks:
+      - postgres
+    restart: always
+
+  redis:
+    container_name: redis_container
+    image: bitnami/redis:6.2.7
+    restart: always
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      # - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis:/var/lib/redis
+      - redis-config:/usr/local/etc/redis/redis.conf
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - postgres
+  redis-commander:
+    container_name: redis_commander_container
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      REDIS_HOSTS: redis_container
+      REDIS_PORT: redis:${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      HTTP_USER: ${REDIS_COMMANDER_USER}
+      HTTP_PASSWORD: ${REDIS_COMMANDER_PASSWORD}
+    ports:
+      - ${REDIS_COMMANDER_PORT}:8081
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  postgres-test:
+  pgadmin:
+  redis:
+  redis-config:
