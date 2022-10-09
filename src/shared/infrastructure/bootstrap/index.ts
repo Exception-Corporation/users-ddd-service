@@ -1,9 +1,9 @@
-import { StartModule } from "../../domain/interfaces/bootstrap";
-import { CacheService } from "../cache/redis.cache";
-import { PostgresDatabase } from "../database/postgresql/postgres.database";
-import { Application } from "../servers/express.server";
-import { LoggerMock } from "../logger/logger.mock";
-import { Logger } from "../../domain/logger";
+import { StartModule } from "@/shared/domain/interfaces/bootstrap";
+import { CacheService } from "@/shared/infrastructure/cache/redis.cache";
+import { PostgresDatabase } from "@/shared/infrastructure/database/postgresql/postgres.database";
+import { Application } from "@/shared/infrastructure/servers/express.server";
+import { LoggerMock } from "@/shared/infrastructure/logger/logger.mock";
+import { Logger } from "@/shared/domain/logger";
 
 export class SharedBootstrap implements StartModule {
   async init(): Promise<void> {

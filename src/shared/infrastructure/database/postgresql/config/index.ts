@@ -1,4 +1,4 @@
-import config from "../../../config";
+import config from "@/shared/infrastructure/config";
 
 const { postgres } = config.database;
 

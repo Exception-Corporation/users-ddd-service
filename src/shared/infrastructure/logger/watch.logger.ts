@@ -1,7 +1,7 @@
 // creat a class
-import { logError, Logger } from "../../domain/logger";
-import { LoggerMock } from "./logger.mock";
-import config from "../config";
+import { logError, Logger } from "@/shared/domain/logger";
+import { LoggerMock } from "@/shared/infrastructure/logger/logger.mock";
+import config from "@/shared/infrastructure/config";
 
 export class WatchLogger {
   // constructor

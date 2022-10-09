@@ -1,4 +1,4 @@
-import { WatchLogger } from "../logger/watch.logger";
+import { WatchLogger } from "@/shared/infrastructure/logger/watch.logger";
 
 type Exception = {
   module: string;

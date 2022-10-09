@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { BaseController } from "../../../../shared/infrastructure/config/base.controller";
-import { User } from "../models/user.entity";
+import { BaseController } from "@/shared/infrastructure/controller/base.controller";
+import { User } from "@/user/v1/infrastructure/models/user.entity";
 
 export class UserController extends BaseController {
   constructor() {

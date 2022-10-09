@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { DatabaseConnection } from "../../../domain/interfaces/database.interface";
-import { Logger } from "../../../domain/logger";
-import postgresConfig from "./config";
-import { PostgresConfig } from "./config/types";
+import { DatabaseConnection } from "@/shared/domain/interfaces/database.interface";
+import { Logger } from "@/shared/domain/logger";
+import postgresConfig from "@/shared/infrastructure/database/postgresql/config";
+import { PostgresConfig } from "@/shared/infrastructure/database/postgresql/config/types";
 
 export class PostgresDatabase implements DatabaseConnection<DataSource> {
   private appDataSource: DataSource;

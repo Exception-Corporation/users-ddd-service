@@ -4,10 +4,11 @@ import express, {
   Response,
   NextFunction,
 } from "express";
-import { Server } from "../../domain/interfaces/server.interface";
-import { UserRouter } from "../../../user/v1/infrastructure/routers/user.router";
-import config from "../config";
-import { Logger } from "../../domain/logger";
+import { Server } from "@/shared/domain/interfaces/server.interface";
+import { UserRouter } from "@/user/v1/infrastructure/routers/user.router";
+import config from "@/shared/infrastructure/config";
+import { Logger } from "@/shared/domain/logger";
+import { RequireContext } from "@/shared/infrastructure/auto-files/require.context";
 
 export class Application implements Server<app> {
   private app: app;
@@ -45,5 +46,9 @@ export class Application implements Server<app> {
         });
       },
     };
+  }
+
+  getRouters() {
+    return new RequireContext().getFiles("@/", true, /^((?!!+).)*router.ts$/);
   }
 }

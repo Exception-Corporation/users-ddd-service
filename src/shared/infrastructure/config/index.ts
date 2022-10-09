@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import validateEnv from "../utils/validateEnv.util";
+import validateEnv from "@/shared/infrastructure/utils/validateEnv.util";
 
 dotenv.config({});
 

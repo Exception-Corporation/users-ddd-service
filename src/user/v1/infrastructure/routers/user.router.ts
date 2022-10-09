@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { RouterC } from "../../../../shared/domain/class/router.class";
-import { UserController } from "../controllers/UserController";
+import { RouterC } from "@/shared/domain/class/router.class";
+import { UserController } from "@/user/v1/infrastructure/controllers/UserController";
 
 export class UserRouter extends RouterC<Router> {
   private router: Router = Router();

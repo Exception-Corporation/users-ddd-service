@@ -1,4 +1,4 @@
-import { logError, logSuccess, Logger } from "../../domain/logger";
+import { logError, logSuccess, Logger } from "@/shared/domain/logger";
 
 export class LoggerMock implements Logger {
   info(message: string): void {

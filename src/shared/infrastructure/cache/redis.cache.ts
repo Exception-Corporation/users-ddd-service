@@ -1,7 +1,7 @@
 import { createClient, RedisClientType } from "redis";
-import { ICacheServer } from "../../domain/interfaces/cache.server";
-import { Logger } from "../../domain/logger";
-import config from "../config";
+import { ICacheServer } from "@/shared/domain/interfaces/cache.server";
+import { Logger } from "@/shared/domain/logger";
+import config from "@/shared/infrastructure/config";
 
 const CACHE = config.cache.redis;
 
