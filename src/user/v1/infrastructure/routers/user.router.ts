@@ -33,6 +33,11 @@ export class UserRouter extends RouterC<Router> {
       `${this.path}/delete/:id`,
       this.controller.remove.bind(this.controller)
     );
+
+    this.router.post(
+      `${this.path}/login/`,
+      this.controller.login.bind(this.controller)
+    );
   }
 
   getRoutes(): Router {

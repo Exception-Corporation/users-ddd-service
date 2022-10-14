@@ -18,6 +18,9 @@ export class User extends BaseEntity {
   @Column()
   lastname!: string;
 
+  @Column()
+  username!: string;
+
   @Column({ unique: true })
   email!: string;
 
