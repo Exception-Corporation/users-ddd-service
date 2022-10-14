@@ -1,16 +1,3 @@
-## STOP POSSIBLE POSTGRES INSTANCE (MACOS)
-
-- brew services stop postgresql
-
-## COMMAND TO INITIALIZE TYPEORM WITH POSTGRESQL
-
-- npx typeorm init --database postgres --express
-
-## USED COMMANDS
-
-- yarn db:migration:generate migrations/initalUserTable
-- db:migrate
-
 # Challenge
 
 ![Image text](https://github.com/IrlandaCV/irlanda_castillo_vega_SkydropXNodeJS/blob/main/src/shared/infrastructure/layouts/workflow.png?raw=true)
@@ -49,9 +36,19 @@ cd irlanda_castillo_vega_SkydropXNodeJS
 yarn
 yarn containers:up # run the docker-compose
 yarn containers:down # remove the containers
+yarn db:migration:generate migrations/InitialConfig
+yarn db:migrate
 yarn yarn prod #compile typescript to javascript and run the api in production mode
 yarn dev #run the api in development mode with nodemon
 ```
+
+## STOP POSSIBLE POSTGRES INSTANCE (MACOS)
+
+- brew services stop postgresql
+
+## COMMAND TO INITIALIZE TYPEORM WITH POSTGRESQL (UNNECESSARY FOR YOU - DON'T RUN THIS COMMAND IN THIS PROJECT)
+
+- npx typeorm init --database postgres --express
 
 You are now good ready to go!! 👯
 
