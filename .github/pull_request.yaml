@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [synchronize, opened, reopened, ready_for_review]
+
+jobs:
+  skip-draft:
+    name: skip draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: fail on draft
+        if: github.event.pull_request.draft == true
+        run: echo "is a draft PR, failing..." && exit 1
+      - name: success
+        run: echo "is not a draft PR"
+
+  tests:
+    needs: skip-draft
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    container: node:lts
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2.1.6
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn build
+      # - name: Tests
+      #   run: yarn test
