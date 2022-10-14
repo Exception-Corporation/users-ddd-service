@@ -31,8 +31,8 @@ Now:
 # Steps to follow in sequential order
 
 ```bash
-git clone git@github.com:IrlandaCV/irlanda_castillo_vega_SkydropXNodeJS.git
-cd irlanda_castillo_vega_SkydropXNodeJS
+git clone git@github.com:Exception-Corporation/users-api.git
+cd users-api
 yarn
 yarn containers:up # run the docker-compose
 yarn containers:down # remove the containers
@@ -66,8 +66,8 @@ We use Docker as a utility tool, mainly for running a PostgresDB, which is the D
 ### Project management
 
 - [Challenge](http://localhost:4000)
-- [Github repo](https://github.com/IrlandaCV/irlanda_castillo_vega_SkydropXNodeJS)
-- [Github Actions](https://github.com/IrlandaCV/irlanda_castillo_vega_SkydropXNodeJS/actions)
+- [Github repo](https://github.com/Exception-Corporation/users-api)
+- [Github Actions](https://github.com/Exception-Corporation/users-api/actions)
 - TODO: Software Architecture
 - Clean Architecture
 - Hexagonal Architecture
@@ -89,7 +89,7 @@ The architecture follows the principles from Hexagonal Architecture, and the fin
 
 All the main code of the application lives under `src`
 
-### `labels/shared or any module`
+### `user/shared or any module`
 
 Under this directory lives all the main application. This root directory contains all the modules of the app, and inside of each module you can find the classic division `domain/application/infrastructure`.
 
