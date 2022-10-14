@@ -1,4 +1,3 @@
-import "module-alias/register";
 import { SharedBootstrap } from "@/shared/infrastructure/bootstrap";
 
 export const modules = [SharedBootstrap];
