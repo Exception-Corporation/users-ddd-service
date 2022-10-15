@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { SharedBootstrap } from "@/shared/infrastructure/bootstrap";
 
 export const modules = [SharedBootstrap];

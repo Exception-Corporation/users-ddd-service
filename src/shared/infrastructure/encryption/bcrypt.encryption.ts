@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 export class BcrypEncryption implements IEncrypt {
   private static instance: IEncrypt | undefined;
-  constructor() {}
+  private constructor() {}
 
   static getInstance() {
     if (this.instance) return this.instance;
