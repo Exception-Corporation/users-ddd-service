@@ -19,7 +19,7 @@ export class RequestAdapter implements IRequestAdapter {
     properties: Array<string> = []
   ): Promise<T> {
     if (!request) {
-      throw new DTOPropertiesError(properties);
+      throw new DTOPropertiesError(["user"]);
     }
 
     if (!Object.keys(request)) {
@@ -34,6 +34,22 @@ export class RequestAdapter implements IRequestAdapter {
     const invalidProperties: Array<string> = [];
 
     for (const property of properties) {
+      if (property.includes("OR")) {
+        const propertiesSplit = property.replace("OR:", "").split(",");
+
+        let count = 0;
+
+        propertiesSplit.forEach((propertyTo) => {
+          if (!(request as any)[propertyTo]) {
+            count++;
+          }
+        });
+
+        if (propertiesSplit.length == count)
+          invalidProperties.push(...propertiesSplit);
+        continue;
+      }
+
       if (!(request as any)[property]) invalidProperties.push(property);
     }
 

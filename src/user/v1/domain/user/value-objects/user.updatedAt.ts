@@ -1,4 +1,5 @@
 import { ValueObject } from "@/shared/domain/interfaces/value.object";
+import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
 
 export class UserUpdatedAt implements ValueObject<string | number> {
   constructor(private userUpdatedAt: string | number) {
@@ -15,7 +16,7 @@ export class UserUpdatedAt implements ValueObject<string | number> {
 
   validate(): void {
     if (!this.userUpdatedAt) {
-      throw new Error("User-UpdatedAt not valid");
+      throw new ValueObjectError("User-UpdatedAt not valid");
     }
   }
 

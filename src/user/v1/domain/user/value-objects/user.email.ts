@@ -1,22 +1,22 @@
 import { ValueObject } from "@/shared/domain/interfaces/value.object";
 import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
 
-export class UserFirstName implements ValueObject<string> {
-  constructor(private userFirstName: string) {
+export class UserEmail implements ValueObject<string> {
+  constructor(private userEmail: string) {
     this.validate();
   }
 
   valueOf(): string {
-    return this.userFirstName;
+    return this.userEmail;
   }
 
   fromPrimitive(value: string): ValueObject<string> {
-    return new UserFirstName(value);
+    return new UserEmail(value);
   }
 
   validate(): void {
-    if (!this.userFirstName) {
-      throw new ValueObjectError("User-first-name not valid");
+    if (!this.userEmail) {
+      throw new ValueObjectError("User-email not valid");
     }
   }
 

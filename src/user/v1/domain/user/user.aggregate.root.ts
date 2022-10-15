@@ -7,59 +7,73 @@ import { UserLastName } from "@/user/v1/domain/user/value-objects/user.last.name
 import { UserPassword } from "@/user/v1/domain/user/value-objects/user.password";
 import { UserUpdatedAt } from "@/user/v1/domain/user/value-objects/user.updatedAt";
 import { UserUsername } from "@/user/v1/domain/user/value-objects/user.username";
+import { UserEmail } from "@/user/v1/domain/user/value-objects/user.email";
+import { UserActive } from "@/user/v1/domain/user/value-objects/user.active";
 
-export type UserPrimitive = ReturnType<User["toPrimitives"]>;
+export type UserPrimitive<T = string> = Omit<
+  ReturnType<User["toPrimitives"]>,
+  "createdAt" | "updatedAt"
+> & {
+  createdAt: T;
+  updatedAt: T;
+};
 
 export class User extends AggregateRoot {
   constructor(
-    private userId: UserId,
-    private firstName: UserFirstName,
-    private lastName: UserLastName,
+    private id: UserId,
+    private firstname: UserFirstName,
+    private lastname: UserLastName,
     private username: UserUsername,
+    private email: UserEmail,
     private password: UserPassword,
     private age: UserAge,
+    private active: UserActive,
     private createdAt: UserCreatedAt,
     private updatedAt: UserUpdatedAt
   ) {
     super();
   }
 
-  static fromPrimitives(user: UserPrimitive) {
+  static fromPrimitives(user: UserPrimitive<Date | string>) {
     return new User(
-      new UserId(user.userId),
-      new UserFirstName(user.firstName),
-      new UserLastName(user.lastName),
+      new UserId(user.id),
+      new UserFirstName(user.firstname),
+      new UserLastName(user.lastname),
       new UserUsername(user.username),
+      new UserEmail(user.email),
       new UserPassword(user.password),
       new UserAge(user.age),
-      new UserCreatedAt(user.createdAt),
-      new UserUpdatedAt(user.updatedAt)
+      new UserActive(user.active),
+      new UserCreatedAt(user.createdAt.toString()),
+      new UserUpdatedAt(user.updatedAt.toString())
     );
   }
 
   toPrimitives() {
     return {
-      userId: this.userId.valueOf(),
-      firstName: this.firstName.valueOf(),
-      lastName: this.lastName.valueOf(),
+      id: this.id.valueOf(),
+      firstname: this.firstname.valueOf(),
+      lastname: this.lastname.valueOf(),
       username: this.username.valueOf(),
+      email: this.email.valueOf(),
       password: this.password.valueOf(),
       age: this.age.valueOf(),
+      active: this.active.valueOf(),
       createdAt: this.createdAt.valueOf(),
       updatedAt: this.updatedAt.valueOf(),
     };
   }
 
   getUserId(): UserId {
-    return this.userId;
+    return this.id;
   }
 
   getFirstName(): UserFirstName {
-    return this.firstName;
+    return this.firstname;
   }
 
   getLastName(): UserLastName {
-    return this.lastName;
+    return this.lastname;
   }
 
   getUsername(): UserUsername {
@@ -72,5 +86,13 @@ export class User extends AggregateRoot {
 
   getAge(): UserAge {
     return this.age;
+  }
+
+  getEmail(): UserEmail {
+    return this.email;
+  }
+
+  getActive(): UserActive {
+    return this.active;
   }
 }

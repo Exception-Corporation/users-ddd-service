@@ -1,4 +1,5 @@
 import { ValueObject } from "@/shared/domain/interfaces/value.object";
+import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
 
 export class UserId implements ValueObject<number> {
   constructor(private userId: number) {
@@ -14,8 +15,8 @@ export class UserId implements ValueObject<number> {
   }
 
   validate(): void {
-    if (!this.userId) {
-      throw new Error("User-id not valid");
+    if (this.userId < 0) {
+      throw new ValueObjectError("User-id not valid");
     }
   }
 

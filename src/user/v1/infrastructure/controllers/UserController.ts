@@ -1,10 +1,16 @@
 import { Request, Response } from "express";
 import { BaseController } from "@/shared/infrastructure/controller/base.controller";
-import { User } from "@/user/v1/infrastructure/models/user.entity";
-import { EncryptionService } from "@/shared/infrastructure/encryption";
 import { RequestAdapter } from "@/user/v1/infrastructure/adapters/";
 import { CreateUserDTO } from "@/user/v1/infrastructure/dtos/create.user.dto";
 import { LoginUserDTO } from "@/user/v1/infrastructure/dtos/login.user.dto";
+import { UserRepository } from "@/user/v1/infrastructure/repositories";
+import { UserId } from "@/user/v1/domain/user/value-objects/user.id";
+import { User, UserPrimitive } from "@/user/v1/domain/user/user.aggregate.root";
+import { UserNotFound } from "@/shared/domain/errors/domain-errors/UserNotFound";
+import { DTOPropertiesError } from "@/shared/domain/errors/domain-errors/DTOPropertiesError";
+import { UserEmail } from "@/user/v1/domain/user/value-objects/user.email";
+import { UserUsername } from "@/user/v1/domain/user/value-objects/user.username";
+import { UserPassword } from "@/user/v1/domain/user/value-objects/user.password";
 
 export class UserController extends BaseController {
   constructor() {
@@ -13,17 +19,24 @@ export class UserController extends BaseController {
 
   async all(req: Request, res: Response) {
     try {
-      const users = await User.find();
-      return res.send(users);
+      const users = await UserRepository.findAll();
+      return res.send(users.map((user) => user.toPrimitives()));
     } catch (error: any) {
       return this.mapperException(res, error, req.body, "Users v1");
     }
   }
 
   async one(req: Request, res: Response) {
+    const id = req.params.id;
+
     try {
-      const user = await User.findOneBy({ id: Number(req.params.id) });
-      return res.status(200).send({ user });
+      const user = await UserRepository.findById(
+        new UserId(Number(id)).valueOf()
+      );
+
+      if (!user) throw new UserNotFound("id", id);
+
+      return res.status(200).send({ user: user.toPrimitives() });
     } catch (error: any) {
       return this.mapperException(res, error, req.body, "Users v1");
     }
@@ -37,36 +50,65 @@ export class UserController extends BaseController {
           "lastname",
           "username",
           "email",
+          "age",
           "password",
         ]);
 
-      const user = await User.save({
-        ...userToCreate,
-        password: await EncryptionService.encrypt(userToCreate.password, 10),
-      });
-      return res.status(200).send({ user });
+      const user = await UserRepository.saveUser(
+        User.fromPrimitives({
+          ...userToCreate,
+          id: 0,
+          createdAt: Date.now().toString(),
+          updatedAt: Date.now().toString(),
+          active: true,
+        }).toPrimitives() as UserPrimitive
+      );
+
+      return res.status(200).send({ user: user.toPrimitives() });
     } catch (error: any) {
       return this.mapperException(res, error, req.body, "Users v1");
     }
   }
 
   async update(req: Request, res: Response) {
-    const id = Number(req.params?.id);
-    const userToUpdate: Partial<CreateUserDTO> = req.body.user;
+    const id = Number(req.params.id);
 
-    if (userToUpdate.password)
-      userToUpdate.password = await EncryptionService.encrypt(
-        userToUpdate.password,
-        10
-      );
+    const userDTO = req.body.user;
 
     try {
-      const user = await User.findOneBy({ id });
-      if (!user) return res.status(404).json({ message: "Not user found" });
+      if (!userDTO) throw new DTOPropertiesError(["user"]);
 
-      const userUpdated = await User.update({ id }, userToUpdate);
+      const userTo: Partial<CreateUserDTO & { active?: boolean }> = userDTO;
 
-      return res.status(200).send(userUpdated);
+      const userFound = await UserRepository.findById(
+        new UserId(Number(req.params.id)).valueOf()
+      );
+      if (!userFound) throw new UserNotFound("id", id);
+
+      const userPrimitive = userFound.toPrimitives();
+      console.info(userPrimitive);
+
+      const user = await UserRepository.updateUser(
+        User.fromPrimitives({
+          id: id,
+          createdAt: Date.now().toString(),
+          updatedAt: Date.now().toString(),
+          active: userTo.active || userPrimitive.active,
+          age: userTo.age || userPrimitive.age,
+          firstname: userTo.firstname || userPrimitive.firstname,
+          lastname: userTo.lastname || userPrimitive.lastname,
+          username: userTo.username || userPrimitive.username,
+          email: userTo.email || userPrimitive.email,
+          password: userTo.password || userPrimitive.password,
+        }).toPrimitives() as UserPrimitive
+      );
+
+      if (user) return res.status(200).send({ message: "User updated" });
+
+      return res.status(400).send({
+        message:
+          "Something went wrong trying to update the user, please try again",
+      });
     } catch (error: any) {
       return this.mapperException(res, error, req.body, "Users v1");
     }
@@ -74,12 +116,16 @@ export class UserController extends BaseController {
 
   async remove(req: Request, res: Response) {
     try {
-      let userToRemove = await User.findOneBy({
-        id: Number(req.params.id),
-      });
-      if (userToRemove) await User.remove(userToRemove);
+      let result = await UserRepository.deleteUser(
+        new UserId(Number(req.params.id)).valueOf()
+      );
 
-      return res.status(200).send({ message: "User deleted" });
+      if (result) return res.status(200).send({ message: "User deleted" });
+
+      return res.status(400).send({
+        message:
+          "Something went wrong trying to delete the user, please try again",
+      });
     } catch (error: any) {
       return this.mapperException(res, error, req.body, "Users v1");
     }
@@ -87,26 +133,21 @@ export class UserController extends BaseController {
 
   async login(req: Request, res: Response) {
     try {
-      const { email, password }: LoginUserDTO =
+      const { email, username, password }: LoginUserDTO =
         await RequestAdapter.build<LoginUserDTO>(req.body.user, [
-          "email",
           "password",
+          "OR:email,username",
         ]);
 
-      const userFound = await User.findOneBy({ email: email });
-
-      if (!userFound)
-        return res.status(404).send({ message: "User not found" });
-
-      const verifyPassword = await EncryptionService.verifyEncrypValues(
-        password,
-        userFound.password
+      const userFound = await UserRepository.getUserByLogin(
+        {
+          email: email ? new UserEmail(email).valueOf() : undefined,
+          username: username ? new UserUsername(username).valueOf() : undefined,
+        },
+        new UserPassword(password).valueOf()
       );
 
-      if (!verifyPassword)
-        return res.status(400).send({ message: "Invalid credentials" });
-
-      return res.status(200).send({ user: userFound });
+      return res.status(200).send({ user: userFound.toPrimitives() });
     } catch (error: any) {
       return this.mapperException(res, error, req.body, "Users v1");
     }
