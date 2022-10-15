@@ -1,0 +1,151 @@
+{
+  "info": {
+    "_postman_id": "2057f8b3-b83b-42da-99d6-576a80776973",
+    "name": "USERS-API-POSTGRESQL",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18425060"
+  },
+  "item": [
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/api/v1/users/getAll",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "v1", "users", "getAll"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/api/v1/users/get/2",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "v1", "users", "get", "2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user\": {\n        \"firstname\": \"Edgar\",\n        \"lastname\": \"Castillo Vega\",\n        \"username\": \"EdgarCV99\",\n        \"email\": \"vayne.edgar271@gmail.com\",\n        \"age\": 22,\n        \"role\": \"standard\",\n        \"password\": \"vega123\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/users/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "v1", "users", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete user by id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdG5hbWUiOiJFZGdhciIsImxhc3RuYW1lIjoiQ2FzdGlsbG8gVmVnYSIsInVzZXJuYW1lIjoiRWRnYXJDVjk5IiwiZW1haWwiOiJ2YXluZS5lZGdhcjI3MUBnbWFpbC5jb20iLCJyb2xlIjoicm9vdCIsImFnZSI6MjIsImV4cCI6MTY2NTkyODEyMiwiaWF0IjoxNjY1ODc0MTIyfQ.21hp4_FDI8lx2b6BxXyNyK_FKYFRQwvcF5mmcpMOeZ8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/v1/users/delete/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "v1", "users", "delete", "1"],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update by id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdG5hbWUiOiJFZGdhciIsImxhc3RuYW1lIjoiQ2FzdGlsbG8gVmVnYSIsInVzZXJuYW1lIjoiRWRnYXJDVjk5IiwiZW1haWwiOiJ2YXluZS5lZGdhcjI3MUBnbWFpbC5jb20iLCJyb2xlIjoicm9vdCIsImFnZSI6MjIsImV4cCI6MTY2NTkyODEyMiwiaWF0IjoxNjY1ODc0MTIyfQ.21hp4_FDI8lx2b6BxXyNyK_FKYFRQwvcF5mmcpMOeZ8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user\": {\n        \"password\": \"Vega12$345\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/users/update/2",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "v1", "users", "update", "2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user\": {\n        \"username\": \"EdgarCV99\",\n        \"password\": \"Vega12$345\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/users/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "v1", "users", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
