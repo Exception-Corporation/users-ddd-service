@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { UserRoleType } from "@/user/v1/domain/user/primitives/user.roles";
 
 @Entity()
 export class User extends BaseEntity {
@@ -29,6 +30,13 @@ export class User extends BaseEntity {
 
   @Column()
   age!: number;
+
+  @Column({
+    type: "enum",
+    enum: ["root", "standard", "visitor"],
+    default: "standard",
+  })
+  role!: UserRoleType;
 
   @Column({ default: true })
   active!: boolean;

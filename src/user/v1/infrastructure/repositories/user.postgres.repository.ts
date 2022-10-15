@@ -6,14 +6,17 @@ import { UserNotFound } from "@/shared/domain/errors/domain-errors/UserNotFound"
 import { InvalidCredentials } from "@/shared/domain/errors/domain-errors/InvalidCredentials";
 import { DatabaseError } from "@/shared/domain/errors/domain-errors/DatabaseError";
 import { DomainError } from "@/shared/domain/errors/lib/DomainError";
+import { GlobalFunctions } from "@/shared/infrastructure/utils/global.functions";
 
 export class UserPostgreseRepository implements UserRepository {
   async saveUser(user: Partial<UserPrimitive>): Promise<User> {
     try {
       user.password = await EncryptionService.encrypt(user.password!, 10);
-      delete user.id;
-      delete user.createdAt;
-      delete user.updatedAt;
+      user = GlobalFunctions.getNewParams<UserPrimitive>(user, [
+        "id",
+        "createdAt",
+        "updatedAt",
+      ]);
 
       const userSaved = (await UserModel.save(user)) as UserPrimitive<Date>;
 
@@ -70,8 +73,10 @@ export class UserPostgreseRepository implements UserRepository {
     try {
       if (user.password)
         user.password = await EncryptionService.encrypt(user.password, 10);
-      delete user.createdAt;
-      delete user.updatedAt;
+      user = GlobalFunctions.getNewParams<UserPrimitive>(user, [
+        "createdAt",
+        "updatedAt",
+      ]);
 
       const userUpdated = await UserModel.update({ id: user.id }, user);
 

@@ -11,6 +11,8 @@ import { DTOPropertiesError } from "@/shared/domain/errors/domain-errors/DTOProp
 import { UserEmail } from "@/user/v1/domain/user/value-objects/user.email";
 import { UserUsername } from "@/user/v1/domain/user/value-objects/user.username";
 import { UserPassword } from "@/user/v1/domain/user/value-objects/user.password";
+import { AuthenticationService } from "@/shared/infrastructure/auth";
+import { GlobalFunctions } from "@/shared/infrastructure/utils/global.functions";
 
 export class UserController extends BaseController {
   constructor() {
@@ -51,6 +53,7 @@ export class UserController extends BaseController {
           "username",
           "email",
           "age",
+          "role",
           "password",
         ]);
 
@@ -100,6 +103,7 @@ export class UserController extends BaseController {
           username: userTo.username || userPrimitive.username,
           email: userTo.email || userPrimitive.email,
           password: userTo.password || userPrimitive.password,
+          role: userTo.role || userPrimitive.role,
         }).toPrimitives() as UserPrimitive
       );
 
@@ -147,7 +151,17 @@ export class UserController extends BaseController {
         new UserPassword(password).valueOf()
       );
 
-      return res.status(200).send({ user: userFound.toPrimitives() });
+      const token = await AuthenticationService.sign(
+        GlobalFunctions.getNewParams<UserPrimitive>(userFound.toPrimitives(), [
+          "createdAt",
+          "updatedAt",
+          "password",
+          "id",
+          "active",
+        ])
+      );
+
+      return res.status(200).send({ access_token: token });
     } catch (error: any) {
       return this.mapperException(res, error, req.body, "Users v1");
     }
