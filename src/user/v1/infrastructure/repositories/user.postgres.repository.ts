@@ -11,7 +11,7 @@ import { GlobalFunctions } from "@/shared/infrastructure/utils/global.functions"
 export class UserPostgreseRepository implements UserRepository {
   async saveUser(user: Partial<UserPrimitive>): Promise<User> {
     try {
-      user.password = await EncryptionService.encrypt(user.password!, 10);
+      user.password = await EncryptionService.encrypt(user.password!, 2);
       user = GlobalFunctions.getNewParams<UserPrimitive>(user, [
         "id",
         "createdAt",
@@ -69,10 +69,14 @@ export class UserPostgreseRepository implements UserRepository {
     }
   }
 
-  async updateUser(user: Partial<UserPrimitive>): Promise<boolean> {
+  async updateUser(
+    user: Partial<UserPrimitive>,
+    currentPassword: string
+  ): Promise<boolean> {
     try {
+      if (currentPassword == user.password) delete user.password;
       if (user.password)
-        user.password = await EncryptionService.encrypt(user.password, 10);
+        user.password = await EncryptionService.encrypt(user.password, 2);
       user = GlobalFunctions.getNewParams<UserPrimitive>(user, [
         "createdAt",
         "updatedAt",

@@ -104,7 +104,8 @@ export class UserController extends BaseController {
           email: userTo.email || userPrimitive.email,
           password: userTo.password || userPrimitive.password,
           role: userTo.role || userPrimitive.role,
-        }).toPrimitives() as UserPrimitive
+        }).toPrimitives() as UserPrimitive,
+        userPrimitive.password
       );
 
       if (user) return res.status(200).send({ message: "User updated" });
