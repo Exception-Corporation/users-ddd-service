@@ -14,7 +14,7 @@ Prerequisites:
 
 ## ENDPOINTS
 
-### Import the postman json
+### Import the postman json file
 
 - [GET] `http://localhost:4000/api/v1/users/getAll` Get all the users
 - [GET] `http://localhost:4000/api/v1/users/get/:id` Get one user by id
@@ -38,7 +38,7 @@ yarn containers:up # run the docker-compose
 yarn containers:down # remove the containers
 yarn db:migration:generate migrations/InitialConfig
 yarn db:migrate
-yarn yarn prod #compile typescript to javascript and run the api in production mode
+yarn prod #compile typescript to javascript and run the api in production mode
 yarn dev #run the api in development mode with nodemon
 ```
 
