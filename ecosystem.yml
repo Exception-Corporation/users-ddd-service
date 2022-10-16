@@ -1,0 +1,16 @@
+apps:
+  - script: ./build/index.js
+    name: "app"
+    instances: max
+    exec_mode: cluster
+    node_args: "-r ts-node/register/transpile-only -r tsconfig-paths/register"
+    instance_var: INSTANCE_ID
+    autorestart: true
+    watch: true
+    merge_logs: true
+    restart_delay: 1000
+
+    env:
+      REDIS_HOSTNAME: redis-users
+      POSTGRES_HOST: postgres-users
+      PROJECT_MODE: production
