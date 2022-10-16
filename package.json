@@ -8,14 +8,15 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon -r tsconfig-paths/register src/index.ts --exec ts-node",
-    "prod": "yarn build && node -r ts-node/register/transpile-only -r tsconfig-paths/register build/index.js",
+    "start": "yarn build && node -r ts-node/register/transpile-only -r tsconfig-paths/register build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "containers:up": "docker-compose up -d",
     "containers:down": "docker-compose down",
     "typeorm": "ts-node -r tsconfig-paths/register $(yarn bin typeorm) -d src/shared/infrastructure/database/postgresql/postgres.database.ts",
     "db:migrate": "yarn typeorm migration:run",
     "db:migrate:revert": "yarn typeorm migration:revert",
-    "db:migration:generate": "yarn typeorm migration:generate"
+    "db:migration:generate": "yarn typeorm migration:generate",
+    "start:prod": "pm2 start ecosystem.yml"
   },
   "keywords": [
     "typescript",
@@ -37,6 +38,7 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.4.0",
+    "pm2": "^5.2.2",
     "redis": "^4.3.1",
     "reflect-metadata": "^0.1.13",
     "require-context": "^1.1.0",
