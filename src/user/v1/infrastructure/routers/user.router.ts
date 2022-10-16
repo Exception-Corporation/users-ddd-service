@@ -1,53 +1,48 @@
 import { Router } from "express";
 import { RouterC } from "@/shared/domain/class/router.class";
-import { UserController } from "@/user/v1/infrastructure/controllers/UserController";
+import Controllers from "@/user/v1/infrastructure/controllers";
 import { MiddlewareRouter } from "@/shared/infrastructure/middleware/security.middleware";
 
 export class UserRouter extends RouterC<Router> {
   private router: Router = Router();
   private path: string;
-  private controller: UserController;
   private authMiddleware: MiddlewareRouter;
   constructor() {
     super();
 
-    this.controller = new UserController();
-
     this.authMiddleware = new MiddlewareRouter();
 
     this.path = "/api/v1/users";
+    this.router;
 
-    //SIMPLE CRUD
-    this.router.get(
-      `${this.path}/getAll`,
-      this.controller.all.bind(this.controller)
-    );
-    this.router.get(
-      `${this.path}/get/:id`,
-      this.controller.one.bind(this.controller)
-    );
-    this.router.post(
-      `${this.path}`,
-      this.controller.save.bind(this.controller)
-    );
+    Controllers.forEach((Controller) => {
+      const { path, handler, roles } = {
+        path: `${this.path}${Controller.path}`,
+        handler: Controller.execute.bind(Controller),
+        roles: this.authMiddleware.isAuth(Controller.roles || []),
+      };
 
-    //WITH AUTH (TOKEN)
-    this.router.put(
-      `${this.path}/update/:id`,
-      this.authMiddleware.isAuth(["standard", "root"]) as any,
-      this.controller.update.bind(this.controller)
-    );
-    this.router.delete(
-      `${this.path}/delete/:id`,
-      this.authMiddleware.isAuth(["standard", "root"]) as any,
-      this.controller.remove.bind(this.controller)
-    );
-
-    //COMPLEX SERVICES
-    this.router.post(
-      `${this.path}/login/`,
-      this.controller.login.bind(this.controller)
-    );
+      switch (Controller.http) {
+        case "get":
+          this.router.get(path, roles, handler);
+          break;
+        case "post":
+          this.router.post(path, roles, handler);
+          break;
+        case "put":
+          this.router.put(path, roles, handler);
+          break;
+        case "patch":
+          this.router.patch(path, roles, handler);
+          break;
+        case "delete":
+          this.router.delete(path, roles, handler);
+          break;
+        case "option":
+          this.router.options(path, roles, handler);
+          break;
+      }
+    });
   }
 
   getRoutes(): Router {

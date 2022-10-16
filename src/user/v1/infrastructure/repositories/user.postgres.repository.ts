@@ -7,8 +7,19 @@ import { InvalidCredentials } from "@/shared/domain/errors/domain-errors/Invalid
 import { DatabaseError } from "@/shared/domain/errors/domain-errors/DatabaseError";
 import { DomainError } from "@/shared/domain/errors/lib/DomainError";
 import { GlobalFunctions } from "@/shared/infrastructure/utils/global.functions";
+import { QueryParams } from "@/shared/domain/interfaces/QueryParams";
 
 export class UserPostgreseRepository implements UserRepository {
+  private static instance: UserRepository | undefined;
+
+  private constructor() {}
+
+  static getInstance() {
+    if (this.instance) return this.instance;
+    this.instance = new UserPostgreseRepository();
+
+    return this.instance;
+  }
   async saveUser(user: Partial<UserPrimitive>): Promise<User> {
     try {
       user.password = await EncryptionService.encrypt(user.password!, 2);
@@ -91,9 +102,14 @@ export class UserPostgreseRepository implements UserRepository {
     }
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(query: QueryParams): Promise<User[]> {
     try {
-      const users: Array<UserPrimitive<Date>> = await UserModel.find();
+      const users: Array<UserPrimitive<Date>> = await UserModel.find({
+        where: query.searchBy,
+        order: { createdAt: "DESC" },
+        skip: (query.page - 1) * query.pageSize,
+        take: query.pageSize,
+      });
 
       return users.map(User.fromPrimitives);
     } catch (error: any) {

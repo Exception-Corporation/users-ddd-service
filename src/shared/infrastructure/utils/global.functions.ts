@@ -35,4 +35,8 @@ export class GlobalFunctions {
 
     return obj;
   }
+
+  static safeVal(data: boolean, firstValue: any, secondValue: any) {
+    return data ? firstValue : secondValue;
+  }
 }
