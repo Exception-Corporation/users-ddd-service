@@ -4,6 +4,7 @@ import {
   SecurityMiddleware,
   MiddlewareResponse,
 } from "@/shared/domain/middlewares/auth.middleware";
+import { DomainError } from "@/shared/domain/errors/lib/DomainError";
 
 export class MiddlewareRouter
   implements SecurityMiddleware<Request, Response, NextFunction, any>
@@ -19,6 +20,10 @@ export class MiddlewareRouter
     roles: Array<string>
   ): MiddlewareResponse<Request, Response, NextFunction, any> {
     return async (req: Request, res: Response, next: NextFunction) => {
+      if (!roles.length) {
+        return next();
+      }
+
       if (!req.headers.authorization) {
         return res.status(403).send({
           message: "The request doesn't have the authentication header",
@@ -38,9 +43,15 @@ export class MiddlewareRouter
           return res
             .status(400)
             .send({ success: false, message: "Permission deneged" });
-      } catch (ex) {
-        console.info(ex, roles);
-        return res.status(400).send({ message: "Invalid token" });
+      } catch (e: any) {
+        console.info(req.headers.authorization);
+        return res
+          .status(400)
+          .send(
+            e instanceof DomainError
+              ? { success: false, message: e.message, type: e.type }
+              : { success: false, message: e.toString() }
+          );
       }
 
       next();
