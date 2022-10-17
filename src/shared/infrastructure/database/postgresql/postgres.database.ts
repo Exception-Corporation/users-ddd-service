@@ -9,8 +9,10 @@ export class PostgresDatabase implements DatabaseConnection<DataSource> {
   private appDataSource: DataSource;
   private postgresConfig: PostgresConfig;
 
-  constructor(private logger: Logger) {
+  constructor(private logger: Logger, private port?: number) {
     this.postgresConfig = postgresConfig;
+
+    if (this.port) this.postgresConfig.port = this.port;
 
     this.appDataSource = new DataSource(this.postgresConfig as any);
   }
@@ -24,6 +26,10 @@ export class PostgresDatabase implements DatabaseConnection<DataSource> {
 
   getConnection() {
     return this.appDataSource;
+  }
+
+  async closeConnection(): Promise<void> {
+    await this.appDataSource.destroy();
   }
 }
 

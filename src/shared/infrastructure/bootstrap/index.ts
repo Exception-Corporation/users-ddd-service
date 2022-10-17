@@ -2,24 +2,25 @@ import { StartModule } from "@/shared/domain/interfaces/bootstrap";
 import { CacheService } from "@/shared/infrastructure/cache/redis.cache";
 import { PostgresDatabase } from "@/shared/infrastructure/database/postgresql/postgres.database";
 import { Application } from "@/shared/infrastructure/servers/express.server";
-import { LoggerMock } from "@/shared/infrastructure/logger/logger.mock";
-import { Logger } from "@/shared/domain/logger";
+import { MainLogger } from "@/shared/infrastructure/logger/main/";
+import config from "@/shared/infrastructure/config";
 
 export class SharedBootstrap implements StartModule {
   async init(): Promise<void> {
-    const logger: Logger = new LoggerMock();
     try {
-      const database = new PostgresDatabase(logger);
+      if (!config.test) {
+        const database = new PostgresDatabase(MainLogger);
 
-      await database.connect();
+        await database.connect();
 
-      const cacheService = CacheService.getInstance(logger);
+        const cacheService = CacheService.getInstance(MainLogger);
 
-      await cacheService.cacheConnect(0);
+        await cacheService.cacheConnect(0);
 
-      const server = new Application(logger);
+        const server = new Application(MainLogger);
 
-      await server.getApp().initialize();
+        await server.getApp().initialize();
+      }
     } catch (error) {
       console.error({
         type: "BOOTSTRAP_ERROR",
