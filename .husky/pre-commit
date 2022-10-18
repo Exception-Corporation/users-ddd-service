@@ -1,0 +1,29 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+localBranchName="$(git rev-parse --abbrev-ref HEAD)"
+
+# If multiple teams work on same project please add them joined with a |
+validBranchTypes='feature|hotfix|refactor|chore|release'
+validBranchRegex="($validBranchTypes)\/[a-zA-Z0-9]+"
+
+message="There is something wrong with your branch name. Please check that your branch has a valid name and try again."
+
+if [[ ! $localBranchName =~ $validBranchRegex ]]; then
+    echo "$message"
+    echo "Your branch name is: $localBranchName Expected format is: $validBranchRegex"
+    exit 1
+fi
+
+echo "Branch name: $localBranchName follows required format."
+
+modifiedFiles=$(git status --porcelain | grep src | cut -c 4- | xargs ls -d 2>/dev/null | xargs) # src is used in grep as prettier doesn't know how to parse unknown file extentions
+
+if [ -z "$modifiedFiles" ]; then
+    echo "No files have been modified. Please make sure you have modified files before you commit."
+else
+    npx prettier --loglevel warn --write $modifiedFiles
+    npx prettier --check $modifiedFiles
+fi
+
+exit 0

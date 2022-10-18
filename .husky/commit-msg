@@ -1,0 +1,14 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+commitMessage=$(cat "$1")                                        # obtain message file content
+validCommitTypes='feat|fix|docs|style|test|chore|refactor|Merge' # valid commit types
+validCommitRegex=.*"($validCommitTypes)".*                       # build dynamic regex
+
+if [[ $commitMessage =~ $validCommitRegex ]]; then
+  exit 0
+else
+  echo "Commit: ($commitMessage) contains format errors. Accepted format is: $validCommitRegex"
+fi
+
+exit 1
