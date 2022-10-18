@@ -1,4 +1,4 @@
-import { DomainEvent } from "@/shared/domain/event-bus/domain.event";
+import { DomainEvent } from '@/shared/domain/event-bus/domain.event';
 
 export abstract class Entity {
   private domainEvents: Array<DomainEvent>;

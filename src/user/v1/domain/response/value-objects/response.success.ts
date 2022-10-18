@@ -1,5 +1,5 @@
-import { ValueObject } from "@/shared/domain/interfaces/value.object";
-import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
+import { ValueObject } from '@/shared/domain/interfaces/value.object';
+import { ValueObjectError } from '@/shared/domain/errors/domain-errors/ValueObjectError';
 
 export class ResponseSuccess implements ValueObject<boolean> {
   constructor(private success: boolean) {
@@ -16,7 +16,7 @@ export class ResponseSuccess implements ValueObject<boolean> {
 
   validate(): void {
     if (this.success == undefined) {
-      throw new ValueObjectError("Response-success not valid");
+      throw new ValueObjectError('Response-success not valid');
     }
   }
 

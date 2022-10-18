@@ -1,5 +1,5 @@
-import { IsString } from "class-validator";
-import { UserRoleType } from "@/user/v1/domain/user/primitives/user.roles";
+import { IsString } from 'class-validator';
+import { UserRoleType } from '@/user/v1/domain/user/primitives/user.roles';
 
 export class CreateUserDTO {
   @IsString()

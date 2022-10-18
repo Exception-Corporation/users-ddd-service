@@ -1,5 +1,5 @@
-import { User, UserPrimitive } from "@/user/v1/domain/user/user.aggregate.root";
-import { QueryParams } from "@/shared/domain/interfaces/QueryParams";
+import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
+import { QueryParams } from '@/shared/domain/interfaces/QueryParams';
 
 export interface UserRepository {
   saveUser(user: UserPrimitive): Promise<User>;

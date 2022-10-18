@@ -1,7 +1,7 @@
-import { createClient, RedisClientType } from "redis";
-import { ICacheServer } from "@/shared/domain/interfaces/cache.server";
-import { Logger } from "@/shared/domain/logger";
-import config from "@/shared/infrastructure/config";
+import { createClient, RedisClientType } from 'redis';
+import { ICacheServer } from '@/shared/domain/interfaces/cache.server';
+import { Logger } from '@/shared/domain/logger';
+import config from '@/shared/infrastructure/config';
 
 const CACHE = config.cache.redis;
 
@@ -19,34 +19,34 @@ export class CacheService implements ICacheServer {
 
   public async cacheConnect(redisDB: number): Promise<void> {
     if (!this.clients[redisDB]) {
-      const uri = `redis${CACHE.isSecure === true ? "s" : ""}://${
-        CACHE.password ? `:${CACHE.password}@` : ""
+      const uri = `redis${CACHE.isSecure === true ? 's' : ''}://${
+        CACHE.password ? `:${CACHE.password}@` : ''
       }${CACHE.hostname}:${CACHE.port}/${redisDB}`;
 
       this.clients[redisDB] = createClient({
-        url: uri,
+        url: uri
       });
 
-      this.clients[redisDB]?.on("ready", () =>
+      this.clients[redisDB]?.on('ready', () =>
         this.logger.info(`Redis clients connected on port ${CACHE.port}`)
       );
-      this.clients[redisDB]?.on("reconnecting", () =>
-        this.logger.warn("Redis clients reconnecting")
+      this.clients[redisDB]?.on('reconnecting', () =>
+        this.logger.warn('Redis clients reconnecting')
       );
-      this.clients[redisDB]?.on("error", (err) =>
+      this.clients[redisDB]?.on('error', (err) =>
         this.logger.error({
           entityinfo: { class: `[${CacheService.name}]` },
-          level: "error",
-          message: "Redis client error",
-          module: "Redis",
-          type: "",
-          params: { redisDB },
+          level: 'error',
+          message: 'Redis client error',
+          module: 'Redis',
+          type: '',
+          params: { redisDB }
         })
       );
 
       await this.clients[redisDB]?.connect();
     } else {
-      this.logger.warn("Redis clients already connected");
+      this.logger.warn('Redis clients already connected');
     }
   }
 
@@ -65,12 +65,12 @@ export class CacheService implements ICacheServer {
     return this.clients[redisDB]
       ? this.cacheIsConnected(redisDB)
         ? await this.clients[redisDB]!.ping() //We know for show client exist because is checked previously
-        : "Redis clients not connected"
+        : 'Redis clients not connected'
       : "Client doesn't exist";
   }
 
   public async cacheGetAllKeys(redisDB: number): Promise<any> {
-    return await this.clients[redisDB]?.keys("*");
+    return await this.clients[redisDB]?.keys('*');
   }
 
   public async cacheGet(
@@ -106,7 +106,7 @@ export class CacheService implements ICacheServer {
       `${pattern}*`
     );
     return foundKeys
-      ? await this.clients[redisDB]?.sendCommand(["DEL", ...foundKeys])
+      ? await this.clients[redisDB]?.sendCommand(['DEL', ...foundKeys])
       : 0;
   }
 

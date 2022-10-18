@@ -1,4 +1,6 @@
-import { cleanEnv, port, str, host, email } from "envalid";
+import { cleanEnv, port, str, host, email } from 'envalid';
+
+declare const process: any;
 
 const validateEnv = () => {
   cleanEnv(process.env, {
@@ -18,7 +20,7 @@ const validateEnv = () => {
     POSTGRES_PORT_TEST: port(),
     PGADMIN_DEFAULT_EMAIL: email(),
     PGADMIN_DEFAULT_PASSWORD: str(),
-    PGADMIN_PORT: port(),
+    PGADMIN_PORT: port()
   });
 };
 

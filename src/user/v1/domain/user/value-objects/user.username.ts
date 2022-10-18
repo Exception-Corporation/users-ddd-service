@@ -1,5 +1,5 @@
-import { ValueObject } from "@/shared/domain/interfaces/value.object";
-import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
+import { ValueObject } from '@/shared/domain/interfaces/value.object';
+import { ValueObjectError } from '@/shared/domain/errors/domain-errors/ValueObjectError';
 
 export class UserUsername implements ValueObject<string> {
   constructor(private userName: string) {
@@ -16,7 +16,7 @@ export class UserUsername implements ValueObject<string> {
 
   validate(): void {
     if (!this.userName) {
-      throw new ValueObjectError("User-Username not valid");
+      throw new ValueObjectError('User-Username not valid');
     }
   }
 

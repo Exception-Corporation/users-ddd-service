@@ -1,9 +1,9 @@
-import { Entity } from "@/shared/domain/class/entity";
-import { ResponseContain } from "@/user/v1/domain/response/value-objects/response.contain";
-import { ResponseStatus } from "@/user/v1/domain/response/value-objects/response.status";
-import { ResponseSuccess } from "@/user/v1/domain/response/value-objects/response.success";
+import { Entity } from '@/shared/domain/class/entity';
+import { ResponseContain } from '@/user/v1/domain/response/value-objects/response.contain';
+import { ResponseStatus } from '@/user/v1/domain/response/value-objects/response.status';
+import { ResponseSuccess } from '@/user/v1/domain/response/value-objects/response.success';
 
-export type ResponsePrimitive = ReturnType<Response["toPrimitives"]>;
+export type ResponsePrimitive = ReturnType<Response['toPrimitives']>;
 
 export class Response extends Entity {
   constructor(
@@ -26,7 +26,7 @@ export class Response extends Entity {
     return {
       success: this.success.valueOf(),
       status: this.status.valueOf(),
-      contain: this.contain.valueOf(),
+      contain: this.contain.valueOf()
     };
   }
 }

@@ -32,18 +32,18 @@ export type logError = {
 
 export type logSuccess = {
   entityinfo?: EntityInfo | Array<EntityInfo> | null;
-  level: Levels | "ok";
+  level: Levels | 'ok';
   module: string;
   result: any;
 };
 
-export type Levels = "debug" | "info" | "warn" | "error";
+export type Levels = 'debug' | 'info' | 'warn' | 'error';
 
 export enum fileLevels {
-  DEBUG = "debug",
-  ERROR = "error",
-  INFO = "info",
-  WARN = "warn",
+  DEBUG = 'debug',
+  ERROR = 'error',
+  INFO = 'info',
+  WARN = 'warn'
 }
 
 export type ExceptionDictionary = {

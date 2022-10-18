@@ -2,13 +2,13 @@ import express, {
   Application as app,
   Request,
   Response,
-  NextFunction,
-} from "express";
-import { Server } from "@/shared/domain/interfaces/server.interface";
-import { UserRouter } from "@/user/v1/infrastructure/routers/user.router";
-import config from "@/shared/infrastructure/config";
-import { Logger } from "@/shared/domain/logger";
-import { RequireContext } from "@/shared/infrastructure/auto-files/require.context";
+  NextFunction
+} from 'express';
+import { Server } from '@/shared/domain/interfaces/server.interface';
+import { UserRouter } from '@/user/v1/infrastructure/routers/user.router';
+import config from '@/shared/infrastructure/config';
+import { Logger } from '@/shared/domain/logger';
+import { RequireContext } from '@/shared/infrastructure/auto-files/require.context';
 
 export class Application implements Server<app> {
   private app: app;
@@ -17,21 +17,21 @@ export class Application implements Server<app> {
     this.app = express();
     this.app.use(express.json());
     this.app.use((_req: Request, res: Response, next: NextFunction) => {
-      res.header("Acess-Control-Allow-Origin", "*");
+      res.header('Acess-Control-Allow-Origin', '*');
       res.header(
-        "Access-Control-Allow-Headers",
-        "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accetp, Access-Control-Allow-Request-Method"
+        'Access-Control-Allow-Headers',
+        'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accetp, Access-Control-Allow-Request-Method'
       );
       res.header(
-        "Access-Control-Allow-Methods",
-        "GET, POST, OPTIONS, PUT, DELETE"
+        'Access-Control-Allow-Methods',
+        'GET, POST, OPTIONS, PUT, DELETE'
       );
-      res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
+      res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
 
       next();
     });
 
-    this.app.use("/", new UserRouter().getRoutes());
+    this.app.use('/', new UserRouter().getRoutes());
   }
 
   getApp() {
@@ -44,11 +44,11 @@ export class Application implements Server<app> {
             `Server [Express] listen on port: [${project.host}:${project.port}] in mode: ${project.mode}`
           );
         });
-      },
+      }
     };
   }
 
   getRouters() {
-    return new RequireContext().getFiles("@/", true, /^((?!!+).)*router.ts$/);
+    return new RequireContext().getFiles('@/', true, /^((?!!+).)*router.ts$/);
   }
 }

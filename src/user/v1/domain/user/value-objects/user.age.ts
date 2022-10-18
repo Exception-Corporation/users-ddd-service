@@ -1,5 +1,5 @@
-import { ValueObject } from "@/shared/domain/interfaces/value.object";
-import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
+import { ValueObject } from '@/shared/domain/interfaces/value.object';
+import { ValueObjectError } from '@/shared/domain/errors/domain-errors/ValueObjectError';
 
 export class UserAge implements ValueObject<number> {
   constructor(private userAge: number) {
@@ -16,7 +16,7 @@ export class UserAge implements ValueObject<number> {
 
   validate(): void {
     if (isNaN(this.userAge)) {
-      throw new ValueObjectError("User-age not valid");
+      throw new ValueObjectError('User-age not valid');
     }
   }
 

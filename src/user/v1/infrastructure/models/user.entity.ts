@@ -4,9 +4,9 @@ import {
   PrimaryGeneratedColumn,
   BaseEntity,
   CreateDateColumn,
-  UpdateDateColumn,
-} from "typeorm";
-import { UserRoleType } from "@/user/v1/domain/user/primitives/user.roles";
+  UpdateDateColumn
+} from 'typeorm';
+import { UserRoleType } from '@/user/v1/domain/user/primitives/user.roles';
 
 @Entity()
 export class User extends BaseEntity {
@@ -32,9 +32,9 @@ export class User extends BaseEntity {
   age!: number;
 
   @Column({
-    type: "enum",
-    enum: ["root", "standard", "visitor"],
-    default: "standard",
+    type: 'enum',
+    enum: ['root', 'standard', 'visitor'],
+    default: 'standard'
   })
   role!: UserRoleType;
 

@@ -1,12 +1,12 @@
-import { UseCase } from "@/shared/infrastructure/use-cases/UseCase";
-import { UserRepository } from "@/user/v1/domain/repositories/user.repository";
+import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
+import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import {
   Response,
-  ResponsePrimitive,
-} from "@/user/v1/domain/response/response.entity";
-import { User, UserPrimitive } from "@/user/v1/domain/user/user.aggregate.root";
-import { UserPassword } from "@/user/v1/domain/user/value-objects/user.password";
-import { GlobalFunctions } from "@/shared/infrastructure/utils/global.functions";
+  ResponsePrimitive
+} from '@/user/v1/domain/response/response.entity';
+import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
+import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
+import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
 
 export class UpdateUserUseCase extends UseCase {
   private static instance: UpdateUserUseCase | undefined;
@@ -33,13 +33,13 @@ export class UpdateUserUseCase extends UseCase {
       status: GlobalFunctions.safeVal(userCreated, 200, 404),
       contain: GlobalFunctions.safeVal(
         userCreated,
-        { message: "User updated successfully" },
+        { message: 'User updated successfully' },
         {
           error: 404,
           message:
-            "Something went wrong trying to update the user, please try again",
+            'Something went wrong trying to update the user, please try again'
         }
-      ),
+      )
     };
 
     return Response.fromPrimitives(

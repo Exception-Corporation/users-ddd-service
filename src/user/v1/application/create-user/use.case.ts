@@ -1,10 +1,10 @@
-import { UseCase } from "@/shared/infrastructure/use-cases/UseCase";
-import { UserRepository } from "@/user/v1/domain/repositories/user.repository";
+import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
+import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import {
   Response,
-  ResponsePrimitive,
-} from "@/user/v1/domain/response/response.entity";
-import { User, UserPrimitive } from "@/user/v1/domain/user/user.aggregate.root";
+  ResponsePrimitive
+} from '@/user/v1/domain/response/response.entity';
+import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
 
 export class CreateUserUseCase extends UseCase {
   private static instance: CreateUserUseCase | undefined;
@@ -29,8 +29,8 @@ export class CreateUserUseCase extends UseCase {
       success: true,
       status: 200,
       contain: {
-        user: userCreated.toPrimitives(),
-      },
+        user: userCreated.toPrimitives()
+      }
     };
 
     return Response.fromPrimitives(

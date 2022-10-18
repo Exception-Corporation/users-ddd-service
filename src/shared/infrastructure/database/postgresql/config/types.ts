@@ -8,8 +8,8 @@ export type PostgresConfig = {
   logging:
     | boolean
     | string
-    | "all"
-    | ("query" | "schema" | "error" | "warn" | "info" | "log" | "migration")[];
+    | 'all'
+    | ('query' | 'schema' | 'error' | 'warn' | 'info' | 'log' | 'migration')[];
   maxQueryExecutionTime: number;
   type: string;
   synchronize: boolean;

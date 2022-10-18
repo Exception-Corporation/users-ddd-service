@@ -1,6 +1,6 @@
-import { validate } from "class-validator";
-import { IRequestAdapter } from "@/shared/domain/interfaces/request.adapter";
-import { DTOPropertiesError } from "@/shared/domain/errors/domain-errors/DTOPropertiesError";
+import { validate } from 'class-validator';
+import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
+import { DTOPropertiesError } from '@/shared/domain/errors/domain-errors/DTOPropertiesError';
 
 export class RequestAdapter implements IRequestAdapter {
   private static instance: IRequestAdapter | undefined;
@@ -19,7 +19,7 @@ export class RequestAdapter implements IRequestAdapter {
     properties: Array<string> = []
   ): Promise<T> {
     if (!request) {
-      throw new DTOPropertiesError(["user"]);
+      throw new DTOPropertiesError(['user']);
     }
 
     if (!Object.keys(request)) {
@@ -34,8 +34,8 @@ export class RequestAdapter implements IRequestAdapter {
     const invalidProperties: Array<string> = [];
 
     for (const property of properties) {
-      if (property.includes("OR")) {
-        const propertiesSplit = property.replace("OR:", "").split(",");
+      if (property.includes('OR')) {
+        const propertiesSplit = property.replace('OR:', '').split(',');
 
         let count = 0;
 

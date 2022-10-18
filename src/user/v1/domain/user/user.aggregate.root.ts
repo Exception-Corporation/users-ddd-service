@@ -1,19 +1,19 @@
-import { AggregateRoot } from "@/shared/domain/class/aggregate.root";
-import { UserAge } from "@/user/v1/domain/user/value-objects/user.age";
-import { UserCreatedAt } from "@/user/v1/domain/user/value-objects/user.createdAt";
-import { UserId } from "@/user/v1/domain/user/value-objects/user.id";
-import { UserFirstName } from "@/user/v1/domain/user/value-objects/user.first.name";
-import { UserLastName } from "@/user/v1/domain/user/value-objects/user.last.name";
-import { UserPassword } from "@/user/v1/domain/user/value-objects/user.password";
-import { UserUpdatedAt } from "@/user/v1/domain/user/value-objects/user.updatedAt";
-import { UserUsername } from "@/user/v1/domain/user/value-objects/user.username";
-import { UserEmail } from "@/user/v1/domain/user/value-objects/user.email";
-import { UserActive } from "@/user/v1/domain/user/value-objects/user.active";
-import { UserRole } from "@/user/v1/domain/user/value-objects/user.role";
+import { AggregateRoot } from '@/shared/domain/class/aggregate.root';
+import { UserAge } from '@/user/v1/domain/user/value-objects/user.age';
+import { UserCreatedAt } from '@/user/v1/domain/user/value-objects/user.createdAt';
+import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
+import { UserFirstName } from '@/user/v1/domain/user/value-objects/user.first.name';
+import { UserLastName } from '@/user/v1/domain/user/value-objects/user.last.name';
+import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
+import { UserUpdatedAt } from '@/user/v1/domain/user/value-objects/user.updatedAt';
+import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';
+import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
+import { UserActive } from '@/user/v1/domain/user/value-objects/user.active';
+import { UserRole } from '@/user/v1/domain/user/value-objects/user.role';
 
 export type UserPrimitive<T = string> = Omit<
-  ReturnType<User["toPrimitives"]>,
-  "createdAt" | "updatedAt"
+  ReturnType<User['toPrimitives']>,
+  'createdAt' | 'updatedAt'
 > & {
   createdAt: T;
   updatedAt: T;
@@ -64,7 +64,7 @@ export class User extends AggregateRoot {
       age: this.age.valueOf(),
       active: this.active.valueOf(),
       createdAt: this.createdAt.valueOf(),
-      updatedAt: this.updatedAt.valueOf(),
+      updatedAt: this.updatedAt.valueOf()
     };
   }
 

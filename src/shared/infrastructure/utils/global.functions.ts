@@ -18,7 +18,7 @@ export class GlobalFunctions {
       if (!properties.find((prop) => prop == property)) {
         const value = obj[property];
         newObj[property] =
-          typeof value == "object" ? Object.assign(obj[property]) : value;
+          typeof value == 'object' ? Object.assign(obj[property]) : value;
       }
     });
 

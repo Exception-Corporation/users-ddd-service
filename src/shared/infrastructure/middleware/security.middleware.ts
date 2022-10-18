@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from "express";
-import { AuthenticationService } from "@/shared/infrastructure/auth";
+import { NextFunction, Request, Response } from 'express';
+import { AuthenticationService } from '@/shared/infrastructure/auth';
 import {
   SecurityMiddleware,
-  MiddlewareResponse,
-} from "@/shared/domain/middlewares/auth.middleware";
-import { DomainError } from "@/shared/domain/errors/lib/DomainError";
+  MiddlewareResponse
+} from '@/shared/domain/middlewares/auth.middleware';
+import { DomainError } from '@/shared/domain/errors/lib/DomainError';
 
 export class MiddlewareRouter
   implements SecurityMiddleware<Request, Response, NextFunction, any>
@@ -26,23 +26,25 @@ export class MiddlewareRouter
 
       if (!req.headers.authorization) {
         return res.status(403).send({
-          message: "The request doesn't have the authentication header",
+          message: "The request doesn't have the authentication header"
         });
       }
 
-      var token = req.headers.authorization.replace(/['"]+/g, "").split(" ")[1];
+      const token = req.headers.authorization
+        .replace(/['"]+/g, '')
+        .split(' ')[1];
 
       try {
-        var payload: any = await AuthenticationService.verify(token);
+        const payload: any = await AuthenticationService.verify(token);
 
         if (!payload || payload?.error) {
-          return res.status(401).send({ message: "Invalid token" });
+          return res.status(401).send({ message: 'Invalid token' });
         }
 
         if (!roles.includes(payload?.role))
           return res
             .status(400)
-            .send({ success: false, message: "Permission deneged" });
+            .send({ success: false, message: 'Permission deneged' });
       } catch (e: any) {
         console.info(req.headers.authorization);
         return res

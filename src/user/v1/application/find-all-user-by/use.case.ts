@@ -1,10 +1,10 @@
-import { UseCase } from "@/shared/infrastructure/use-cases/UseCase";
-import { UserRepository } from "@/user/v1/domain/repositories/user.repository";
+import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
+import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import {
   Response,
-  ResponsePrimitive,
-} from "@/user/v1/domain/response/response.entity";
-import { QueryParams } from "@/shared/domain/interfaces/QueryParams";
+  ResponsePrimitive
+} from '@/user/v1/domain/response/response.entity';
+import { QueryParams } from '@/shared/domain/interfaces/QueryParams';
 
 export class FindAllUsersUseCase extends UseCase {
   private static instance: FindAllUsersUseCase | undefined;
@@ -30,8 +30,8 @@ export class FindAllUsersUseCase extends UseCase {
         page: query.page,
         itemsByPage: query.pageSize,
         usersSize: users.length,
-        users: users.map((user) => user.toPrimitives()),
-      },
+        users: users.map((user) => user.toPrimitives())
+      }
     };
 
     return Response.fromPrimitives(
