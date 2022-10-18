@@ -1,5 +1,5 @@
-import { ValueObject } from "@/shared/domain/interfaces/value.object";
-import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
+import { ValueObject } from '@/shared/domain/interfaces/value.object';
+import { ValueObjectError } from '@/shared/domain/errors/domain-errors/ValueObjectError';
 
 export class UserActive implements ValueObject<boolean> {
   constructor(private userActive: boolean) {
@@ -16,7 +16,7 @@ export class UserActive implements ValueObject<boolean> {
 
   validate(): void {
     if (!this.userActive) {
-      throw new ValueObjectError("User-Active not valid");
+      throw new ValueObjectError('User-Active not valid');
     }
   }
 

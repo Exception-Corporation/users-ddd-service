@@ -1,11 +1,11 @@
-import { UseCase } from "@/shared/infrastructure/use-cases/UseCase";
-import { UserRepository } from "@/user/v1/domain/repositories/user.repository";
+import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
+import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import {
   Response,
-  ResponsePrimitive,
-} from "@/user/v1/domain/response/response.entity";
-import { UserId } from "@/user/v1/domain/user/value-objects/user.id";
-import { GlobalFunctions } from "@/shared/infrastructure/utils/global.functions";
+  ResponsePrimitive
+} from '@/user/v1/domain/response/response.entity';
+import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
+import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
 
 export class DeleteUserUseCase extends UseCase {
   private static instance: DeleteUserUseCase | undefined;
@@ -29,9 +29,9 @@ export class DeleteUserUseCase extends UseCase {
       status: GlobalFunctions.safeVal(userCreated, 200, 404),
       contain: GlobalFunctions.safeVal(
         userCreated,
-        { message: "User deleted successfully" },
-        { error: 404, message: "User not found" }
-      ),
+        { message: 'User deleted successfully' },
+        { error: 404, message: 'User not found' }
+      )
     };
 
     return Response.fromPrimitives(

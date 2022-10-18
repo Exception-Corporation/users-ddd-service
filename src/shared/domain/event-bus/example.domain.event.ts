@@ -1,4 +1,4 @@
-import { DomainEvent } from "@/shared/domain/event-bus/domain.event";
+import { DomainEvent } from '@/shared/domain/event-bus/domain.event';
 
 type CreateExampleDomainEventBody = {
   readonly eventName: string;
@@ -7,7 +7,7 @@ type CreateExampleDomainEventBody = {
   readonly breed: string;
 };
 export class ExampleCreatedDomainEvent extends DomainEvent {
-  static readonly EVENT_NAME = "example.created";
+  static readonly EVENT_NAME = 'example.created';
   static readonly EVENT_TYPE = null;
 
   private id: string;
@@ -44,7 +44,7 @@ export class ExampleCreatedDomainEvent extends DomainEvent {
       id,
       name,
       breed,
-      eventName: ExampleCreatedDomainEvent.EVENT_NAME,
+      eventName: ExampleCreatedDomainEvent.EVENT_NAME
     };
   }
 

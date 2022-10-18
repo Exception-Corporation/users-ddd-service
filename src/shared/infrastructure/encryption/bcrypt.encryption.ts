@@ -1,5 +1,5 @@
-import { IEncrypt } from "@/shared/domain/interfaces/encrypt.interface";
-import bcrypt from "bcrypt";
+import { IEncrypt } from '@/shared/domain/interfaces/encrypt.interface';
+import bcrypt from 'bcrypt';
 
 export class BcrypEncryption implements IEncrypt {
   private static instance: IEncrypt | undefined;

@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { RouterC } from "@/shared/domain/class/router.class";
-import Controllers from "@/user/v1/infrastructure/controllers";
-import { MiddlewareRouter } from "@/shared/infrastructure/middleware/security.middleware";
+import { Router } from 'express';
+import { RouterC } from '@/shared/domain/class/router.class';
+import Controllers from '@/user/v1/infrastructure/controllers';
+import { MiddlewareRouter } from '@/shared/infrastructure/middleware/security.middleware';
 
 export class UserRouter extends RouterC<Router> {
   private router: Router = Router();
@@ -12,33 +12,33 @@ export class UserRouter extends RouterC<Router> {
 
     this.authMiddleware = new MiddlewareRouter();
 
-    this.path = "/api/v1/users";
+    this.path = '/api/v1/users';
     this.router;
 
     Controllers.forEach((Controller) => {
       const { path, handler, roles } = {
         path: `${this.path}${Controller.path}`,
         handler: Controller.execute.bind(Controller),
-        roles: this.authMiddleware.isAuth(Controller.roles || []),
+        roles: this.authMiddleware.isAuth(Controller.roles || [])
       };
 
       switch (Controller.http) {
-        case "get":
+        case 'get':
           this.router.get(path, roles, handler);
           break;
-        case "post":
+        case 'post':
           this.router.post(path, roles, handler);
           break;
-        case "put":
+        case 'put':
           this.router.put(path, roles, handler);
           break;
-        case "patch":
+        case 'patch':
           this.router.patch(path, roles, handler);
           break;
-        case "delete":
+        case 'delete':
           this.router.delete(path, roles, handler);
           break;
-        case "option":
+        case 'option':
           this.router.options(path, roles, handler);
           break;
       }

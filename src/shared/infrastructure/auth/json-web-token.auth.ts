@@ -1,8 +1,8 @@
-import jwt from "jsonwebtoken";
-import config from "@/shared/infrastructure/config";
-import { DateLib } from "@/shared/infrastructure/dates";
-import { AuthenticationError } from "@/shared/domain/errors/domain-errors/AuthenticationError";
-import { IAuthentication } from "@/shared/domain/auth/authentication.interface";
+import jwt from 'jsonwebtoken';
+import config from '@/shared/infrastructure/config';
+import { DateLib } from '@/shared/infrastructure/dates';
+import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
+import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 
 export class JSONWebTokenAuth implements IAuthentication {
   private static instance: JSONWebTokenAuth | undefined;
@@ -27,7 +27,7 @@ export class JSONWebTokenAuth implements IAuthentication {
       const token = await jwt.sign(
         {
           ...data,
-          exp: DateLib.getData(this.expirationTime, "hours"),
+          exp: DateLib.getData(this.expirationTime, 'hours')
         },
         this.secretKey
       );

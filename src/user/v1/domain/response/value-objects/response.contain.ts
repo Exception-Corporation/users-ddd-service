@@ -1,5 +1,5 @@
-import { ValueObject } from "@/shared/domain/interfaces/value.object";
-import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
+import { ValueObject } from '@/shared/domain/interfaces/value.object';
+import { ValueObjectError } from '@/shared/domain/errors/domain-errors/ValueObjectError';
 
 export class ResponseContain implements ValueObject<object> {
   constructor(private contain: object) {
@@ -16,7 +16,7 @@ export class ResponseContain implements ValueObject<object> {
 
   validate(): void {
     if (!this.contain || !Object.keys(this.contain || {})) {
-      throw new ValueObjectError("Response-contain not valid");
+      throw new ValueObjectError('Response-contain not valid');
     }
   }
 

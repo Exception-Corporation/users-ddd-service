@@ -1,7 +1,7 @@
 // creat a class
-import { logError, Logger } from "@/shared/domain/logger";
-import { MainLogger } from "@/shared/infrastructure/logger/main/";
-import config from "@/shared/infrastructure/config";
+import { logError, Logger } from '@/shared/domain/logger';
+import { MainLogger } from '@/shared/infrastructure/logger/main/';
+import config from '@/shared/infrastructure/config';
 
 export class WatchLogger {
   // constructor
@@ -11,7 +11,7 @@ export class WatchLogger {
   // Logs
   static registerLog(logErrorMessage: logError) {
     this.logger.error(logErrorMessage);
-    if (config.project.mode === "production") {
+    if (config.project.mode === 'production') {
       // this.airBrake == new AirBrakeLogger();
       // this.airBrake.registerLog(logErrorMessage);
     }

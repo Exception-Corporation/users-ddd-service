@@ -1,5 +1,5 @@
-import { ValueObject } from "@/shared/domain/interfaces/value.object";
-import { ValueObjectError } from "@/shared/domain/errors/domain-errors/ValueObjectError";
+import { ValueObject } from '@/shared/domain/interfaces/value.object';
+import { ValueObjectError } from '@/shared/domain/errors/domain-errors/ValueObjectError';
 
 export class ResponseStatus implements ValueObject<number> {
   constructor(private status: number) {
@@ -16,7 +16,7 @@ export class ResponseStatus implements ValueObject<number> {
 
   validate(): void {
     if (!this.status) {
-      throw new ValueObjectError("Response-status not valid");
+      throw new ValueObjectError('Response-status not valid');
     }
   }
 

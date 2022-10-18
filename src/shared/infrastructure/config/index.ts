@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-import validateEnv from "@/shared/infrastructure/utils/validateEnv.util";
+import dotenv from 'dotenv';
+import validateEnv from '@/shared/infrastructure/utils/validateEnv.util';
 
 dotenv.config({});
 
@@ -11,7 +11,7 @@ export default {
   project: {
     port: process.env.PROJECT_PORT,
     host: process.env.PROJECT_HOST,
-    mode: process.env.PROJECT_MODE,
+    mode: process.env.PROJECT_MODE
   },
   authentication: {
     accessTokenExpiresIn: 15,
@@ -20,7 +20,7 @@ export default {
     accessTokenPrivateKey: process.env.JWT_ACCESS_TOKEN_PRIVATE_KEY,
     accessTokenPublicKey: process.env.JWT_ACCESS_TOKEN_PUBLIC_KEY,
     refreshTokenPrivateKey: process.env.JWT_REFRESH_TOKEN_PRIVATE_KEY,
-    refreshTokenPublicKey: process.env.JWT_REFRESH_TOKEN_PUBLIC_KEY,
+    refreshTokenPublicKey: process.env.JWT_REFRESH_TOKEN_PUBLIC_KEY
   },
   database: {
     postgres: {
@@ -29,8 +29,8 @@ export default {
       password: process.env.POSTGRES_PASSWORD,
       host: process.env.POSTGRES_HOST,
       port: process.env.POSTGRES_PORT,
-      database: process.env.POSTGRES_DB,
-    },
+      database: process.env.POSTGRES_DB
+    }
   },
   database_test: {
     postgres: {
@@ -39,8 +39,8 @@ export default {
       password: process.env.POSTGRES_PASSWORD,
       host: process.env.POSTGRES_HOST,
       port: process.env.POSTGRES_PORT_TEST,
-      database: process.env.POSTGRES_DB,
-    },
+      database: process.env.POSTGRES_DB
+    }
   },
   cache: {
     redis: {
@@ -56,9 +56,9 @@ export default {
         pickup: process.env.REDIS_DB_PICKUP,
         tracking: process.env.REDIS_DB_TRACKING,
         branchOffices: process.env.REDIS_DB_BRANCH_OFFICES,
-        zones: process.env.REDIS_DB_ZONES,
-      },
-    },
+        zones: process.env.REDIS_DB_ZONES
+      }
+    }
   },
-  test: process.env.NODE_TEST,
+  test: process.env.NODE_TEST
 };

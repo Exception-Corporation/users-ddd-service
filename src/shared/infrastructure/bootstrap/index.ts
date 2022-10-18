@@ -1,9 +1,9 @@
-import { StartModule } from "@/shared/domain/interfaces/bootstrap";
-import { CacheService } from "@/shared/infrastructure/cache/redis.cache";
-import { PostgresDatabase } from "@/shared/infrastructure/database/postgresql/postgres.database";
-import { Application } from "@/shared/infrastructure/servers/express.server";
-import { MainLogger } from "@/shared/infrastructure/logger/main/";
-import config from "@/shared/infrastructure/config";
+import { StartModule } from '@/shared/domain/interfaces/bootstrap';
+import { CacheService } from '@/shared/infrastructure/cache/redis.cache';
+import { PostgresDatabase } from '@/shared/infrastructure/database/postgresql/postgres.database';
+import { Application } from '@/shared/infrastructure/servers/express.server';
+import { MainLogger } from '@/shared/infrastructure/logger/main/';
+import config from '@/shared/infrastructure/config';
 
 export class SharedBootstrap implements StartModule {
   async init(): Promise<void> {
@@ -23,10 +23,10 @@ export class SharedBootstrap implements StartModule {
       }
     } catch (error) {
       console.error({
-        type: "BOOTSTRAP_ERROR",
+        type: 'BOOTSTRAP_ERROR',
         message: `[${SharedBootstrap.name}] Error ${error}`,
-        module: "SHARED",
-        level: "error",
+        module: 'SHARED',
+        level: 'error'
       });
     }
   }

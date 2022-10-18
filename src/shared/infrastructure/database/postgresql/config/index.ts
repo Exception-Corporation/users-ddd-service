@@ -1,4 +1,4 @@
-import config from "@/shared/infrastructure/config";
+import config from '@/shared/infrastructure/config';
 
 const { postgres } = config.database;
 
@@ -9,14 +9,14 @@ export default {
   password: postgres.password,
   database: postgres.database,
   rol: postgres.rol,
-  logging: "all",
+  logging: 'all',
   maxQueryExecutionTime: 2000,
-  type: "postgres",
+  type: 'postgres',
   synchronize: false,
-  entities: ["src/**/**.entity{.ts,.js}", "build/**/**.entity{.ts,.js}"],
-  migrations: ["migrations/*{.ts,.js}"],
+  entities: ['src/**/**.entity{.ts,.js}', 'build/**/**.entity{.ts,.js}'],
+  migrations: ['migrations/*{.ts,.js}'],
   subscribers: [
-    "src/shared/infrastructure/database/postgresql/subscribers/**/*{.ts,.js}",
-    "build/shared/infrastructure/database/postgresql/subscribers/**/*{.ts,.js}",
-  ],
+    'src/shared/infrastructure/database/postgresql/subscribers/**/*{.ts,.js}',
+    'build/shared/infrastructure/database/postgresql/subscribers/**/*{.ts,.js}'
+  ]
 };

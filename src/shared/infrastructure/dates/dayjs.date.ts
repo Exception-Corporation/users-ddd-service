@@ -1,9 +1,9 @@
-import dayjs, { ManipulateType } from "dayjs";
-import utc from "dayjs/plugin/utc";
-import tz from "dayjs/plugin/timezone";
-import isBetween from "dayjs/plugin/isBetween";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import { IDates } from "@/shared/domain/dates/dates.interface";
+import dayjs, { ManipulateType } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
+import isBetween from 'dayjs/plugin/isBetween';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { IDates } from '@/shared/domain/dates/dates.interface';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
