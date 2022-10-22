@@ -29,6 +29,8 @@ export class UserCreateController extends BaseController {
           'password'
         ]);
 
+      userToCreate.role = userToCreate.role || 'standard';
+
       const response = await CreateUserUseCase.getInstance(
         UserRepository
       ).execute(
