@@ -25,7 +25,6 @@ export class UserCreateController extends BaseController {
           'username',
           'email',
           'age',
-          'role',
           'password'
         ]);
 
