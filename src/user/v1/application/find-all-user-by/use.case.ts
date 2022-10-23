@@ -37,7 +37,12 @@ export class FindAllUsersUseCase extends UseCase {
         itemsByPage: query.pageSize,
         usersSize: users.length,
         totalUsers: size,
-        totalPages: floor < totalPages ? floor + 1 : floor,
+        totalPages:
+          users.length < query.pageSize
+            ? query.page
+            : floor < totalPages
+            ? floor + 1
+            : floor,
         users: users.map((user) => user.toPrimitives())
       }
     };
