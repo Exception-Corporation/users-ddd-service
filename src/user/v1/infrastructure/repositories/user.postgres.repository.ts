@@ -106,9 +106,9 @@ export class UserPostgreseRepository implements UserRepository {
     try {
       const users: Array<UserPrimitive<Date>> = await UserModel.find({
         where: query.searchBy,
-        order: { createdAt: 'DESC' },
-        skip: (query.page - 1) * query.pageSize,
-        take: query.pageSize
+        order: { createdAt: 'DESC' }
+        // skip: (query.page - 1) * query.pageSize,
+        // take: query.pageSize
       });
 
       return users.map(User.fromPrimitives);

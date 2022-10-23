@@ -21,7 +21,13 @@ export class FindAllUsersUseCase extends UseCase {
   }
 
   async execute(query: QueryParams): Promise<Response> {
-    const users = await this.userRepository.findAll(query);
+    let users = await this.userRepository.findAll(query);
+    const size = users.length;
+
+    users = users.splice((query.page - 1) * query.pageSize, query.pageSize);
+
+    const totalPages = size / users.length;
+    const floor = Math.floor(totalPages);
 
     let response: ResponsePrimitive = {
       success: true,
@@ -30,6 +36,8 @@ export class FindAllUsersUseCase extends UseCase {
         page: query.page,
         itemsByPage: query.pageSize,
         usersSize: users.length,
+        totalUsers: size,
+        totalPages: floor < totalPages ? floor + 1 : floor,
         users: users.map((user) => user.toPrimitives())
       }
     };
