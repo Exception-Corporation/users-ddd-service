@@ -15,7 +15,9 @@ export class UserFindAllController extends BaseController {
   }
 
   async execute(req: Request, res: Response) {
-    const { pageSize, page, searchBy } = req.query;
+    let { pageSize, page, searchBy } = req.query;
+
+    searchBy = searchBy || '';
 
     try {
       const response = await FindAllUsersUseCase.getInstance(
