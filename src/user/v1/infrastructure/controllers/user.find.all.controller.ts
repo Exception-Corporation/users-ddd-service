@@ -16,11 +16,13 @@ export class UserFindAllController extends BaseController {
 
   async execute(req: Request, res: Response) {
     const { pageSize, page } = req.query;
+    const { searchBy } = req.body;
+
     try {
       const response = await FindAllUsersUseCase.getInstance(
         UserRepository
       ).execute({
-        searchBy: {},
+        searchBy: searchBy || {},
         pageSize: pageSize ? Number(pageSize) : 10,
         page: page ? Number(page) : 1
       });
