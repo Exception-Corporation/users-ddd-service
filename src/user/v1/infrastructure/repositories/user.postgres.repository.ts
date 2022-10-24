@@ -110,7 +110,12 @@ export class UserPostgreseRepository implements UserRepository {
       const users: Array<UserPrimitive<Date>> = await UserModel.find({
         where: properties.length
           ? properties.map((property) => ({
-              [property]: Like(`%${(query.searchBy as any)[property]}%`)
+              [property]:
+                property == 'age'
+                  ? isNaN((query.searchBy as any)[property])
+                    ? 0
+                    : (query.searchBy as any)[property]
+                  : Like(`%${(query.searchBy as any)[property]}%`)
             }))
           : {},
         order: { createdAt: 'DESC' }

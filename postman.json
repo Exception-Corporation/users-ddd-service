@@ -11,6 +11,9 @@
       "item": [
         {
           "name": "Get All",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -22,11 +25,11 @@
                 }
               ]
             },
-            "method": "POST",
+            "method": "GET",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"searchBy\":{\n        \"firstname\": \"a\"\n    }\n}",
+              "raw": "",
               "options": {
                 "raw": {
                   "language": "json"
@@ -34,7 +37,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/getAll?pageSize=6&page=1",
+              "raw": "http://localhost:4000/api/v1/users/getAll?pageSize=6&page=1&searchBy=juli",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
@@ -47,6 +50,10 @@
                 {
                   "key": "page",
                   "value": "1"
+                },
+                {
+                  "key": "searchBy",
+                  "value": "juli"
                 }
               ]
             }
