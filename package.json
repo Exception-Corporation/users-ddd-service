@@ -13,9 +13,9 @@
     "containers:up": "docker-compose up -d --build",
     "containers:down": "docker-compose down",
     "typeorm": "ts-node -r tsconfig-paths/register $(yarn bin typeorm) -d src/shared/infrastructure/database/postgresql/postgres.database.ts",
-    "db:migrate": "yarn typeorm migration:run",
+    "db:migrate": "yarn --silent typeorm migration:run",
     "db:migrate:revert": "yarn typeorm migration:revert",
-    "db:migration:generate": "yarn typeorm migration:generate",
+    "db:migration:generate": "yarn --silent typeorm migration:generate",
     "start:prod": "pm2 start ecosystem.yml",
     "prepare": "husky install"
   },
