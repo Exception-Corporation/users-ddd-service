@@ -16,7 +16,7 @@ Prerequisites:
 
 ### Import the postman json file
 
-- [GET] `http://localhost:4000/api/v1/users/getAll` Get all the users
+- [POST] `http://localhost:4000/api/v1/users/getAll` Get all the users
 - [GET] `http://localhost:4000/api/v1/users/get/:id` Get one user by id
 - [POST] `http://localhost:4000/api/v1/users/` Create new normal user
 - [POST] `http://localhost:4000/api/v1/users/login` Get a token to authenticate in other services

@@ -12,14 +12,43 @@
         {
           "name": "Get All",
           "request": {
-            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"searchBy\":{\n        \"firstname\": \"a\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/getAll",
+              "raw": "http://localhost:4000/api/v1/users/getAll?pageSize=6&page=1",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "v1", "users", "getAll"]
+              "path": ["api", "v1", "users", "getAll"],
+              "query": [
+                {
+                  "key": "pageSize",
+                  "value": "6"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
             }
           },
           "response": []
@@ -27,6 +56,16 @@
         {
           "name": "Get By Id",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
@@ -46,7 +85,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"user\": {\n        \"firstname\": \"Edgar\",\n        \"lastname\": \"Castillo Vega\",\n        \"username\": \"EdgarCV99\",\n        \"email\": \"vayne.edgar271@gmail.com\",\n        \"age\": 22,\n        \"role\": \"standard\",\n        \"password\": \"vega123\"\n    }\n}",
+              "raw": "{\n    \"user\": {\n        \"firstname\": \"Alejandro\",\n        \"lastname\": \"Ramirez\",\n        \"username\": \"Alejandro\",\n        \"email\": \"alejandro@gmail.com\",\n        \"age\": 19,\n        \"password\": \"alejandro123\"\n    }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -66,20 +105,31 @@
         {
           "name": "Delete user by id",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "DELETE",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdG5hbWUiOiJFZGdhciIsImxhc3RuYW1lIjoiQ2FzdGlsbG8gVmVnYSIsInVzZXJuYW1lIjoiRWRnYXJDVjk5IiwiZW1haWwiOiJ2YXluZS5lZGdhcjI3MUBnbWFpbC5jb20iLCJyb2xlIjoicm9vdCIsImFnZSI6MjIsImV4cCI6MTY2NTkyODEyMiwiaWF0IjoxNjY1ODc0MTIyfQ.21hp4_FDI8lx2b6BxXyNyK_FKYFRQwvcF5mmcpMOeZ8",
-                "type": "text"
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
               }
             ],
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/delete/1",
+              "raw": "http://localhost:4000/api/v1/users/delete/3",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "v1", "users", "delete", "1"],
+              "path": ["api", "v1", "users", "delete", "3"],
               "query": [
                 {
                   "key": "",
@@ -94,17 +144,28 @@
         {
           "name": "Update by id",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PUT",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdG5hbWUiOiJFZGdhciIsImxhc3RuYW1lIjoiQ2FzdGlsbG8gVmVnYSIsInVzZXJuYW1lIjoiRWRnYXJDVjk5IiwiZW1haWwiOiJ2YXluZS5lZGdhcjI3MUBnbWFpbC5jb20iLCJyb2xlIjoicm9vdCIsImFnZSI6MjIsImV4cCI6MTY2NTkyODEyMiwiaWF0IjoxNjY1ODc0MTIyfQ.21hp4_FDI8lx2b6BxXyNyK_FKYFRQwvcF5mmcpMOeZ8",
-                "type": "text"
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"user\": {\n        \"password\": \"Vega12$345\"\n    }\n}",
+              "raw": "{\n    \"user\": {\n        \"age\": 33\n    }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -112,23 +173,38 @@
               }
             },
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/update/2",
+              "raw": "http://localhost:4000/api/v1/users/update/5",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "v1", "users", "update", "2"]
+              "path": ["api", "v1", "users", "update", "5"]
             }
           },
           "response": []
         },
         {
           "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var res = JSON.parse(responseBody);",
+                  "if(res.access_token)",
+                  "{",
+                  "    pm.collectionVariables.set('access_token', res.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"user\": {\n        \"username\": \"EdgarCV99\",\n        \"password\": \"Vega12$345\"\n    }\n}",
+              "raw": "{\n    \"user\": {\n        \"username\": \"Brayan01\",\n        \"password\": \"brayan123\"\n    }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -146,6 +222,16 @@
           "response": []
         }
       ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "TestToken",
+      "value": ""
+    },
+    {
+      "key": "access_token",
+      "value": ""
     }
   ]
 }
