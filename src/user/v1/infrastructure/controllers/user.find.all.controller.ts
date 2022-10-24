@@ -4,7 +4,7 @@ import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { FindAllUsersUseCase } from '@/user/v1/application/find-all-user-by/use.case';
 
 export class UserFindAllController extends BaseController {
-  public http = 'get';
+  public http = 'post';
   public roles?: Array<string>;
   public path: string;
 
@@ -15,21 +15,15 @@ export class UserFindAllController extends BaseController {
   }
 
   async execute(req: Request, res: Response) {
-    const { pageSize, page, searchBy } = req.query;
+    const { pageSize, page } = req.query;
 
-    let searching;
-
-    try {
-      searching = JSON.parse(searchBy?.toString() || '{}');
-    } catch (error) {
-      searching = '{}';
-    }
+    const { searchBy } = req.body;
 
     try {
       const response = await FindAllUsersUseCase.getInstance(
         UserRepository
       ).execute({
-        searchBy: searching || {},
+        searchBy: searchBy || {},
         pageSize: pageSize ? Number(pageSize) : 10,
         page: page ? Number(page) : 1
       });
