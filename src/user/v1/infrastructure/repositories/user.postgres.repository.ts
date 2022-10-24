@@ -105,10 +105,14 @@ export class UserPostgreseRepository implements UserRepository {
 
   async findAll(query: QueryParams): Promise<User[]> {
     try {
+      const properties = Object.keys(query.searchBy);
+
       const users: Array<UserPrimitive<Date>> = await UserModel.find({
-        where: Object.keys(query.searchBy).map((property) => ({
-          [property]: Like(`%${(query.searchBy as any)[property]}%`)
-        })),
+        where: properties.length
+          ? properties.map((property) => ({
+              [property]: Like(`%${(query.searchBy as any)[property]}%`)
+            }))
+          : {},
         order: { createdAt: 'DESC' }
         // skip: (query.page - 1) * query.pageSize,
         // take: query.pageSize
