@@ -1,3 +1,4 @@
+import { Like } from 'typeorm';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
 import { User as UserModel } from '@/user/v1/infrastructure/models/user.entity';
@@ -105,7 +106,9 @@ export class UserPostgreseRepository implements UserRepository {
   async findAll(query: QueryParams): Promise<User[]> {
     try {
       const users: Array<UserPrimitive<Date>> = await UserModel.find({
-        where: query.searchBy,
+        where: Object.keys(query.searchBy).map((property) => ({
+          [property]: Like(`%${(query.searchBy as any)[property]}%`)
+        })),
         order: { createdAt: 'DESC' }
         // skip: (query.page - 1) * query.pageSize,
         // take: query.pageSize
