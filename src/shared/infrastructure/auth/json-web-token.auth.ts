@@ -3,7 +3,8 @@ import config from '@/shared/infrastructure/config';
 import { DateLib } from '@/shared/infrastructure/dates';
 import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
-
+import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
+import { UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
 export class JSONWebTokenAuth implements IAuthentication {
   private static instance: JSONWebTokenAuth | undefined;
   private secretKey: string;
@@ -22,12 +23,20 @@ export class JSONWebTokenAuth implements IAuthentication {
     return JSONWebTokenAuth.instance;
   }
 
-  async sign(data: object): Promise<string> {
+  async sign(
+    data: any,
+    propertiesToIgnore: Array<string> = []
+  ): Promise<string> {
     try {
+      data = GlobalFunctions.getNewParams<any>(data, propertiesToIgnore);
+
       const token = await jwt.sign(
         {
           ...data,
-          exp: DateLib.getData(this.expirationTime, 'hours')
+          exp: DateLib.getData(
+            data.exp ? data.exp : this.expirationTime,
+            'hours'
+          )
         },
         this.secretKey
       );

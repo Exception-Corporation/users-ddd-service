@@ -7,19 +7,26 @@ import {
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';
-import { AuthenticationService } from '@/shared/infrastructure/auth';
-import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
-import { UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
+import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 
 export class LoginUserUseCase extends UseCase {
   private static instance: LoginUserUseCase | undefined;
-  constructor(private userRepository: UserRepository) {
+  constructor(
+    private userRepository: UserRepository,
+    private authenticationService: IAuthentication
+  ) {
     super();
   }
 
-  static getInstance(userRepository: UserRepository) {
+  static getInstance(
+    userRepository: UserRepository,
+    authenticationService: IAuthentication
+  ) {
     if (!this.instance) {
-      this.instance = new LoginUserUseCase(userRepository);
+      this.instance = new LoginUserUseCase(
+        userRepository,
+        authenticationService
+      );
     }
 
     return this.instance;
@@ -37,13 +44,9 @@ export class LoginUserUseCase extends UseCase {
       password.valueOf()
     );
 
-    const access_token = await AuthenticationService.sign(
-      GlobalFunctions.getNewParams<UserPrimitive>(user.toPrimitives(), [
-        'createdAt',
-        'updatedAt',
-        'password',
-        'active'
-      ])
+    const access_token = await this.authenticationService.sign(
+      user.toPrimitives(),
+      ['createdAt', 'updatedAt', 'password', 'active']
     );
 
     let response: ResponsePrimitive = {
