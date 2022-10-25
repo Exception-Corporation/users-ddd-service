@@ -1,25 +1,23 @@
 import { ValueObject } from '@/shared/domain/interfaces/value.object';
 import { ValueObjectError } from '@/shared/domain/errors/domain-errors/ValueObjectError';
 
-export class UserEmail implements ValueObject<string> {
-  constructor(private userEmail: string) {
+export class UserPhone implements ValueObject<string> {
+  constructor(private userPhone: string) {
     this.validate();
   }
 
   valueOf(): string {
-    return this.userEmail;
+    return this.userPhone;
   }
 
   fromPrimitive(value: string): ValueObject<string> {
-    return new UserEmail(value);
+    return new UserPhone(value);
   }
 
   validate(): void {
-    const emailRegex =
-      /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
-    if (!this.userEmail || !emailRegex.test(this.userEmail)) {
-      throw new ValueObjectError('User-email not valid');
-    }
+    /*if (this.userPhone) {
+      throw new ValueObjectError('User-phone not valid');
+    }*/
   }
 
   equals(object: ValueObject<string>): boolean {

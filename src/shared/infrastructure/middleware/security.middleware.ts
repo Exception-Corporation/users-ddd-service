@@ -5,6 +5,7 @@ import {
   MiddlewareResponse
 } from '@/shared/domain/middlewares/auth.middleware';
 import { DomainError } from '@/shared/domain/errors/lib/DomainError';
+import { MainLogger } from '../logger/main';
 
 export class MiddlewareRouter
   implements SecurityMiddleware<Request, Response, NextFunction, any>
@@ -45,8 +46,11 @@ export class MiddlewareRouter
           return res
             .status(400)
             .send({ success: false, message: 'Permission deneged' });
+
+        req.body['auth'] = payload;
       } catch (e: any) {
-        console.info(req.headers.authorization);
+        MainLogger.warn(e.toString());
+
         return res
           .status(400)
           .send(

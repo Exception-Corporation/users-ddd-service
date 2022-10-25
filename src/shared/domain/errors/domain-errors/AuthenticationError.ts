@@ -4,7 +4,10 @@ import { DomainErrorCode } from '@/shared/domain/errors/lib/DomainErrorCode';
 export class AuthenticationError extends DomainError {
   public domainErrorCode = DomainErrorCode.DTO_PROPERTIES_ERROR;
 
-  constructor(message: string) {
-    super(`INTERNAL AUTHENTICATION ERROR: ${message}`, 'unsupported');
+  constructor(message: string, wrongPassword?: boolean) {
+    super(
+      wrongPassword ? message : `INTERNAL AUTHENTICATION ERROR: ${message}`,
+      'unsupported'
+    );
   }
 }

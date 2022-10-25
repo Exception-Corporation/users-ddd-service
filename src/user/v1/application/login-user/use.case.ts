@@ -42,7 +42,6 @@ export class LoginUserUseCase extends UseCase {
         'createdAt',
         'updatedAt',
         'password',
-        'id',
         'active'
       ])
     );
