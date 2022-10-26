@@ -53,7 +53,7 @@ export class GetPasswordUseCase extends UseCase {
     });
 
     await this.mailerService.send({
-      to: email,
+      to: emailTo,
       subject: 'Recover password in CRM',
       html: missingPassword(
         emailTo,
