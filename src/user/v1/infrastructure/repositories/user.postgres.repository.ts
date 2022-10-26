@@ -132,11 +132,15 @@ export class UserPostgreseRepository implements UserRepository {
     }
   }
 
-  async findById(userId: number): Promise<User | null> {
+  async findById(userId: number, email?: string): Promise<User | null> {
     try {
-      const userFound = (await UserModel.findOneBy({
-        id: userId
-      })) as UserPrimitive<Date> | null;
+      const userFound = (await UserModel.findOneBy(
+        email
+          ? { email }
+          : {
+              id: userId
+            }
+      )) as UserPrimitive<Date> | null;
 
       return !userFound ? null : User.fromPrimitives(userFound);
     } catch (error: any) {

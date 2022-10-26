@@ -4,6 +4,7 @@ import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { AuthenticationService } from '@/shared/infrastructure/auth';
 import { GetPasswordUseCase } from '@/user/v1/application/get-password/use.case';
 import { MailerService } from '@/shared/infrastructure/mailer';
+import { UserRepository } from '@/user/v1/infrastructure/repositories';
 
 export class UserMissingPasswordController extends BaseController {
   public http = 'post';
@@ -21,7 +22,8 @@ export class UserMissingPasswordController extends BaseController {
 
       const response = await GetPasswordUseCase.getInstance(
         MailerService,
-        AuthenticationService
+        AuthenticationService,
+        UserRepository
       ).execute(new UserEmail(email));
 
       const { status, success, contain } = response.toPrimitives();
