@@ -10,6 +10,7 @@ import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username'
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { UserActive } from '@/user/v1/domain/user/value-objects/user.active';
 import { UserRole } from '@/user/v1/domain/user/value-objects/user.role';
+import { UserPhone } from '@/user/v1/domain/user/value-objects/user.phone';
 
 export type UserPrimitive<T = string> = Omit<
   ReturnType<User['toPrimitives']>,
@@ -25,6 +26,7 @@ export class User extends AggregateRoot {
     private firstname: UserFirstName,
     private lastname: UserLastName,
     private username: UserUsername,
+    private phone: UserPhone,
     private email: UserEmail,
     private password: UserPassword,
     private role: UserRole,
@@ -42,6 +44,7 @@ export class User extends AggregateRoot {
       new UserFirstName(user.firstname),
       new UserLastName(user.lastname),
       new UserUsername(user.username),
+      new UserPhone(user.phone),
       new UserEmail(user.email),
       new UserPassword(user.password),
       new UserRole(user.role),
@@ -58,6 +61,7 @@ export class User extends AggregateRoot {
       firstname: this.firstname.valueOf(),
       lastname: this.lastname.valueOf(),
       username: this.username.valueOf(),
+      phone: this.phone.valueOf(),
       email: this.email.valueOf(),
       password: this.password.valueOf(),
       role: this.role.valueOf(),
@@ -74,6 +78,10 @@ export class User extends AggregateRoot {
 
   getRole(): UserRole {
     return this.role;
+  }
+
+  getPhone(): UserPhone {
+    return this.phone;
   }
 
   getFirstName(): UserFirstName {

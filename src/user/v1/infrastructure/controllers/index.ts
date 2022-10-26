@@ -4,6 +4,7 @@ import { UserUpdateController } from '@/user/v1/infrastructure/controllers/user.
 import { UserLoginController } from '@/user/v1/infrastructure/controllers/user.login.controller';
 import { UserFindAllController } from '@/user/v1/infrastructure/controllers/user.find.all.controller';
 import { UserFindController } from '@/user/v1/infrastructure/controllers/user.find.controller';
+import { UserMissingPasswordController } from '@/user/v1/infrastructure/controllers/user.missing.password.controller';
 
 const Controllers = [
   UserCreateController,
@@ -11,7 +12,8 @@ const Controllers = [
   UserFindAllController,
   UserFindController,
   UserLoginController,
-  UserUpdateController
+  UserUpdateController,
+  UserMissingPasswordController
 ];
 
 export default Controllers.map((Controller) => new Controller());

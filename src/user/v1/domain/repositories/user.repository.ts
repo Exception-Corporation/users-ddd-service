@@ -6,7 +6,7 @@ export interface UserRepository {
   deleteUser(id: number): Promise<boolean>;
   updateUser(user: UserPrimitive, currentPassword: string): Promise<boolean>;
   findAll(query: QueryParams): Promise<Array<User>>;
-  findById(id: number): Promise<User | null>;
+  findById(id: number, email?: string): Promise<User | null>;
   getUserByLogin(
     { username, email }: { username?: string; email?: string },
     password: string

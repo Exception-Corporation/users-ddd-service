@@ -21,5 +21,8 @@ export class CreateUserDTO {
   public role!: UserRoleType;
 
   @IsString()
+  public phone!: string;
+
+  @IsString()
   public password!: string;
 }

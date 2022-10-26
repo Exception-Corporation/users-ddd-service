@@ -8,6 +8,8 @@ import { DTOPropertiesError } from '@/shared/domain/errors/domain-errors/DTOProp
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { UpdateUserUseCase } from '@/user/v1/application/update-user/use.case';
 import { FindUserUseCase } from '@/user/v1/application/find-user-by/use.case';
+import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
+import { EncryptionService } from '@/shared/infrastructure/encryption';
 
 export class UserUpdateController extends BaseController {
   public http = 'put';
@@ -23,12 +25,16 @@ export class UserUpdateController extends BaseController {
   async execute(req: Request, res: Response) {
     const id = Number(req.params.id);
 
-    const userDTO = req.body.user;
+    const owner = Boolean(req.query.owner) || false;
+
+    const { user: userDTO, auth } = req.body;
 
     try {
       if (!userDTO) throw new DTOPropertiesError(['user']);
 
-      const userTo: Partial<CreateUserDTO & { active?: boolean }> = userDTO;
+      const userTo: Partial<
+        CreateUserDTO & { active?: boolean; verifyPassword?: string }
+      > = userDTO;
 
       const { user } = (
         await FindUserUseCase.getInstance(UserRepository).execute(
@@ -37,6 +43,19 @@ export class UserUpdateController extends BaseController {
       ).toPrimitives().contain as { user: UserPrimitive };
 
       const userPrimitive = user;
+
+      if (
+        !(await EncryptionService.verifyEncrypValues(
+          userTo?.verifyPassword || '',
+          user.password
+        )) &&
+        owner &&
+        auth.id == user.id
+      )
+        throw new AuthenticationError(
+          'Wrong password: The current password is incorrect',
+          true
+        );
 
       const response = await UpdateUserUseCase.getInstance(
         UserRepository
@@ -50,6 +69,7 @@ export class UserUpdateController extends BaseController {
           firstname: userTo.firstname || userPrimitive.firstname,
           lastname: userTo.lastname || userPrimitive.lastname,
           username: userTo.username || userPrimitive.username,
+          phone: userTo.phone || userPrimitive.phone,
           email: userTo.email || userPrimitive.email,
           password: userTo.password || userPrimitive.password,
           role: userTo.role || userPrimitive.role

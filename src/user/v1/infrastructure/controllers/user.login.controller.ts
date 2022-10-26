@@ -7,6 +7,7 @@ import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { LoginUserUseCase } from '@/user/v1/application/login-user/use.case';
+import { AuthenticationService } from '@/shared/infrastructure/auth';
 
 export class UserLoginController extends BaseController {
   public http = 'post';
@@ -27,7 +28,8 @@ export class UserLoginController extends BaseController {
         ]);
 
       const response = await LoginUserUseCase.getInstance(
-        UserRepository
+        UserRepository,
+        AuthenticationService
       ).execute(
         {
           email: email ? new UserEmail(email) : undefined,

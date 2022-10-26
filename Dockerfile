@@ -12,7 +12,7 @@ COPY . .
 
 # Installing the project dependencies
 RUN yarn global add pm2
-RUN yarn install --ignore-engines
+RUN yarn install --ignore-engines --network-timeout 100000
 RUN yarn build
 
 # Exposing the RestAPI port

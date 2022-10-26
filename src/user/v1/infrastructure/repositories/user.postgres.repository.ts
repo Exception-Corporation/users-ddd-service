@@ -74,7 +74,10 @@ export class UserPostgreseRepository implements UserRepository {
 
       if (!verifyPassword) throw new InvalidCredentials();
 
-      return User.fromPrimitives(userFound);
+      return User.fromPrimitives({
+        ...userFound,
+        phone: userFound.phone || ''
+      });
     } catch (error: any) {
       if (error instanceof DomainError) throw error;
       throw new DatabaseError(error.toString());
@@ -107,7 +110,7 @@ export class UserPostgreseRepository implements UserRepository {
     try {
       const properties = Object.keys(query.searchBy);
 
-      const users: Array<UserPrimitive<Date>> = await UserModel.find({
+      const users = (await UserModel.find({
         where: properties.length
           ? properties.map((property) => ({
               [property]:
@@ -121,7 +124,7 @@ export class UserPostgreseRepository implements UserRepository {
         order: { createdAt: 'DESC' }
         // skip: (query.page - 1) * query.pageSize,
         // take: query.pageSize
-      });
+      })) as Array<UserPrimitive<Date>>;
 
       return users.map(User.fromPrimitives);
     } catch (error: any) {
@@ -129,11 +132,15 @@ export class UserPostgreseRepository implements UserRepository {
     }
   }
 
-  async findById(userId: number): Promise<User | null> {
+  async findById(userId: number, email?: string): Promise<User | null> {
     try {
-      const userFound: UserPrimitive<Date> | null = await UserModel.findOneBy({
-        id: userId
-      });
+      const userFound = (await UserModel.findOneBy(
+        email
+          ? { email }
+          : {
+              id: userId
+            }
+      )) as UserPrimitive<Date> | null;
 
       return !userFound ? null : User.fromPrimitives(userFound);
     } catch (error: any) {
