@@ -17,7 +17,9 @@
     "db:migrate:revert": "yarn typeorm migration:revert",
     "db:migration:generate": "yarn --silent typeorm migration:generate",
     "start:prod": "pm2 start ecosystem.yml",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "create:user": "ts-node -r tsconfig-paths/register scripts/create-admin-user.ts",
+    "publisher": "docker login && docker push edgarcv99/users-api"
   },
   "keywords": [
     "typescript",
