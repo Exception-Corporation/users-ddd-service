@@ -19,6 +19,7 @@
     "start:prod": "pm2 start ecosystem.yml",
     "prepare": "husky install",
     "create:user": "ts-node -r tsconfig-paths/register scripts/create-admin-user.ts",
+    "build:prod": "docker build -f Dockerfile -t edgarcv99/users-api .",
     "publisher": "docker login && docker push edgarcv99/users-api"
   },
   "keywords": [

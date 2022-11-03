@@ -4,9 +4,7 @@ services:
   app:
     profiles: ['app']
     container_name: users-api
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: edgarcv99/users-api
     ports:
       - ${PROJECT_PORT}:${PROJECT_PORT}
     networks:
