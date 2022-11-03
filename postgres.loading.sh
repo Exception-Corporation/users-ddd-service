@@ -5,7 +5,7 @@ set -e
 host="$1"
 shift
   
-until POSTGRES_HOST=$host yarn typeorm query 'SELECT * FROM public."user"' ; do
+until POSTGRES_HOST=$host yarn typeorm query 'SELECT datname FROM pg_database' ; do
   >&2 echo "Postgres is unavailable - sleeping"
   sleep 1
 done
@@ -19,4 +19,11 @@ until POSTGRES_HOST=$host yarn --silent db:migration:generate migrations/Initial
 done
 
 POSTGRES_HOST=$host yarn --silent db:migrate 
+
+until POSTGRES_HOST=$host yarn create:user ; do
+  >&2 echo "Creating admin"
+  sleep 1
+  break
+done
+
 yarn start:prod && tail -f /dev/null
