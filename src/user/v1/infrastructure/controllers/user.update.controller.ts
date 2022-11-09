@@ -19,7 +19,7 @@ export class UserUpdateController extends BaseController {
   constructor() {
     super();
     this.path = '/update/:id';
-    this.roles = ['standard', 'root'];
+    this.roles = ['standard', 'root', 'visitor'];
   }
 
   async execute(req: Request, res: Response) {
