@@ -12,7 +12,7 @@ export class UserFindController extends BaseController {
   constructor() {
     super();
     this.path = '/get/:id';
-    this.roles = ['standard', 'root'];
+    this.roles = ['standard', 'root', 'visitor'];
   }
 
   async execute(req: Request, res: Response) {
