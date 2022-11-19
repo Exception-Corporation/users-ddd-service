@@ -12,7 +12,7 @@ export class UserRouter extends RouterC<Router> {
   constructor(protected logger: Logger) {
     super(logger);
 
-    this.authMiddleware = new MiddlewareRouter();
+    this.authMiddleware = new MiddlewareRouter(logger);
 
     this.path = '/api/v1/users';
     this.router;

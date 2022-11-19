@@ -5,12 +5,12 @@ import {
   MiddlewareResponse
 } from '@/shared/domain/middlewares/auth.middleware';
 import { DomainError } from '@/shared/domain/errors/lib/DomainError';
-import { MainLogger } from '../logger/main';
+import { Logger } from '@/shared/domain/logger';
 
 export class MiddlewareRouter
   implements SecurityMiddleware<Request, Response, NextFunction, any>
 {
-  constructor() {}
+  constructor(private logger: Logger) {}
   /**
    * Validation middleware for authentication in a router
    * @param req
@@ -49,7 +49,7 @@ export class MiddlewareRouter
 
         req.body['auth'] = payload;
       } catch (e: any) {
-        MainLogger.warn(e.toString());
+        this.logger.warn(e.toString());
 
         return res
           .status(400)
