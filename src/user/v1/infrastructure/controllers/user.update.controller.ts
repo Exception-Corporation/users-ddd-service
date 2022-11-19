@@ -10,16 +10,16 @@ import { UpdateUserUseCase } from '@/user/v1/application/update-user/use.case';
 import { FindUserUseCase } from '@/user/v1/application/find-user-by/use.case';
 import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
 import { EncryptionService } from '@/shared/infrastructure/encryption';
+import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
 
-export class UserUpdateController extends BaseController {
-  public http = 'put';
-  public path: string;
-  public roles: Array<string>; //Auth
-
+@Controller({
+  http: 'put',
+  path: '/update/:id',
+  roles: ['standard', 'root', 'visitor']
+})
+export class UserUpdateController extends BaseController<Request, Response> {
   constructor() {
     super();
-    this.path = '/update/:id';
-    this.roles = ['standard', 'root', 'visitor'];
   }
 
   async execute(req: Request, res: Response) {

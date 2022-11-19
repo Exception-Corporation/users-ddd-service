@@ -7,11 +7,7 @@ type Exception = {
   message: string;
 };
 
-export abstract class BaseController {
-  abstract http: string;
-  abstract path: string;
-  abstract roles?: Array<string>;
-
+export abstract class BaseController<R, S> {
   protected mapperException(
     res: any,
     exception: DomainError,
@@ -77,4 +73,6 @@ export abstract class BaseController {
       .status(DomainErrorToHttpStatus[exception.domainErrorCode])
       .send({ success: false, module: 'global', ...body });
   }
+
+  abstract execute(req: R, res: S): Promise<any>;
 }

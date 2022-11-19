@@ -1,3 +1,5 @@
+import { InternalError } from '@/shared/domain/errors/domain-errors/InternalError';
+
 export class GlobalFunctions {
   private constructor() {}
 
@@ -38,5 +40,27 @@ export class GlobalFunctions {
 
   static safeVal(data: boolean, firstValue: any, secondValue: any) {
     return data ? firstValue : secondValue;
+  }
+
+  static verifyDuplicationValues<T>(
+    array: Array<T>,
+    properties: Array<keyof T>
+  ) {
+    const newArray = array.map((obj) => {
+      const newObj: any = {};
+
+      properties.forEach((property) => {
+        newObj[property] = obj[property];
+      });
+
+      return JSON.stringify(newObj);
+    });
+
+    const arrayToValidate = [...new Set([...newArray])];
+
+    if (arrayToValidate.length !== newArray.length)
+      throw new InternalError(
+        'Duplicate controllers with the http and path values.'
+      );
   }
 }

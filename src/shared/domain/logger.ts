@@ -4,6 +4,7 @@ export interface Logger {
   warn: (message: string) => void;
   debug: (message: string) => void;
   success: (message: logSuccess) => void;
+  table: (message: Array<any>) => void;
 }
 
 export type EntityInfo = {

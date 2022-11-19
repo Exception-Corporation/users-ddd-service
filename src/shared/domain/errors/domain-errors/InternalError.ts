@@ -1,10 +1,10 @@
 import { DomainError } from '@/shared/domain/errors/lib/DomainError';
 import { DomainErrorCode } from '@/shared/domain/errors/lib/DomainErrorCode';
 
-export class DatabaseError extends DomainError {
-  public domainErrorCode = DomainErrorCode.DATABASE_ERROR;
+export class InternalError extends DomainError {
+  public domainErrorCode = DomainErrorCode.INTERNAL_ERROR;
 
   constructor(message: string) {
-    super(`INTERNAL DATABASE ERROR: ${message}`, 'unsupported');
+    super(`INTERNAL GENERAL ERROR: ${message}`, 'unsupported');
   }
 }

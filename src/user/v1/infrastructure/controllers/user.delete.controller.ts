@@ -3,16 +3,16 @@ import { BaseController } from '@/shared/infrastructure/controller/base.controll
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
 import { DeleteUserUseCase } from '@/user/v1/application/delete-user/use.case';
+import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
 
-export class UserDeleteController extends BaseController {
-  public http = 'delete';
-  public path: string;
-  public roles: Array<string>; //Auth
-
+@Controller({
+  http: 'delete',
+  path: '/delete/:id',
+  roles: ['standard', 'root']
+})
+export class UserDeleteController extends BaseController<Request, Response> {
   constructor() {
     super();
-    this.path = '/delete/:id';
-    this.roles = ['standard', 'root'];
   }
 
   async execute(req: Request, res: Response) {

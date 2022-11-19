@@ -6,5 +6,6 @@ export const DomainErrorToHttpStatus: Record<DomainErrorCode, HttpStatus> = {
   [DomainErrorCode.USER_NOT_FOUND]: HttpStatus.NOT_FOUND,
   [DomainErrorCode.DTO_PROPERTIES_ERROR]: HttpStatus.BAD_REQUEST,
   [DomainErrorCode.INVALID_CREDENTIALS]: HttpStatus.BAD_REQUEST,
-  [DomainErrorCode.DATABASE_ERROR]: HttpStatus.INTERNAL_SERVER_ERROR
+  [DomainErrorCode.DATABASE_ERROR]: HttpStatus.INTERNAL_SERVER_ERROR,
+  [DomainErrorCode.INTERNAL_ERROR]: HttpStatus.INTERNAL_SERVER_ERROR
 };

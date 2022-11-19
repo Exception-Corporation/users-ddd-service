@@ -21,10 +21,12 @@ export class SharedBootstrap implements StartModule {
 
         await server.getApp().initialize();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error({
         type: 'BOOTSTRAP_ERROR',
-        message: `[${SharedBootstrap.name}] Error ${error}`,
+        message: `[${SharedBootstrap.name}] Error ${
+          error?.message || error.toString()
+        }`,
         module: 'SHARED',
         level: 'error'
       });

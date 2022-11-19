@@ -1,6 +1,10 @@
 import { logError, logSuccess, Logger } from '@/shared/domain/logger';
 
 export class LoggerMock implements Logger {
+  table(message: Array<any>): void {
+    console.table(message);
+  }
+
   info(message: string): void {
     console.info(message);
   }
