@@ -5,15 +5,18 @@ import { AuthenticationService } from '@/shared/infrastructure/auth';
 import { GetPasswordUseCase } from '@/user/v1/application/get-password/use.case';
 import { MailerService } from '@/shared/infrastructure/mailer';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
+import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
 
-export class UserMissingPasswordController extends BaseController {
-  public http = 'post';
-  public roles?: Array<string>;
-  public path: string;
-
+@Controller({
+  http: 'post',
+  path: '/missing/password/:email'
+})
+export class UserMissingPasswordController extends BaseController<
+  Request,
+  Response
+> {
   constructor() {
     super();
-    this.path = '/missing/password/:email';
   }
 
   async execute(req: Request, res: Response) {

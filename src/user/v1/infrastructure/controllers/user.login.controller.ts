@@ -8,15 +8,15 @@ import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username'
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { LoginUserUseCase } from '@/user/v1/application/login-user/use.case';
 import { AuthenticationService } from '@/shared/infrastructure/auth';
+import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
 
-export class UserLoginController extends BaseController {
-  public http = 'post';
-  public roles?: Array<string>;
-  public path: string;
-
+@Controller({
+  http: 'post',
+  path: '/login/'
+})
+export class UserLoginController extends BaseController<Request, Response> {
   constructor() {
     super();
-    this.path = '/login/';
   }
 
   async execute(req: Request, res: Response) {

@@ -3,16 +3,16 @@ import { BaseController } from '@/shared/infrastructure/controller/base.controll
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
 import { FindUserUseCase } from '@/user/v1/application/find-user-by/use.case';
+import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
 
-export class UserFindController extends BaseController {
-  public http = 'get';
-  public roles?: Array<string>;
-  public path: string;
-
+@Controller({
+  http: 'get',
+  path: '/get/:id',
+  roles: ['standard', 'root', 'visitor']
+})
+export class UserFindController extends BaseController<Request, Response> {
   constructor() {
     super();
-    this.path = '/get/:id';
-    this.roles = ['standard', 'root', 'visitor'];
   }
 
   async execute(req: Request, res: Response) {

@@ -5,6 +5,7 @@ import { UserLoginController } from '@/user/v1/infrastructure/controllers/user.l
 import { UserFindAllController } from '@/user/v1/infrastructure/controllers/user.find.all.controller';
 import { UserFindController } from '@/user/v1/infrastructure/controllers/user.find.controller';
 import { UserMissingPasswordController } from '@/user/v1/infrastructure/controllers/user.missing.password.controller';
+import { ControllerParams } from '@/shared/infrastructure/controller/decorators/controller';
 
 const Controllers = [
   UserCreateController,
@@ -16,4 +17,9 @@ const Controllers = [
   UserMissingPasswordController
 ];
 
-export default Controllers.map((Controller) => new Controller());
+export default Controllers.map((Controller) => {
+  const controller = new Controller();
+  type ControllerType = typeof controller & ControllerParams;
+
+  return controller as ControllerType;
+});

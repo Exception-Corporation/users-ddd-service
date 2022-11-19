@@ -5,15 +5,15 @@ import { CreateUserDTO } from '@/user/v1/infrastructure/dtos/create.user.dto';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { User } from '@/user/v1/domain/user/user.aggregate.root';
 import { CreateUserUseCase } from '@/user/v1/application/create-user/use.case';
+import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
 
-export class UserCreateController extends BaseController {
-  public http = 'post';
-  public roles?: Array<string>;
-  public path: string;
-
+@Controller({
+  http: 'post',
+  path: ''
+})
+export class UserCreateController extends BaseController<Request, Response> {
   constructor() {
     super();
-    this.path = '';
   }
 
   async execute(req: Request, res: Response) {

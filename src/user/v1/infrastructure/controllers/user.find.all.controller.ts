@@ -2,16 +2,16 @@ import { Request, Response } from 'express';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { FindAllUsersUseCase } from '@/user/v1/application/find-all-user-by/use.case';
+import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
 
-export class UserFindAllController extends BaseController {
-  public http = 'get';
-  public roles?: Array<string>;
-  public path: string;
-
+@Controller({
+  http: 'get',
+  path: '/getAll',
+  roles: ['standard', 'root']
+})
+export class UserFindAllController extends BaseController<Request, Response> {
   constructor() {
     super();
-    this.path = '/getAll';
-    this.roles = ['standard', 'root'];
   }
 
   async execute(req: Request, res: Response) {
