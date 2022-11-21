@@ -4,9 +4,9 @@ import Controllers from '@/user/v1/infrastructure/controllers';
 import { MiddlewareRouter } from '@/shared/infrastructure/middleware/security.middleware';
 import { Logger } from '@/shared/domain/logger';
 import { ControllerParams } from '@/shared/infrastructure/controller/decorators/controller';
-import { RouterD } from '@/shared/infrastructure/router/decorators/router.decorator';
+import { Routes } from '@/shared/infrastructure/router/decorators/router.decorator';
 
-@RouterD({ path: '/api/v1/users', Controllers })
+@Routes({ path: '/api/v1/users', Controllers })
 export class UserRouter extends RouterC<Router> {
   private router: Router = Router();
   private authMiddleware: MiddlewareRouter;

@@ -2,7 +2,7 @@ import { ControllerParams } from '@/shared/infrastructure/controller/decorators/
 import { MainLogger } from '@/shared/infrastructure/logger/main';
 import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
 
-export function RouterD({
+export function Routes({
   path,
   Controllers
 }: {
