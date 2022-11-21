@@ -1,10 +1,9 @@
 import express, { Application as app } from 'express';
 import cors from 'cors';
 import { Server } from '@/shared/domain/interfaces/server.interface';
-import { UserRouter } from '@/user/v1/infrastructure/routers/user.router';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
-import { RequireContext } from '@/shared/infrastructure/auto-files/require.context';
+import { RequireService } from '@/shared/infrastructure/auto-files/';
 
 export class Application implements Server<app> {
   private app: app;
@@ -16,7 +15,11 @@ export class Application implements Server<app> {
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cors());
 
-    this.app.use('/', new UserRouter(this.logger).getRoutes());
+    this.getRouters().forEach((Router) => {
+      const router = new Router(this.logger);
+      if (router.path !== undefined)
+        this.app.use(router.path, router.getRoutes());
+    });
   }
 
   getApp() {
@@ -33,7 +36,7 @@ export class Application implements Server<app> {
     };
   }
 
-  getRouters() {
-    return new RequireContext().getFiles('@/', true, /^((?!!+).)*router.ts$/);
+  getRouters(): Array<any> {
+    return RequireService.getFiles('src/**/*.router.ts');
   }
 }

@@ -1,25 +1,14 @@
-import { UserCreateController } from '@/user/v1/infrastructure/controllers/user.create.controller';
-import { UserDeleteController } from '@/user/v1/infrastructure/controllers/user.delete.controller';
-import { UserUpdateController } from '@/user/v1/infrastructure/controllers/user.update.controller';
-import { UserLoginController } from '@/user/v1/infrastructure/controllers/user.login.controller';
-import { UserFindAllController } from '@/user/v1/infrastructure/controllers/user.find.all.controller';
-import { UserFindController } from '@/user/v1/infrastructure/controllers/user.find.controller';
-import { UserMissingPasswordController } from '@/user/v1/infrastructure/controllers/user.missing.password.controller';
-import { ControllerParams } from '@/shared/infrastructure/controller/decorators/controller';
+import { RequireService } from '@/shared/infrastructure/auto-files/';
 
-const Controllers = [
-  UserCreateController,
-  UserDeleteController,
-  UserFindAllController,
-  UserFindController,
-  UserLoginController,
-  UserUpdateController,
-  UserMissingPasswordController
-];
+const Controllers = RequireService.getFiles(
+  'src/user/v1/infrastructure/controllers/*.controller.ts'
+);
 
-export default Controllers.map((Controller) => {
+export default Controllers.map((Controller: any) => {
   const controller = new Controller();
-  type ControllerType = typeof controller & ControllerParams;
 
-  return controller as ControllerType;
-});
+  return controller;
+}).filter(
+  (controller: { path: string; http: string }) =>
+    controller.path !== undefined && controller.http !== undefined
+);
