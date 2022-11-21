@@ -69,5 +69,9 @@ export default {
       front: process.env.MAILER_FRONT
     }
   },
-  test: process.env.NODE_TEST
+  test: process.env.NODE_TEST,
+  RateLimit: {
+    duration: process.env.RATE_LIMIT_DURATION_MS,
+    request: process.env.RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION
+  }
 };

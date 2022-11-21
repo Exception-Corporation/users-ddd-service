@@ -1,4 +1,4 @@
-import { cleanEnv, port, str, host, email } from 'envalid';
+import { cleanEnv, port, str, host, email, bool } from 'envalid';
 
 declare const process: any;
 
@@ -20,7 +20,24 @@ const validateEnv = () => {
     POSTGRES_PORT_TEST: port(),
     PGADMIN_DEFAULT_EMAIL: email(),
     PGADMIN_DEFAULT_PASSWORD: str(),
-    PGADMIN_PORT: port()
+    PGADMIN_PORT: port(),
+    REDIS_IS_SECURE: bool(),
+    REDIS_HOSTNAME: host(),
+    REDIS_PORT: port(),
+    REDIS_USERNAME: str(),
+    REDIS_PASSWORD: str(),
+
+    REDIS_COMMANDER_USER: str(),
+    REDIS_COMMANDER_PASSWORD: str(),
+    REDIS_COMMANDER_PORT: str(),
+
+    MAILER_HOST: host(),
+    MAILER_PORT: str(),
+    MAILER_EMAIL: email(),
+    MAILER_PASSWORD: str(),
+
+    RATE_LIMIT_DURATION_MS: str(),
+    RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION: str()
   });
 };
 

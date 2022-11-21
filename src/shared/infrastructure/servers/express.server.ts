@@ -1,4 +1,5 @@
 import express, { Application as app } from 'express';
+import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import { Server } from '@/shared/domain/interfaces/server.interface';
 import config from '@/shared/infrastructure/config';
@@ -14,6 +15,15 @@ export class Application implements Server<app> {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cors());
+
+    const apiLimiter = rateLimit({
+      windowMs: config.RateLimit.duration,
+      max: config.RateLimit.request,
+      standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+      legacyHeaders: false // Disable the `X-RateLimit-*` headers
+    });
+
+    this.app.use('/', apiLimiter);
 
     this.getRouters().forEach((Router) => {
       const router = new Router(this.logger);
