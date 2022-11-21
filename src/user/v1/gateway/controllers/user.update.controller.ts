@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
-import { CreateUserDTO } from '@/user/v1/infrastructure/dtos/create.user.dto';
+import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
 import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';

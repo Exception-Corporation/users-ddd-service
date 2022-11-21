@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { RequestAdapter } from '@/user/v1/infrastructure/adapters/';
-import { LoginUserDTO } from '@/user/v1/infrastructure/dtos/login.user.dto';
+import { LoginUserDTO } from '@/user/v1/gateway/dtos/login.user.dto';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';

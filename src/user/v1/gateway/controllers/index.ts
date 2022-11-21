@@ -1,7 +1,7 @@
 import { RequireService } from '@/shared/infrastructure/auto-files/';
 
 const Controllers = RequireService.getFiles(
-  'src/user/v1/infrastructure/controllers/*.controller.ts'
+  'src/user/v1/gateway/controllers/*.controller.ts'
 );
 
 export default Controllers.map((Controller: any) => {

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { RouterC } from '@/shared/infrastructure/router/router.class';
-import Controllers from '@/user/v1/infrastructure/controllers';
+import Controllers from '@/user/v1/gateway/controllers';
 import { MiddlewareRouter } from '@/shared/infrastructure/middleware/security.middleware';
 import { Logger } from '@/shared/domain/logger';
 import { ControllerParams } from '@/shared/infrastructure/controller/decorators/controller';
