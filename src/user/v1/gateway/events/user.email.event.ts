@@ -1,7 +1,10 @@
 import { DomainEventClass } from '@/shared/domain/event-bus/domain.event';
 import { DomainEventSubscriber } from '@/shared/domain/event-bus/domain.event.subscriber';
 
-import { UserEmailDomainEvent } from '@/user/v1/domain/events/user.email.event';
+import {
+  UserEmailDomainEvent,
+  Body
+} from '@/user/v1/domain/events/user.email.event';
 
 import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import { RequestAdapter } from '@/user/v1/infrastructure/adapters';
@@ -31,7 +34,11 @@ export class TrackingTracingEvent
       data: domainEvent.getData()
     };
 
-    const { data } = await RequestAdapter.validateData(body);
+    const { data } = await RequestAdapter.validateData(body, [
+      'html',
+      'to',
+      'subject'
+    ]);
 
     const { to, subject, html } = MailDto.fromJson(data).to().toPrimitives();
 

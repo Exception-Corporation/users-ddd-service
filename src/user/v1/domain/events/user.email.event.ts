@@ -1,6 +1,6 @@
 import { DomainEvent } from '@/shared/domain/event-bus/domain.event';
 
-type Body = {
+export type Body = {
   to: string;
   subject: string;
   html: string;
