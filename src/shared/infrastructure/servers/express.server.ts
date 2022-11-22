@@ -1,6 +1,7 @@
 import express, { Application as app } from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import morgan from 'morgan';
 import { Server } from '@/shared/domain/interfaces/server.interface';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
@@ -15,6 +16,7 @@ export class Application implements Server<app> {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cors());
+    this.app.use(morgan('dev'));
 
     const apiLimiter = rateLimit({
       windowMs: config.RateLimit.duration,

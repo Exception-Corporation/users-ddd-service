@@ -9,7 +9,7 @@ export default {
   password: postgres.password,
   database: postgres.database,
   rol: postgres.rol,
-  logging: 'all',
+  logging: postgres.logging ? 'all' : false,
   maxQueryExecutionTime: 2000,
   type: 'postgres',
   synchronize: false,
