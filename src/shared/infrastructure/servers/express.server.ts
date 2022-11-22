@@ -29,8 +29,7 @@ export class Application implements Server<app> {
 
     this.getRouters().forEach((Router) => {
       const router = new Router(this.logger);
-      if (router.path !== undefined)
-        this.app.use(router.path, router.getRoutes());
+      this.app.use(router.path, router.getRoutes());
     });
   }
 
@@ -49,6 +48,6 @@ export class Application implements Server<app> {
   }
 
   getRouters(): Array<any> {
-    return RequireService.getFiles('src/**/*.router.ts');
+    return RequireService.getFiles('src/**/*.router.ts', ['path']);
   }
 }

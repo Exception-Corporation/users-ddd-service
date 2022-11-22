@@ -74,5 +74,15 @@ export default {
   RateLimit: {
     duration: process.env.RATE_LIMIT_DURATION_MS,
     request: process.env.RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION
+  },
+  buses: {
+    rabbitmq: {
+      user: process.env.RABBITMQ_DEFAULT_USER,
+      password: process.env.RABBITMQ_DEFAULT_PASS,
+      host: process.env.RABBITMQ_HOST,
+      port: process.env.RABBITMQ_PORT,
+      queue: process.env.RABBITMQ_QUEUE,
+      exchange: process.env.RABBITMQ_EXCHANGE
+    }
   }
 };

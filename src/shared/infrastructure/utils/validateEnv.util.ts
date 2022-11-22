@@ -37,7 +37,13 @@ const validateEnv = () => {
     MAILER_PASSWORD: str(),
 
     RATE_LIMIT_DURATION_MS: str(),
-    RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION: str()
+    RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION: str(),
+    RABBITMQ_DEFAULT_USER: str(),
+    RABBITMQ_DEFAULT_PASS: str(),
+    RABBITMQ_PORT: port(),
+    RABBITMQ_HOST: host(),
+    RABBITMQ_QUEUE: str(),
+    RABBITMQ_EXCHANGE: str()
   });
 };
 
