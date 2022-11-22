@@ -22,7 +22,7 @@ export class UserLoginController extends BaseController<Request, Response> {
   async execute(req: Request, res: Response) {
     try {
       const { email, username, password }: LoginUserDTO =
-        await RequestAdapter.build<LoginUserDTO>(req.body.user, [
+        await RequestAdapter.validateData<LoginUserDTO>(req.body.user, [
           'password',
           'OR:email,username'
         ]);

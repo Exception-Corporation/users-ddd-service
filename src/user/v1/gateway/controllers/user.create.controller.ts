@@ -19,7 +19,7 @@ export class UserCreateController extends BaseController<Request, Response> {
   async execute(req: Request, res: Response) {
     try {
       const userToCreate: CreateUserDTO =
-        await RequestAdapter.build<CreateUserDTO>(req.body.user, [
+        await RequestAdapter.validateData<CreateUserDTO>(req.body.user, [
           'firstname',
           'lastname',
           'username',
