@@ -1,9 +1,9 @@
-import * as uuid from 'uuid';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
 import {
   Response,
   ResponsePrimitive
 } from '@/user/v1/domain/response/response.entity';
+import { Identifier } from '@/shared/infrastructure/uuid/identifier';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import missingPassword from '@/shared/domain/mail/templates/missing.password';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
@@ -54,20 +54,7 @@ export class GetPasswordUseCase extends UseCase {
       exp: 1
     });
 
-    await this.eventBus.publish([
-      new SendEmailDomainEvent(
-        uuid.v4(),
-        {
-          to: emailTo,
-          subject: 'Recover password in CRM',
-          html: missingPassword(
-            emailTo,
-            `${config.mailer.nodemailer.front}?token=${access_token}`
-          )
-        },
-        new Date()
-      )
-    ]);
+    await this.publishEvents(emailTo, access_token);
 
     let response: ResponsePrimitive = {
       success: true,
@@ -82,5 +69,22 @@ export class GetPasswordUseCase extends UseCase {
       response.status,
       response.contain
     );
+  }
+
+  private async publishEvents(email: string, token: string) {
+    await this.eventBus.publish([
+      new SendEmailDomainEvent(
+        Identifier.random().valueOf(),
+        {
+          to: email,
+          subject: 'Recover password in CRM',
+          html: missingPassword(
+            email,
+            `${config.mailer.nodemailer.front}?token=${token}`
+          )
+        },
+        new Date()
+      )
+    ]);
   }
 }
