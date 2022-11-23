@@ -36,8 +36,7 @@ cd users-api
 yarn
 yarn containers:up # run the docker-compose
 yarn containers:down # remove the containers
-yarn db:migration:generate migrations/InitialConfig
-yarn db:migrate
+sh postgres.loading.sh localhost
 yarn prod #compile typescript to javascript and run the api in production mode
 yarn dev #run the api in development mode with nodemon
 ```

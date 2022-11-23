@@ -3,7 +3,7 @@ import { CacheService } from '@/shared/infrastructure/cache/redis.cache';
 import { PostgresDatabase } from '@/shared/infrastructure/database/postgresql/postgres.database';
 import { Application } from '@/shared/infrastructure/servers/express.server';
 import { MainLogger } from '@/shared/infrastructure/logger/main/';
-import { RabbitMQEventBus } from '@/shared/infrastructure/event-bus/rabbitmq/rabbitmq.event.bus';
+import { MainEventBus } from '@/shared/infrastructure/event-bus';
 import config from '@/shared/infrastructure/config';
 import { RequireService } from '@/shared/infrastructure/auto-files';
 
@@ -26,7 +26,6 @@ export class SharedBootstrap implements StartModule {
         await server.getApp().initialize();
       }
     } catch (error: any) {
-      console.info(error);
       MainLogger.error({
         type: 'BOOTSTRAP_ERROR',
         message: `[${SharedBootstrap.name}] Error ${
@@ -39,25 +38,12 @@ export class SharedBootstrap implements StartModule {
   }
 
   private async startEventBus(): Promise<void> {
-    const { user, password, host, port, queue, exchange } =
-      config.buses.rabbitmq;
-    const eventBus = new RabbitMQEventBus(MainLogger, {
-      user,
-      password,
-      host,
-      port,
-      queue,
-      exchange,
-      retries: 5,
-      interval: 60
-    });
-
     const subscriberDefinitions = RequireService.getFiles(
-      'src/**/events/*.event.ts',
-      ['EVENT_NAME']
-    );
+      'src/**/gateway/events/*.event.ts',
+      ['on', 'subscribedTo']
+    ).map((Subscriber: any) => new Subscriber(MainEventBus, MainLogger));
 
-    eventBus.addSubscribers(subscriberDefinitions);
-    eventBus.start();
+    MainEventBus.addSubscribers(subscriberDefinitions);
+    MainEventBus.start();
   }
 }

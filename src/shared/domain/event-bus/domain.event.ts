@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import * as uuid from 'uuid';
 
 export abstract class DomainEvent {
   static EVENT_NAME: string;
@@ -12,7 +12,7 @@ export abstract class DomainEvent {
   constructor(
     eventName: string,
     eventType: string | null,
-    eventId: string,
+    eventId?: string,
     occurredAt?: Date
   ) {
     this.eventName = eventName;

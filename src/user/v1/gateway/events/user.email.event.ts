@@ -1,10 +1,7 @@
 import { DomainEventClass } from '@/shared/domain/event-bus/domain.event';
 import { DomainEventSubscriber } from '@/shared/domain/event-bus/domain.event.subscriber';
 
-import {
-  UserEmailDomainEvent,
-  Body
-} from '@/user/v1/domain/events/user.email.event';
+import { UserEmailDomainEvent } from '@/user/v1/domain/events/user.email.event';
 
 import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import { RequestAdapter } from '@/user/v1/infrastructure/adapters';
@@ -14,7 +11,7 @@ import { EventIdDto } from '@/user/v1/gateway/dtos/events/eventId.dto';
 import { Logger } from '@/shared/domain/logger';
 import { MailerService } from '@/shared/infrastructure/mailer';
 
-export class TrackingTracingEvent
+export class UserEmailEvent
   implements DomainEventSubscriber<UserEmailDomainEvent>
 {
   constructor(
@@ -34,7 +31,7 @@ export class TrackingTracingEvent
       data: domainEvent.getData()
     };
 
-    const { data } = await RequestAdapter.validateData(body, [
+    const data = await RequestAdapter.validateData(body.data, [
       'html',
       'to',
       'subject'
@@ -51,9 +48,9 @@ export class TrackingTracingEvent
     });
 
     this.logger.success({
-      entityinfo: { class: TrackingTracingEvent.name },
+      entityinfo: { class: UserEmailEvent.name },
       level: 'ok',
-      module: TrackingTracingEvent.name,
+      module: UserEmailEvent.name,
       result: `The mail was sent with the eventId: ${eventId.to().valueOf()}`
     });
   }
