@@ -54,7 +54,7 @@ export class GetPasswordUseCase extends UseCase {
       exp: 1
     });
 
-    await this.publishEvents(emailTo, access_token);
+    await this.publish(emailTo, access_token);
 
     let response: ResponsePrimitive = {
       success: true,
@@ -71,7 +71,7 @@ export class GetPasswordUseCase extends UseCase {
     );
   }
 
-  private async publishEvents(email: string, token: string) {
+  private async publish(email: string, token: string) {
     await this.eventBus.publish([
       new SendEmailDomainEvent(
         Identifier.random().valueOf(),
