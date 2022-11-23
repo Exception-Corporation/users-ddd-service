@@ -1,9 +1,9 @@
 apps:
   - script: ./build/index.js
-    name: "app"
+    name: 'app'
     instances: max
     exec_mode: cluster
-    node_args: "-r ts-node/register/transpile-only -r tsconfig-paths/register"
+    node_args: '-r ts-node/register/transpile-only -r tsconfig-paths/register'
     instance_var: INSTANCE_ID
     autorestart: true
     watch: true
@@ -13,4 +13,5 @@ apps:
     env:
       REDIS_HOSTNAME: redis-users
       POSTGRES_HOST: postgres-users
+      RABBITMQ_HOST: rabbitmq-users
       PROJECT_MODE: production

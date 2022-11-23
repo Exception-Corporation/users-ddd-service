@@ -1,20 +1,22 @@
+import * as uuid from 'uuid';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
 import {
   Response,
   ResponsePrimitive
 } from '@/user/v1/domain/response/response.entity';
-import { IMailer } from '@/shared/domain/mail/mailer.interface';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import missingPassword from '@/shared/domain/mail/templates/missing.password';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
-import config from '@/shared/infrastructure/config';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import { UserNotFound } from '@/shared/domain/errors/domain-errors/UserNotFound';
+import { EventBus } from '@/shared/domain/event-bus/event.bus';
+import { SendEmailDomainEvent } from '@/user/v1/domain/events/send.emai.event';
+import config from '@/shared/infrastructure/config';
 
 export class GetPasswordUseCase extends UseCase {
   private static instance: GetPasswordUseCase | undefined;
   constructor(
-    private mailerService: IMailer<any>,
+    private eventBus: EventBus,
     private authenticationService: IAuthentication,
     private repository: UserRepository
   ) {
@@ -22,13 +24,13 @@ export class GetPasswordUseCase extends UseCase {
   }
 
   static getInstance(
-    mailerService: IMailer<any>,
+    eventBus: EventBus,
     authenticationService: IAuthentication,
     repository: UserRepository
   ) {
     if (!this.instance) {
       this.instance = new GetPasswordUseCase(
-        mailerService,
+        eventBus,
         authenticationService,
         repository
       );
@@ -52,14 +54,20 @@ export class GetPasswordUseCase extends UseCase {
       exp: 1
     });
 
-    await this.mailerService.send({
-      to: emailTo,
-      subject: 'Recover password in CRM',
-      html: missingPassword(
-        emailTo,
-        `${config.mailer.nodemailer.front}?token=${access_token}`
+    await this.eventBus.publish([
+      new SendEmailDomainEvent(
+        uuid.v4(),
+        {
+          to: emailTo,
+          subject: 'Recover password in CRM',
+          html: missingPassword(
+            emailTo,
+            `${config.mailer.nodemailer.front}?token=${access_token}`
+          )
+        },
+        new Date()
       )
-    });
+    ]);
 
     let response: ResponsePrimitive = {
       success: true,

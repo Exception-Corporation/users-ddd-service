@@ -29,7 +29,8 @@ export default {
       password: process.env.POSTGRES_PASSWORD,
       host: process.env.POSTGRES_HOST,
       port: process.env.POSTGRES_PORT,
-      database: process.env.POSTGRES_DB
+      database: process.env.POSTGRES_DB,
+      logging: process.env.PROJECT_MODE == 'development'
     }
   },
   database_test: {
@@ -69,5 +70,19 @@ export default {
       front: process.env.MAILER_FRONT
     }
   },
-  test: process.env.NODE_TEST
+  test: process.env.NODE_TEST,
+  RateLimit: {
+    duration: process.env.RATE_LIMIT_DURATION_MS,
+    request: process.env.RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION
+  },
+  buses: {
+    rabbitmq: {
+      user: process.env.RABBITMQ_DEFAULT_USER,
+      password: process.env.RABBITMQ_DEFAULT_PASS,
+      host: process.env.RABBITMQ_HOST,
+      port: process.env.RABBITMQ_PORT,
+      queue: process.env.RABBITMQ_QUEUE,
+      exchange: process.env.RABBITMQ_EXCHANGE
+    }
+  }
 };

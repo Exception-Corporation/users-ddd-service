@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { RequestAdapter } from '@/user/v1/infrastructure/adapters/';
-import { CreateUserDTO } from '@/user/v1/infrastructure/dtos/create.user.dto';
+import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { User } from '@/user/v1/domain/user/user.aggregate.root';
 import { CreateUserUseCase } from '@/user/v1/application/create-user/use.case';
@@ -19,7 +19,7 @@ export class UserCreateController extends BaseController<Request, Response> {
   async execute(req: Request, res: Response) {
     try {
       const userToCreate: CreateUserDTO =
-        await RequestAdapter.build<CreateUserDTO>(req.body.user, [
+        await RequestAdapter.validateData<CreateUserDTO>(req.body.user, [
           'firstname',
           'lastname',
           'username',

@@ -14,7 +14,7 @@ export class RequestAdapter implements IRequestAdapter {
     return this.instance;
   }
 
-  public async build<T extends object>(
+  public async validateData<T extends object>(
     request: T,
     properties: Array<string> = []
   ): Promise<T> {

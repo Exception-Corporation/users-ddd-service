@@ -12,6 +12,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - rabbitmq
     logging:
       driver: 'local'
 
@@ -95,6 +96,23 @@ services:
     networks:
       - users-api
 
+  rabbitmq:
+    image: rabbitmq:3.7.28-management
+    container_name: rabbitmq-${PROJECT_NAME}
+    restart: always
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq:/var/log/rabbitmq/
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-root}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-root}
+    ports:
+      - ${RABBITMQ_PORT}:5672 #amqp
+      - 15672:15672 #http
+      - 15692:15692 #prometheus
+    networks:
+      - users-api
+
 networks:
   users-api:
     driver: bridge
@@ -105,3 +123,4 @@ volumes:
   pgadmin:
   redis:
   redis-config:
+  rabbitmq:
