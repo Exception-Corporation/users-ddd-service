@@ -1,6 +1,6 @@
 export type ControllerParams = {
   path: string;
-  http: 'post' | 'put' | 'patch' | 'delete' | 'get' | 'option';
+  http: 'post' | 'put' | 'patch' | 'delete' | 'get' | 'options';
 };
 
 export type Context = {

@@ -33,26 +33,7 @@ export class UserRouter extends RouterC<Router> {
         }
       };
 
-      switch (Controller.http) {
-        case 'get':
-          this.router.get(path, Controller.middlewares, handler);
-          break;
-        case 'post':
-          this.router.post(path, Controller.middlewares, handler);
-          break;
-        case 'put':
-          this.router.put(path, Controller.middlewares, handler);
-          break;
-        case 'patch':
-          this.router.patch(path, Controller.middlewares, handler);
-          break;
-        case 'delete':
-          this.router.delete(path, Controller.middlewares, handler);
-          break;
-        case 'option':
-          this.router.options(path, Controller.middlewares, handler);
-          break;
-      }
+      this.router[Controller.http](path, Controller.middlewares, handler);
     });
   }
 
