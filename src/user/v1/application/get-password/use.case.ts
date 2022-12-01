@@ -1,9 +1,9 @@
-import * as uuid from 'uuid';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
 import {
   Response,
   ResponsePrimitive
 } from '@/user/v1/domain/response/response.entity';
+import { Identifier } from '@/shared/infrastructure/uuid/identifier';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import missingPassword from '@/shared/domain/mail/templates/missing.password';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
@@ -46,28 +46,12 @@ export class GetPasswordUseCase extends UseCase {
 
     if (!userFound) throw new UserNotFound('email', emailTo);
 
-    const access_token = await this.authenticationService.sign({
-      id: userFound.getUserId().valueOf(),
-      role: 'standard',
-      action: 'get-password',
-      email: emailTo,
-      exp: 1
-    });
+    const access_token = await this.buildToken(
+      userFound.getUserId().valueOf(),
+      emailTo
+    );
 
-    await this.eventBus.publish([
-      new SendEmailDomainEvent(
-        uuid.v4(),
-        {
-          to: emailTo,
-          subject: 'Recover password in CRM',
-          html: missingPassword(
-            emailTo,
-            `${config.mailer.nodemailer.front}?token=${access_token}`
-          )
-        },
-        new Date()
-      )
-    ]);
+    await this.publish(emailTo, access_token);
 
     let response: ResponsePrimitive = {
       success: true,
@@ -82,5 +66,32 @@ export class GetPasswordUseCase extends UseCase {
       response.status,
       response.contain
     );
+  }
+
+  private async buildToken(id: number, email: string) {
+    return await this.authenticationService.sign({
+      id,
+      role: 'standard',
+      action: 'get-password',
+      email,
+      exp: 1
+    });
+  }
+
+  private async publish(email: string, token: string) {
+    await this.eventBus.publish([
+      new SendEmailDomainEvent(
+        Identifier.random().valueOf(),
+        {
+          to: email,
+          subject: 'Recover password in CRM',
+          html: missingPassword(
+            email,
+            `${config.mailer.nodemailer.front}?token=${token}`
+          )
+        },
+        new Date()
+      )
+    ]);
   }
 }

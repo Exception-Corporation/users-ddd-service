@@ -1,4 +1,4 @@
-import * as uuid from 'uuid';
+import { Identifier } from '@/shared/infrastructure/uuid/identifier';
 
 export abstract class DomainEvent {
   static EVENT_NAME: string;
@@ -17,7 +17,7 @@ export abstract class DomainEvent {
   ) {
     this.eventName = eventName;
     this.eventType = eventType || null;
-    this.eventId = eventId || uuid.v4();
+    this.eventId = eventId || Identifier.random().valueOf();
     this.occurredAt = occurredAt || new Date();
   }
 
