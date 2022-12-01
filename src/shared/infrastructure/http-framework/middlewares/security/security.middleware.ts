@@ -1,5 +1,7 @@
+import { injectable, inject } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { NextFunction, Request, Response } from 'express';
-import { AuthenticationService } from '@/shared/infrastructure/auth';
+import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import {
   SecurityMiddleware,
   MiddlewareResponse
@@ -7,10 +9,14 @@ import {
 import { DomainError } from '@/shared/domain/errors/lib/DomainError';
 import { Logger } from '@/shared/domain/logger';
 
+@injectable()
 export class AutorizationRouter
   implements SecurityMiddleware<Request, Response, NextFunction, any>
 {
-  constructor(private logger: Logger) {}
+  constructor(
+    @inject(TYPES.Logger) private readonly logger: Logger,
+    @inject(TYPES.IAuthentication) private readonly authService: IAuthentication
+  ) {}
   /**
    * Validation middleware for authentication in a router
    * @param req
@@ -36,7 +42,7 @@ export class AutorizationRouter
         .split(' ')[1];
 
       try {
-        const payload: any = await AuthenticationService.verify(token);
+        const payload: any = await this.authService.verify(token);
 
         if (!payload || payload?.error) {
           return res.status(401).send({ message: 'Invalid token' });

@@ -1,3 +1,7 @@
+import { inject } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
+import { TYPES as TYPES_SHARED } from '@/shared/infrastructure/d-injection/types';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import {
@@ -9,27 +13,15 @@ import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 
+@provide(TYPES.LoginUserUseCase)
 export class LoginUserUseCase extends UseCase {
-  private static instance: LoginUserUseCase | undefined;
   constructor(
-    private userRepository: UserRepository,
-    private authenticationService: IAuthentication
+    @inject(TYPES_SHARED.IAuthentication)
+    private readonly authenticationService: IAuthentication,
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: UserRepository
   ) {
     super();
-  }
-
-  static getInstance(
-    userRepository: UserRepository,
-    authenticationService: IAuthentication
-  ) {
-    if (!this.instance) {
-      this.instance = new LoginUserUseCase(
-        userRepository,
-        authenticationService
-      );
-    }
-
-    return this.instance;
   }
 
   async execute(

@@ -1,6 +1,7 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
-import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
 import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
 import { DTOPropertiesError } from '@/shared/domain/errors/domain-errors/DTOPropertiesError';
@@ -21,8 +22,14 @@ import { ALL_ROLES } from '@/shared/infrastructure/http-framework/middlewares/se
   path: '/update/:id'
 })
 @GuardWithJwt(ALL_ROLES)
+@injectable()
 export class UserUpdateController extends BaseController {
-  constructor() {
+  constructor(
+    @inject(TYPES.FindUserUseCase)
+    private readonly findUseCase: FindUserUseCase,
+    @inject(TYPES.UpdateUserUseCase)
+    private readonly updateUseCase: UpdateUserUseCase
+  ) {
     super();
   }
 
@@ -41,9 +48,7 @@ export class UserUpdateController extends BaseController {
       > = userDTO;
 
       const { user } = (
-        await FindUserUseCase.getInstance(UserRepository).execute(
-          new UserId(Number(id))
-        )
+        await this.findUseCase.execute(new UserId(Number(id)))
       ).toPrimitives().contain as { user: UserPrimitive };
 
       const userPrimitive = user;
@@ -61,9 +66,7 @@ export class UserUpdateController extends BaseController {
           true
         );
 
-      const response = await UpdateUserUseCase.getInstance(
-        UserRepository
-      ).execute(
+      const response = await this.updateUseCase.execute(
         User.fromPrimitives({
           id: id,
           createdAt: Date.now().toString(),

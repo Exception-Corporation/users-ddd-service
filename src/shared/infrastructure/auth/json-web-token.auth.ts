@@ -1,26 +1,19 @@
+import { injectable } from 'inversify';
 import jwt from 'jsonwebtoken';
 import config from '@/shared/infrastructure/config';
 import { DateLib } from '@/shared/infrastructure/dates';
 import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
-import { UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
+
+@injectable()
 export class JSONWebTokenAuth implements IAuthentication {
-  private static instance: JSONWebTokenAuth | undefined;
   private secretKey: string;
   private expirationTime: number;
 
-  private constructor() {
+  constructor() {
     this.secretKey = config.authentication.accessTokenPrivateKey;
     this.expirationTime = config.authentication.accessTokenExpiresIn;
-  }
-
-  static getInstance() {
-    if (JSONWebTokenAuth.instance) return JSONWebTokenAuth.instance;
-
-    JSONWebTokenAuth.instance = new JSONWebTokenAuth();
-
-    return JSONWebTokenAuth.instance;
   }
 
   async sign(

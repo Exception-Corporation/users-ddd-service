@@ -13,8 +13,6 @@ import { QueryParams } from '@/shared/domain/interfaces/QueryParams';
 export class UserPostgreseRepository implements UserRepository {
   private static instance: UserRepository | undefined;
 
-  private constructor() {}
-
   static getInstance() {
     if (this.instance) return this.instance;
     this.instance = new UserPostgreseRepository();

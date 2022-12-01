@@ -1,5 +1,6 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
-import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
 import { FindUserUseCase } from '@/user/v1/application/find-user-by/use.case';
 import {
@@ -14,8 +15,12 @@ import { ALL_ROLES } from '@/shared/infrastructure/http-framework/middlewares/se
   path: '/get/:id'
 })
 @GuardWithJwt(ALL_ROLES)
+@injectable()
 export class UserFindController extends BaseController {
-  constructor() {
+  constructor(
+    @inject(TYPES.FindUserUseCase)
+    private readonly findUseCase: FindUserUseCase
+  ) {
     super();
   }
 
@@ -23,9 +28,7 @@ export class UserFindController extends BaseController {
     const id = ctx.params.id;
 
     try {
-      const response = await FindUserUseCase.getInstance(
-        UserRepository
-      ).execute(new UserId(Number(id)));
+      const response = await this.findUseCase.execute(new UserId(Number(id)));
 
       const { status, success, contain } = response.toPrimitives();
 

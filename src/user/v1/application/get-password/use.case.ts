@@ -1,3 +1,7 @@
+import { inject } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
+import { TYPES as TYPES_SHARED } from '@/shared/infrastructure/d-injection/types';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
 import {
   Response,
@@ -13,30 +17,15 @@ import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import { SendEmailDomainEvent } from '@/user/v1/domain/events/send.emai.event';
 import config from '@/shared/infrastructure/config';
 
+@provide(TYPES.GetPasswordUseCase)
 export class GetPasswordUseCase extends UseCase {
-  private static instance: GetPasswordUseCase | undefined;
   constructor(
-    private eventBus: EventBus,
-    private authenticationService: IAuthentication,
-    private repository: UserRepository
+    @inject(TYPES_SHARED.EventBus) private readonly eventBus: EventBus,
+    @inject(TYPES_SHARED.IAuthentication)
+    private readonly authenticationService: IAuthentication,
+    @inject(TYPES.UserRepository) private readonly repository: UserRepository
   ) {
     super();
-  }
-
-  static getInstance(
-    eventBus: EventBus,
-    authenticationService: IAuthentication,
-    repository: UserRepository
-  ) {
-    if (!this.instance) {
-      this.instance = new GetPasswordUseCase(
-        eventBus,
-        authenticationService,
-        repository
-      );
-    }
-
-    return this.instance;
   }
 
   async execute(email: UserEmail): Promise<Response> {

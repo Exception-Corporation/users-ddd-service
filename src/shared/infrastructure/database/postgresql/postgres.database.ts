@@ -1,15 +1,21 @@
 import 'reflect-metadata';
+import { injectable, inject } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { DataSource } from 'typeorm';
 import { DatabaseConnection } from '@/shared/domain/database/database.interface';
 import { Logger } from '@/shared/domain/logger';
 import postgresConfig from '@/shared/infrastructure/database/postgresql/config';
 import { PostgresConfig } from '@/shared/infrastructure/database/postgresql/config/types';
 
+@injectable()
 export class PostgresDatabase implements DatabaseConnection<DataSource> {
   private appDataSource: DataSource;
   private postgresConfig: PostgresConfig;
 
-  constructor(private logger: Logger, private port?: number) {
+  constructor(
+    @inject(TYPES.Logger) private readonly logger: Logger,
+    private port?: number
+  ) {
     this.postgresConfig = postgresConfig;
 
     if (this.port) this.postgresConfig.port = this.port;

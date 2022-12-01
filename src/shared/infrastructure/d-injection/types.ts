@@ -10,5 +10,7 @@ export const TYPES = {
 
   Logger: Symbol.for('Logger'),
 
-  StartModule: Symbol.for('StartModule')
+  StartModule: Symbol.for('StartModule'),
+
+  IAuthentication: Symbol.for('IAuthentication')
 };

@@ -21,6 +21,9 @@ import { modules } from '@/index';
 import { CacheService } from '@/shared/infrastructure/cache/redis.cache';
 import { ICacheServer } from '@/shared/domain/cache/cache.server';
 
+import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
+import { JSONWebTokenAuth } from '@/shared/infrastructure/auth/json-web-token.auth';
+
 export class AppDependencies {
   register(container: Container) {
     this.configLogger(container);
@@ -29,10 +32,18 @@ export class AppDependencies {
     this.configServer(container);
     this.configDatabase(container);
     this.configEventBus(container);
+    this.configAuthentication(container);
   }
 
   private configLogger(container: Container) {
     container.bind<Logger>(TYPES.Logger).to(LoggerMock).inSingletonScope();
+  }
+
+  private configAuthentication(container: Container) {
+    container
+      .bind<IAuthentication>(TYPES.IAuthentication)
+      .to(JSONWebTokenAuth)
+      .inSingletonScope();
   }
 
   private configModule(container: Container) {

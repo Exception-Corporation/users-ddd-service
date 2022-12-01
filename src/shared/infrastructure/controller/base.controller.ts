@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { WatchLogger } from '@/shared/infrastructure/logger/watch.logger';
 import { DomainErrorToHttpStatus } from '@/shared/domain/errors/lib/DomainErrorToHttpStatus';
 import { DomainError } from '@/shared/domain/errors/lib/DomainError';
@@ -11,6 +12,7 @@ type Exception = {
   message: string;
 };
 
+@injectable()
 export abstract class BaseController {
   protected mapperException(
     exception: DomainError,

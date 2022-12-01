@@ -1,7 +1,8 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { RequestAdapter } from '@/user/v1/infrastructure/adapters/';
 import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
-import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { User } from '@/user/v1/domain/user/user.aggregate.root';
 import { CreateUserUseCase } from '@/user/v1/application/create-user/use.case';
 import {
@@ -13,8 +14,12 @@ import {
   http: 'post',
   path: ''
 })
+@injectable()
 export class UserCreateController extends BaseController {
-  constructor() {
+  constructor(
+    @inject(TYPES.CreateUserUseCase)
+    private readonly createUserUseCase: CreateUserUseCase
+  ) {
     super();
   }
 
@@ -32,9 +37,7 @@ export class UserCreateController extends BaseController {
 
       userToCreate.role = userToCreate.role || 'standard';
 
-      const response = await CreateUserUseCase.getInstance(
-        UserRepository
-      ).execute(
+      const response = await this.createUserUseCase.execute(
         User.fromPrimitives({
           ...userToCreate,
           id: 0,

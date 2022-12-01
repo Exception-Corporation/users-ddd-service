@@ -58,7 +58,7 @@ export class SharedBootstrap implements StartModule {
   }
 
   private async startEventBus(): Promise<void> {
-    const eventBus = AppContainer.get<EventBus>(TYPES.Framework);
+    const eventBus = AppContainer.get<EventBus>(TYPES.EventBus);
 
     const subscriberDefinitions = AppContainer.getAll<
       DomainEventSubscriber<DomainEvent>

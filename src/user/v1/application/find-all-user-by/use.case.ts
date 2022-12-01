@@ -1,3 +1,6 @@
+import { inject } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import {
@@ -6,18 +9,13 @@ import {
 } from '@/user/v1/domain/response/response.entity';
 import { QueryParams } from '@/shared/domain/interfaces/QueryParams';
 
+@provide(TYPES.FindAllUsersUseCase)
 export class FindAllUsersUseCase extends UseCase {
-  private static instance: FindAllUsersUseCase | undefined;
-  constructor(private userRepository: UserRepository) {
+  constructor(
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: UserRepository
+  ) {
     super();
-  }
-
-  static getInstance(userRepository: UserRepository) {
-    if (!this.instance) {
-      this.instance = new FindAllUsersUseCase(userRepository);
-    }
-
-    return this.instance;
   }
 
   async execute(query: QueryParams): Promise<Response> {
