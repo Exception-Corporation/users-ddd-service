@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { FindAllUsersUseCase } from '@/user/v1/application/find-all-user-by/use.case';
