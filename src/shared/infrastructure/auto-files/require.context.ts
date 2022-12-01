@@ -10,9 +10,20 @@ export class RequireContext implements IAutoFiles<any> {
         return require(path.resolve(file));
       })
     ).filter((obj: any) => {
-      if ('prototype' in obj) obj = new obj();
+      try {
+        if (this._isClass(obj)) obj = new obj();
 
-      return !filters.find((filter) => obj[filter] === undefined);
+        return !filters.find((filter) => obj[filter] === undefined);
+      } catch (_e: any) {
+        return false;
+      }
     });
+  }
+
+  private _isClass(definition: any) {
+    return (
+      typeof definition === 'function' &&
+      /^class\s/.test(Function.prototype.toString.call(definition))
+    );
   }
 }

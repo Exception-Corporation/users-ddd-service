@@ -7,7 +7,7 @@ import {
 import { DomainError } from '@/shared/domain/errors/lib/DomainError';
 import { Logger } from '@/shared/domain/logger';
 
-export class MiddlewareRouter
+export class AutorizationRouter
   implements SecurityMiddleware<Request, Response, NextFunction, any>
 {
   constructor(private logger: Logger) {}

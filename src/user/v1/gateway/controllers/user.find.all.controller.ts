@@ -3,12 +3,13 @@ import { BaseController } from '@/shared/infrastructure/controller/base.controll
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { FindAllUsersUseCase } from '@/user/v1/application/find-all-user-by/use.case';
 import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
+import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 
 @Controller({
   http: 'get',
-  path: '/getAll',
-  roles: ['standard', 'root']
+  path: '/getAll'
 })
+@GuardWithJwt(['standard', 'root'])
 export class UserFindAllController extends BaseController<Request, Response> {
   constructor() {
     super();

@@ -4,12 +4,13 @@ import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
 import { DeleteUserUseCase } from '@/user/v1/application/delete-user/use.case';
 import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
+import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 
 @Controller({
   http: 'delete',
-  path: '/delete/:id',
-  roles: ['standard', 'root']
+  path: '/delete/:id'
 })
+@GuardWithJwt(['standard', 'root'])
 export class UserDeleteController extends BaseController<Request, Response> {
   constructor() {
     super();

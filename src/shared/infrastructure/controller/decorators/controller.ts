@@ -1,13 +1,17 @@
 export type ControllerParams = {
   path: string;
   http: 'post' | 'put' | 'patch' | 'delete' | 'get' | 'option';
-  roles?: Array<string>;
 };
 
-export function Controller({ path, http, roles }: ControllerParams) {
+export type ControllerClass = ControllerParams & {
+  execute: () => any;
+  middlewares: Array<any>;
+};
+
+export function Controller({ path, http }: ControllerParams) {
   return (target: Function) => {
     target.prototype.path = path;
     target.prototype.http = http;
-    target.prototype.roles = roles || [];
+    target.prototype.middlewares = target.prototype.middlewares || [];
   };
 }

@@ -4,12 +4,13 @@ import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
 import { FindUserUseCase } from '@/user/v1/application/find-user-by/use.case';
 import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
+import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 
 @Controller({
   http: 'get',
-  path: '/get/:id',
-  roles: ['standard', 'root', 'visitor']
+  path: '/get/:id'
 })
+@GuardWithJwt(['standard', 'root', 'visitor'])
 export class UserFindController extends BaseController<Request, Response> {
   constructor() {
     super();

@@ -11,12 +11,13 @@ import { FindUserUseCase } from '@/user/v1/application/find-user-by/use.case';
 import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
 import { EncryptionService } from '@/shared/infrastructure/encryption';
 import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
+import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 
 @Controller({
   http: 'put',
-  path: '/update/:id',
-  roles: ['standard', 'root', 'visitor']
+  path: '/update/:id'
 })
+@GuardWithJwt(['standard', 'root', 'visitor'])
 export class UserUpdateController extends BaseController<Request, Response> {
   constructor() {
     super();

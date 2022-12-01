@@ -1,4 +1,4 @@
-import { ControllerParams } from '@/shared/infrastructure/controller/decorators/controller';
+import { ControllerClass } from '@/shared/infrastructure/controller/decorators/controller';
 import { MainLogger } from '@/shared/infrastructure/logger/main';
 import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
 
@@ -7,7 +7,9 @@ export function Routes({
   Controllers
 }: {
   path: string;
-  Controllers: Array<ControllerParams>;
+  Controllers: Array<
+    ControllerClass & { isAuth?: boolean; roles?: Array<string> }
+  >;
 }) {
   GlobalFunctions.verifyDuplicationValues(Controllers, ['http', 'path']);
 
@@ -17,8 +19,8 @@ export function Routes({
       Controllers.map((controller) => ({
         HTTP: controller.http.toUpperCase(),
         ENDPOINT: `${path}${controller.path}`,
-        AUTHENITCATION: Boolean(controller.roles?.length),
-        ROLES: controller.roles
+        AUTHENITCATION: Boolean(controller.isAuth),
+        ROLES: controller.roles || []
       }))
     );
 
