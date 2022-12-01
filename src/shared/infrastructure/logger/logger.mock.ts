@@ -1,5 +1,7 @@
+import { injectable } from 'inversify';
 import { logError, logSuccess, Logger } from '@/shared/domain/logger';
 
+@injectable()
 export class LoggerMock implements Logger {
   table(message: Array<any>): void {
     console.table(message);

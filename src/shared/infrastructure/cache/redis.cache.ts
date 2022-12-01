@@ -1,34 +1,31 @@
+import { injectable, inject } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { createClient, RedisClientType } from 'redis';
-import { ICacheServer } from '@/shared/domain/interfaces/cache.server';
+import { ICacheServer } from '@/shared/domain/cache/cache.server';
 import { Logger } from '@/shared/domain/logger';
 import config from '@/shared/infrastructure/config';
 
-const CACHE = config.cache.redis;
-
+@injectable()
 export class CacheService implements ICacheServer {
-  private static instance: CacheService;
   private clients: Array<RedisClientType | undefined> = [];
-  private constructor(private logger: Logger) {}
+  private CACHE: typeof config.cache.redis;
 
-  static getInstance(logger: Logger): CacheService {
-    if (!CacheService.instance) {
-      CacheService.instance = new CacheService(logger);
-    }
-    return CacheService.instance;
+  constructor(@inject(TYPES.CacheService) private readonly logger: Logger) {
+    this.CACHE = config.cache.redis;
   }
 
   public async cacheConnect(redisDB: number): Promise<void> {
     if (!this.clients[redisDB]) {
-      const uri = `redis${CACHE.isSecure === true ? 's' : ''}://${
-        CACHE.password ? `:${CACHE.password}@` : ''
-      }${CACHE.hostname}:${CACHE.port}/${redisDB}`;
+      const uri = `redis${this.CACHE.isSecure === true ? 's' : ''}://${
+        this.CACHE.password ? `:${this.CACHE.password}@` : ''
+      }${this.CACHE.hostname}:${this.CACHE.port}/${redisDB}`;
 
       this.clients[redisDB] = createClient({
         url: uri
       });
 
       this.clients[redisDB]?.on('ready', () =>
-        this.logger.info(`Redis clients connected on port ${CACHE.port}`)
+        this.logger.info(`Redis clients connected on port ${this.CACHE.port}`)
       );
       this.clients[redisDB]?.on('reconnecting', () =>
         this.logger.warn('Redis clients reconnecting')

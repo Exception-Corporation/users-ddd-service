@@ -1,11 +1,11 @@
 // creat a class
 import { logError, Logger } from '@/shared/domain/logger';
-import { MainLogger } from '@/shared/infrastructure/logger/main/';
+import { LoggerMock } from '@/shared/infrastructure/logger/logger.mock';
 import config from '@/shared/infrastructure/config';
 
 export class WatchLogger {
   // constructor
-  private static logger: Logger = MainLogger;
+  private static logger: Logger = new LoggerMock();
   //private static airBrake: AirBrakeLogger;
   //private static dataDog: DataDogLogger = new DataDogLogger();
   // Logs

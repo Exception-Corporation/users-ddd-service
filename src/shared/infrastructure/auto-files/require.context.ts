@@ -1,6 +1,6 @@
 import glob from 'glob';
 import path from 'path';
-import { IAutoFiles } from '@/shared/domain/interfaces/auto.files.interface';
+import { IAutoFiles } from '@/shared/domain/auto-files/auto.files.interface';
 import { importAll } from '@/shared/infrastructure/utils/import.all';
 
 export class RequireContext implements IAutoFiles<any> {

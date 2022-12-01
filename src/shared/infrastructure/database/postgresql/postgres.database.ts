@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { DatabaseConnection } from '@/shared/domain/interfaces/database.interface';
+import { DatabaseConnection } from '@/shared/domain/database/database.interface';
 import { Logger } from '@/shared/domain/logger';
 import postgresConfig from '@/shared/infrastructure/database/postgresql/config';
 import { PostgresConfig } from '@/shared/infrastructure/database/postgresql/config/types';

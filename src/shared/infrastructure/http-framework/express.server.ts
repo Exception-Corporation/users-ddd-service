@@ -1,16 +1,19 @@
+import { injectable, inject } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import express, { Application as app } from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import morgan from 'morgan';
-import { Server } from '@/shared/domain/interfaces/server.interface';
+import { Server } from '@/shared/domain/http-framework/server.interface';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
 import { RequireService } from '@/shared/infrastructure/auto-files/';
 
-export class Application implements Server<app> {
+@injectable()
+export class ExpressServer implements Server<app> {
   private app: app;
 
-  constructor(private logger: Logger) {
+  constructor(@inject(TYPES.Framework) private readonly logger: Logger) {
     this.app = express();
 
     this.app.use(express.json());

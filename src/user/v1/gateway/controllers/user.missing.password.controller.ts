@@ -2,7 +2,6 @@ import { BaseController } from '@/shared/infrastructure/controller/base.controll
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { AuthenticationService } from '@/shared/infrastructure/auth';
 import { GetPasswordUseCase } from '@/user/v1/application/get-password/use.case';
-import { MainEventBus } from '@/shared/infrastructure/event-bus';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import {
   Context,
@@ -23,7 +22,7 @@ export class UserMissingPasswordController extends BaseController {
       const { email } = ctx.params;
 
       const response = await GetPasswordUseCase.getInstance(
-        MainEventBus,
+        {} as any,
         AuthenticationService,
         UserRepository
       ).execute(new UserEmail(email));
