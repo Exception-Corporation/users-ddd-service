@@ -6,12 +6,13 @@ import {
   Controller
 } from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
+import { BASIC } from '@/shared/infrastructure/http-framework/middlewares/security/roles';
 
 @Controller({
   http: 'get',
   path: '/getAll'
 })
-@GuardWithJwt(['standard', 'root'])
+@GuardWithJwt(BASIC)
 export class UserFindAllController extends BaseController {
   constructor() {
     super();

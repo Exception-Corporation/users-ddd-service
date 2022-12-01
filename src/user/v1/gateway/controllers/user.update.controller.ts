@@ -14,12 +14,13 @@ import {
   Context
 } from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
+import { ALL_ROLES } from '@/shared/infrastructure/http-framework/middlewares/security/roles';
 
 @Controller({
   http: 'put',
   path: '/update/:id'
 })
-@GuardWithJwt(['standard', 'root', 'visitor'])
+@GuardWithJwt(ALL_ROLES)
 export class UserUpdateController extends BaseController {
   constructor() {
     super();

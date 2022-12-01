@@ -7,12 +7,13 @@ import {
   Controller
 } from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
+import { BASIC } from '@/shared/infrastructure/http-framework/middlewares/security/roles';
 
 @Controller({
   http: 'delete',
   path: '/delete/:id'
 })
-@GuardWithJwt(['standard', 'root'])
+@GuardWithJwt(BASIC)
 export class UserDeleteController extends BaseController {
   constructor() {
     super();
