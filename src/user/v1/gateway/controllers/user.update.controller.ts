@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
@@ -10,7 +9,10 @@ import { UpdateUserUseCase } from '@/user/v1/application/update-user/use.case';
 import { FindUserUseCase } from '@/user/v1/application/find-user-by/use.case';
 import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
 import { EncryptionService } from '@/shared/infrastructure/encryption';
-import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
+import {
+  Controller,
+  Context
+} from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 
 @Controller({
@@ -18,17 +20,17 @@ import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares
   path: '/update/:id'
 })
 @GuardWithJwt(['standard', 'root', 'visitor'])
-export class UserUpdateController extends BaseController<Request, Response> {
+export class UserUpdateController extends BaseController {
   constructor() {
     super();
   }
 
-  async execute(req: Request, res: Response) {
-    const id = Number(req.params.id);
+  async execute(ctx: Context) {
+    const id = Number(ctx.params.id);
 
-    const owner = Boolean(req.query.owner) || false;
+    const owner = Boolean(ctx.query.owner) || false;
 
-    const { user: userDTO, auth } = req.body;
+    const { user: userDTO, auth } = ctx.body;
 
     try {
       if (!userDTO) throw new DTOPropertiesError(['user']);
@@ -80,9 +82,9 @@ export class UserUpdateController extends BaseController<Request, Response> {
 
       const { status, success, contain } = response.toPrimitives();
 
-      return res.status(status).send({ success, ...contain });
+      return { status, response: { success, ...contain } };
     } catch (error: any) {
-      return this.mapperException(res, error, req.body, 'Users v1');
+      return this.mapperException(error, ctx.body, 'Users v1');
     }
   }
 }

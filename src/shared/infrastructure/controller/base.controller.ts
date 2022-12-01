@@ -1,19 +1,22 @@
 import { WatchLogger } from '@/shared/infrastructure/logger/watch.logger';
 import { DomainErrorToHttpStatus } from '@/shared/domain/errors/lib/DomainErrorToHttpStatus';
 import { DomainError } from '@/shared/domain/errors/lib/DomainError';
+import {
+  Context,
+  ControllerResponse
+} from '@/shared/infrastructure/controller/decorators/controller';
 
 type Exception = {
   type: string;
   message: string;
 };
 
-export abstract class BaseController<R, S> {
+export abstract class BaseController {
   protected mapperException(
-    res: any,
     exception: DomainError,
     params: object,
     module: string
-  ): any {
+  ): ControllerResponse {
     let body: Exception;
 
     switch (exception.type) {
@@ -68,11 +71,11 @@ export abstract class BaseController<R, S> {
       level: 'error',
       params: params
     });
-
-    res
-      .status(DomainErrorToHttpStatus[exception.domainErrorCode])
-      .send({ success: false, module: 'global', ...body });
+    return {
+      status: DomainErrorToHttpStatus[exception.domainErrorCode],
+      response: { success: false, module: 'global', ...body }
+    };
   }
 
-  abstract execute(req: R, res: S): Promise<any>;
+  abstract execute(context: Context): Promise<ControllerResponse>;
 }

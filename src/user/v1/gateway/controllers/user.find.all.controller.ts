@@ -2,7 +2,10 @@ import { Request, Response } from 'express';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { FindAllUsersUseCase } from '@/user/v1/application/find-all-user-by/use.case';
-import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
+import {
+  Context,
+  Controller
+} from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 
 @Controller({
@@ -10,13 +13,13 @@ import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares
   path: '/getAll'
 })
 @GuardWithJwt(['standard', 'root'])
-export class UserFindAllController extends BaseController<Request, Response> {
+export class UserFindAllController extends BaseController {
   constructor() {
     super();
   }
 
-  async execute(req: Request, res: Response) {
-    let { pageSize, page, searchBy } = req.query;
+  async execute(ctx: Context) {
+    let { pageSize, page, searchBy } = ctx.query;
 
     searchBy = searchBy || '';
 
@@ -37,9 +40,9 @@ export class UserFindAllController extends BaseController<Request, Response> {
 
       const { status, success, contain } = response.toPrimitives();
 
-      return res.status(status).send({ success, ...contain });
+      return { status, response: { success, ...contain } };
     } catch (error: any) {
-      return this.mapperException(res, error, req.body, 'Users v1');
+      return this.mapperException(error, ctx.body, 'Users v1');
     }
   }
 }

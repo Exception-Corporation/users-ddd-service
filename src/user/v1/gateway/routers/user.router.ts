@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 import { RouterC } from '@/shared/infrastructure/router/router.class';
 import Controllers from '@/user/v1/gateway/controllers';
 import { Logger } from '@/shared/domain/logger';
@@ -17,7 +17,20 @@ export class UserRouter extends RouterC<Router> {
     Controllers.forEach((Controller: ControllerClass) => {
       const { path, handler } = {
         path: Controller.path.toString(),
-        handler: Controller.execute.bind(Controller)
+        handler: async (req: Request, res: Response) => {
+          const context = {
+            body: req.body,
+            params: req.params,
+            query: req.query,
+            headers: req.headers,
+            cookies: req.cookies,
+            path: req.path
+          };
+
+          const { status, response } = await Controller.execute(context);
+
+          return res.status(status).send(response);
+        }
       };
 
       switch (Controller.http) {

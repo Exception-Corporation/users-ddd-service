@@ -3,8 +3,19 @@ export type ControllerParams = {
   http: 'post' | 'put' | 'patch' | 'delete' | 'get' | 'option';
 };
 
+export type Context = {
+  body: any;
+  params: any;
+  query: any;
+  headers: any;
+  cookies: any;
+  path: string;
+};
+
+export type ControllerResponse = { status: number; response: any };
+
 export type ControllerClass = ControllerParams & {
-  execute: () => any;
+  execute: (context: Context) => Promise<ControllerResponse>;
   middlewares: Array<any>;
 };
 

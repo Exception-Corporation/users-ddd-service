@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { RequestAdapter } from '@/user/v1/infrastructure/adapters/';
 import { LoginUserDTO } from '@/user/v1/gateway/dtos/login.user.dto';
@@ -8,21 +7,24 @@ import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username'
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { LoginUserUseCase } from '@/user/v1/application/login-user/use.case';
 import { AuthenticationService } from '@/shared/infrastructure/auth';
-import { Controller } from '@/shared/infrastructure/controller/decorators/controller';
+import {
+  Context,
+  Controller
+} from '@/shared/infrastructure/controller/decorators/controller';
 
 @Controller({
   http: 'post',
   path: '/login/'
 })
-export class UserLoginController extends BaseController<Request, Response> {
+export class UserLoginController extends BaseController {
   constructor() {
     super();
   }
 
-  async execute(req: Request, res: Response) {
+  async execute(ctx: Context) {
     try {
       const { email, username, password }: LoginUserDTO =
-        await RequestAdapter.validateData<LoginUserDTO>(req.body.user, [
+        await RequestAdapter.validateData<LoginUserDTO>(ctx.body.user, [
           'password',
           'OR:email,username'
         ]);
@@ -40,9 +42,9 @@ export class UserLoginController extends BaseController<Request, Response> {
 
       const { status, success, contain } = response.toPrimitives();
 
-      return res.status(status).send({ success, ...contain });
+      return { status, response: { success, ...contain } };
     } catch (error: any) {
-      return this.mapperException(res, error, req.body, 'Users v1');
+      return this.mapperException(error, ctx.body, 'Users v1');
     }
   }
 }
