@@ -1,5 +1,5 @@
 import { inject } from 'inversify';
-import { provide } from 'inversify-binding-decorators';
+import { provide } from '@/shared/infrastructure/d-injection/decorators/provider';
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { TYPES as TYPES_SHARED } from '@/shared/infrastructure/d-injection/types';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';

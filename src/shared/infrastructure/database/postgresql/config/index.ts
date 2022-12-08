@@ -1,4 +1,5 @@
 import config from '@/shared/infrastructure/config';
+import { RequireService } from '@/shared/infrastructure/auto-files/';
 
 const { postgres } = config.database;
 
@@ -13,10 +14,12 @@ export default {
   maxQueryExecutionTime: 2000,
   type: 'postgres',
   synchronize: false,
-  entities: ['src/**/**.entity{.ts,.js}', 'build/**/**.entity{.ts,.js}'],
-  migrations: ['migrations/*{.ts,.js}'],
-  subscribers: [
-    'src/shared/infrastructure/database/postgresql/subscribers/**/*{.ts,.js}',
-    'build/shared/infrastructure/database/postgresql/subscribers/**/*{.ts,.js}'
-  ]
+  entities: postgres.ORM_UP
+    ? ['src/**/**.entity{.ts,.js}', 'build/**/**.entity{.ts,.js}']
+    : RequireService.getFiles(
+        require.context('@/*', true, /^((?!!+).)*entity.ts$/),
+        ['entityModel']
+      ),
+  migrations: postgres.ORM_UP ? ['migrations/*{.ts,.js}'] : [],
+  subscribers: []
 };

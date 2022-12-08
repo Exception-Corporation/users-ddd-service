@@ -25,8 +25,10 @@ export class SharedBootstrap implements StartModule {
         await this.startEventBus();
 
         await this.startFramework();
+
         return;
       }
+
       new AppDependencies().register(AppContainer);
     } catch (error: any) {
       this.logger.error({

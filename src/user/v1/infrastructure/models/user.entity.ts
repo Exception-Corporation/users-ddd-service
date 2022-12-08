@@ -7,8 +7,10 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 import { UserRoleType } from '@/user/v1/domain/user/primitives/user.roles';
+import { EntityModel } from '@/shared/infrastructure/entities/decorator.entity';
 
 @Entity()
+@EntityModel()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;

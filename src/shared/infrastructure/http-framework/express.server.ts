@@ -1,5 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
+import { AppContainer } from '@/shared/infrastructure/d-injection/container';
 import express, { Application as app } from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
@@ -31,7 +32,7 @@ export class ExpressServer implements Server<app> {
     this.app.use('/', apiLimiter);
 
     this.getRouters().forEach((Router) => {
-      const router = new Router(this.logger);
+      const router: any = AppContainer.resolve(Router);
       this.app.use(router.path, router.getRoutes());
     });
   }
@@ -51,6 +52,9 @@ export class ExpressServer implements Server<app> {
   }
 
   getRouters(): Array<any> {
-    return RequireService.getFiles('src/**/*.router.ts', ['path']);
+    return RequireService.getFiles(
+      require.context('@/*', true, /^((?!!+).)*router.ts$/),
+      ['path']
+    );
   }
 }

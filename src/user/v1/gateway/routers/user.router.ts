@@ -1,15 +1,18 @@
+import { inject, injectable } from 'inversify';
 import { Request, Response, Router } from 'express';
 import { RouterC } from '@/shared/infrastructure/router/router.class';
 import Controllers from '@/user/v1/gateway/controllers';
 import { Logger } from '@/shared/domain/logger';
 import { ControllerClass } from '@/shared/infrastructure/controller/decorators/controller';
 import { Routes } from '@/shared/infrastructure/router/decorators/router.decorator';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 
 @Routes({ path: '/api/v1/users', Controllers })
+@injectable()
 export class UserRouter extends RouterC<Router> {
   private router: Router = Router();
 
-  constructor(protected logger: Logger) {
+  constructor(@inject(TYPES.Logger) protected logger: Logger) {
     super(logger);
 
     this.router;

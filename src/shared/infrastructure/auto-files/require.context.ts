@@ -1,15 +1,10 @@
-import glob from 'glob';
-import path from 'path';
 import { IAutoFiles } from '@/shared/domain/auto-files/auto.files.interface';
-import { importAll } from '@/shared/infrastructure/utils/import.all';
+
+declare const require: any;
 
 export class RequireContext implements IAutoFiles<any> {
-  getFiles(directory: string, filters: Array<string> = []) {
-    return importAll(
-      glob.sync(directory).map(function (file) {
-        return require(path.resolve(file));
-      })
-    ).filter((obj: any) => {
+  getFiles<S>(data: S, filters: Array<string> = []) {
+    return (require?.id ? this.importAll(data) : []).filter((obj: any) => {
       try {
         if (this._isClass(obj)) obj = new obj();
 
@@ -18,6 +13,16 @@ export class RequireContext implements IAutoFiles<any> {
         return false;
       }
     });
+  }
+
+  private importAll(paths: any) {
+    return paths
+      .keys()
+      .map(paths)
+      .map((x: any) => {
+        const [k]: any = Object.keys(x);
+        return x[k];
+      });
   }
 
   private _isClass(definition: any) {

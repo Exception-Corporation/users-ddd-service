@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { Like } from 'typeorm';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
@@ -10,15 +11,8 @@ import { DomainError } from '@/shared/domain/errors/lib/DomainError';
 import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
 import { QueryParams } from '@/shared/domain/interfaces/QueryParams';
 
+@injectable()
 export class UserPostgreseRepository implements UserRepository {
-  private static instance: UserRepository | undefined;
-
-  static getInstance() {
-    if (this.instance) return this.instance;
-    this.instance = new UserPostgreseRepository();
-
-    return this.instance;
-  }
   async saveUser(user: Partial<UserPrimitive>): Promise<User> {
     try {
       user.password = await EncryptionService.encrypt(user.password!, 2);

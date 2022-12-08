@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import { buildProviderModule } from 'inversify-binding-decorators';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { AppContainer } from '@/shared/infrastructure/d-injection/container';
 import { AppDependencies } from '@/shared/infrastructure/d-injection/config';
@@ -19,5 +18,3 @@ if (!config.test.isDefined) {
     Bootstrap.init();
   }
 }
-
-AppContainer.load(buildProviderModule());

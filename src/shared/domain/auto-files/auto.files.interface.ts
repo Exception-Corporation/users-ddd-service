@@ -1,3 +1,3 @@
 export interface IAutoFiles<T> {
-  getFiles(directory: string, filters?: Array<string>): T;
+  getFiles<S>(data: S, filters?: Array<string>): T;
 }

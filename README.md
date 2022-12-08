@@ -127,6 +127,60 @@ interface AccountRepository {
 }
 ```
 
+```typescript
+import 'reflect-metadata';
+import { injectable, Container, inject } from 'inversify';
+import { provide, buildProviderModule } from 'inversify-binding-decorators';
+
+interface Weapon {
+  hit(): string;
+}
+
+interface ThrowableWeapon {
+  throw(): string;
+}
+
+const TYPES = {
+  katana: Symbol.for('Katana'),
+  Shuriken: Symbol.for('Shuriken')
+};
+
+@provide(TYPES.katana)
+class Katana implements Weapon {
+  public hit() {
+    return 'hit!';
+  }
+}
+
+@provide(TYPES.Shuriken)
+class Shuriken implements ThrowableWeapon {
+  public throw() {
+    return 'throw!';
+  }
+}
+
+@injectable()
+class Main {
+  constructor(
+    @inject(TYPES.katana) private readonly katana: Weapon,
+    @inject(TYPES.Shuriken) private shuriken: ThrowableWeapon
+  ) {}
+
+  get() {
+    console.log(this.katana.hit());
+    console.log(this.shuriken.throw());
+  }
+}
+
+const container = new Container();
+container.load(buildProviderModule());
+
+const main = container.resolve(Main);
+main.get();
+// Reflects all decorators provided by this package and packages them into
+// a module to be loaded by the container
+```
+
 ## ✅ Tests
 
 - We are using [Jest](https://jestjs.io/) and [supertest](https://github.com/visionmedia/supertest) for acceptance tests.

@@ -30,13 +30,17 @@ export class PostgresDatabase implements DatabaseConnection<DataSource> {
     );
   }
 
+  async closeConnection(): Promise<void> {
+    await this.appDataSource.destroy();
+  }
+
   getConnection() {
     return this.appDataSource;
   }
 
-  async closeConnection(): Promise<void> {
-    await this.appDataSource.destroy();
+  static getConnectionToMigrate() {
+    return new DataSource(postgresConfig as any);
   }
 }
 
-export default new PostgresDatabase(console as any).getConnection();
+export default PostgresDatabase.getConnectionToMigrate();
