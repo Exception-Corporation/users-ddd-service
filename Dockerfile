@@ -18,5 +18,7 @@ RUN yarn build
 # Exposing the RestAPI port
 EXPOSE 4000
 
+#ARGS
+
 # Starting the pm2 process and keeping the docker container alive
 CMD sh postgres.loading.sh postgres-users

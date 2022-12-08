@@ -1,9 +1,8 @@
 apps:
-  - script: ./build/index.js
+  - script: ./build/app.js
     name: 'app'
     instances: max
     exec_mode: cluster
-    node_args: '-r ts-node/register/transpile-only -r tsconfig-paths/register'
     instance_var: INSTANCE_ID
     autorestart: true
     watch: true
