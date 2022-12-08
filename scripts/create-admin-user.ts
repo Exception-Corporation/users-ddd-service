@@ -14,7 +14,7 @@ database
       username: 'admin',
       phone: '0',
       email: 'admin@admin.com',
-      password: '$2b$04$wI0u6JLhKQvGcmiEG9R32..Eu5R0U9HWPClEiHtkOqPIUIeQn6mcW',
+      password: process.env.ADMIN_PASSWORD,
       role: 'root',
       age: 30,
       active: true
