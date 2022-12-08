@@ -6,5 +6,6 @@ export const TYPES = {
   FindUserUseCase: Symbol.for('FindUserUseCase'),
   GetPasswordUseCase: Symbol.for('GetPasswordUseCase'),
   LoginUserUseCase: Symbol.for('LoginUserUseCase'),
-  UpdateUserUseCase: Symbol.for('UpdateUserUseCase')
+  UpdateUserUseCase: Symbol.for('UpdateUserUseCase'),
+  IRequestAdapter: Symbol.for('IRequestAdapter')
 };

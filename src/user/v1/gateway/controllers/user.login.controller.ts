@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
-import { RequestAdapter } from '@/user/v1/infrastructure/adapters/';
+import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
 import { LoginUserDTO } from '@/user/v1/gateway/dtos/login.user.dto';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';
@@ -20,7 +20,9 @@ import {
 export class UserLoginController extends BaseController {
   constructor(
     @inject(TYPES.LoginUserUseCase)
-    private readonly loginUseCase: LoginUserUseCase
+    private readonly loginUseCase: LoginUserUseCase,
+    @inject(TYPES.IRequestAdapter)
+    private readonly requestAdapter: IRequestAdapter
   ) {
     super();
   }
@@ -28,7 +30,7 @@ export class UserLoginController extends BaseController {
   async execute(ctx: Context) {
     try {
       const { email, username, password }: LoginUserDTO =
-        await RequestAdapter.validateData<LoginUserDTO>(ctx.body.user, [
+        await this.requestAdapter.validateData<LoginUserDTO>(ctx.body.user, [
           'password',
           'OR:email,username'
         ]);

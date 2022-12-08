@@ -1,7 +1,8 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import jwt from 'jsonwebtoken';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import config from '@/shared/infrastructure/config';
-import { DateLib } from '@/shared/infrastructure/dates';
+import { IDates } from '@/shared/domain/dates/dates.interface';
 import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
@@ -11,7 +12,7 @@ export class JSONWebTokenAuth implements IAuthentication {
   private secretKey: string;
   private expirationTime: number;
 
-  constructor() {
+  constructor(@inject(TYPES.IDates) private dateService: IDates<unknown>) {
     this.secretKey = config.authentication.accessTokenPrivateKey;
     this.expirationTime = config.authentication.accessTokenExpiresIn;
   }
@@ -26,7 +27,7 @@ export class JSONWebTokenAuth implements IAuthentication {
       const token = await jwt.sign(
         {
           ...data,
-          exp: DateLib.getData(
+          exp: this.dateService.getData(
             data.exp ? data.exp : this.expirationTime,
             'hours'
           )

@@ -12,5 +12,11 @@ export const TYPES = {
 
   StartModule: Symbol.for('StartModule'),
 
-  IAuthentication: Symbol.for('IAuthentication')
+  IAuthentication: Symbol.for('IAuthentication'),
+
+  IMailer: Symbol.for('IMailer'),
+
+  IDates: Symbol.for('IDates'),
+
+  IEncrypt: Symbol.for('IEncrypt')
 };

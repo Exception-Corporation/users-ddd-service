@@ -1,19 +1,10 @@
+import { injectable } from 'inversify';
 import { validate } from 'class-validator';
 import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
 import { DTOPropertiesError } from '@/shared/domain/errors/domain-errors/DTOPropertiesError';
 
+@injectable()
 export class RequestAdapter implements IRequestAdapter {
-  private static instance: IRequestAdapter | undefined;
-
-  private constructor() {}
-
-  static getInstance() {
-    if (this.instance) return this.instance;
-    this.instance = new RequestAdapter();
-
-    return this.instance;
-  }
-
   public async validateData<T extends object>(
     request: T,
     properties: Array<string> = []

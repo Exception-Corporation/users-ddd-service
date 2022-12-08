@@ -1,9 +1,10 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { Like } from 'typeorm';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
 import { User as UserModel } from '@/user/v1/infrastructure/models/user.entity';
-import { EncryptionService } from '@/shared/infrastructure/encryption';
+import { IEncrypt } from '@/shared/domain/encryption/encrypt.interface';
 import { UserNotFound } from '@/shared/domain/errors/domain-errors/UserNotFound';
 import { InvalidCredentials } from '@/shared/domain/errors/domain-errors/InvalidCredentials';
 import { DatabaseError } from '@/shared/domain/errors/domain-errors/DatabaseError';
@@ -13,9 +14,14 @@ import { QueryParams } from '@/shared/domain/interfaces/QueryParams';
 
 @injectable()
 export class UserPostgreseRepository implements UserRepository {
+  constructor(
+    @inject(TYPES.IEncrypt)
+    private readonly encryptionService: IEncrypt
+  ) {}
+
   async saveUser(user: Partial<UserPrimitive>): Promise<User> {
     try {
-      user.password = await EncryptionService.encrypt(user.password!, 2);
+      user.password = await this.encryptionService.encrypt(user.password!, 2);
       user = GlobalFunctions.getNewParams<UserPrimitive>(user, [
         'id',
         'createdAt',
@@ -59,7 +65,7 @@ export class UserPostgreseRepository implements UserRepository {
       if (!userFound)
         throw new UserNotFound(userNotFound.property!, userNotFound.value!);
 
-      const verifyPassword = await EncryptionService.verifyEncrypValues(
+      const verifyPassword = await this.encryptionService.verifyEncrypValues(
         password,
         userFound.password
       );
@@ -83,7 +89,7 @@ export class UserPostgreseRepository implements UserRepository {
     try {
       if (currentPassword == user.password) delete user.password;
       if (user.password)
-        user.password = await EncryptionService.encrypt(user.password, 2);
+        user.password = await this.encryptionService.encrypt(user.password, 2);
       user = GlobalFunctions.getNewParams<UserPrimitive>(user, [
         'createdAt',
         'updatedAt'

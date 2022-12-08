@@ -10,6 +10,9 @@ import { UserEmailEvent } from '@/user/v1/gateway/events/user.email.event';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import { UserPostgreseRepository } from '@/user/v1/infrastructure/repositories/user.postgres.repository';
 
+import { RequestAdapter } from '@/user/v1/infrastructure/adapters/request.adapter';
+import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
+
 export const UserContainerModule = new ContainerModule(
   (bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
     // event-subscribers
@@ -18,5 +21,7 @@ export const UserContainerModule = new ContainerModule(
     ).to(UserEmailEvent);
 
     bind<UserRepository>(TYPES.UserRepository).to(UserPostgreseRepository);
+
+    bind<IRequestAdapter>(TYPES.IRequestAdapter).to(RequestAdapter);
   }
 );

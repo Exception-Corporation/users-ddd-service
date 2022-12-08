@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
-import { RequestAdapter } from '@/user/v1/infrastructure/adapters/';
+import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
 import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
 import { User } from '@/user/v1/domain/user/user.aggregate.root';
 import { CreateUserUseCase } from '@/user/v1/application/create-user/use.case';
@@ -18,7 +18,9 @@ import {
 export class UserCreateController extends BaseController {
   constructor(
     @inject(TYPES.CreateUserUseCase)
-    private readonly createUserUseCase: CreateUserUseCase
+    private readonly createUserUseCase: CreateUserUseCase,
+    @inject(TYPES.IRequestAdapter)
+    private readonly requestAdapter: IRequestAdapter
   ) {
     super();
   }
@@ -26,7 +28,7 @@ export class UserCreateController extends BaseController {
   async execute(ctx: Context) {
     try {
       const userToCreate: CreateUserDTO =
-        await RequestAdapter.validateData<CreateUserDTO>(ctx.body.user, [
+        await this.requestAdapter.validateData<CreateUserDTO>(ctx.body.user, [
           'firstname',
           'lastname',
           'username',

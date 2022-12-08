@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import nodemailer, { SendMailOptions } from 'nodemailer';
 import { IMailer } from '@/shared/domain/mail/mailer.interface';
 import config from '@/shared/infrastructure/config';
@@ -5,18 +6,8 @@ import { AuthenticationError } from '@/shared/domain/errors/domain-errors/Authen
 
 export type options = SendMailOptions;
 
+@injectable()
 export class NodeMailer implements IMailer<SendMailOptions> {
-  private static instance: IMailer<SendMailOptions> | undefined;
-
-  private constructor() {}
-
-  static getInstance() {
-    if (this.instance) return this.instance;
-    this.instance = new NodeMailer();
-
-    return this.instance;
-  }
-
   async send(params: SendMailOptions): Promise<void> {
     try {
       const carrier = nodemailer.createTransport({
