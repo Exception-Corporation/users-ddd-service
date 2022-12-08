@@ -1,5 +1,6 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
-import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
 import { DeleteUserUseCase } from '@/user/v1/application/delete-user/use.case';
 import {
@@ -14,16 +15,20 @@ import { BASIC } from '@/shared/infrastructure/http-framework/middlewares/securi
   path: '/delete/:id'
 })
 @GuardWithJwt(BASIC)
+@injectable()
 export class UserDeleteController extends BaseController {
-  constructor() {
+  constructor(
+    @inject(TYPES.DeleteUserUseCase)
+    private readonly deleteUserUseCase: DeleteUserUseCase
+  ) {
     super();
   }
 
   async execute(ctx: Context) {
     try {
-      let response = await DeleteUserUseCase.getInstance(
-        UserRepository
-      ).execute(new UserId(Number(ctx.params.id)));
+      let response = await this.deleteUserUseCase.execute(
+        new UserId(Number(ctx.params.id))
+      );
 
       const { status, success, contain } = response.toPrimitives();
 

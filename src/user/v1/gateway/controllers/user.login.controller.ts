@@ -1,12 +1,12 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { RequestAdapter } from '@/user/v1/infrastructure/adapters/';
 import { LoginUserDTO } from '@/user/v1/gateway/dtos/login.user.dto';
-import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { LoginUserUseCase } from '@/user/v1/application/login-user/use.case';
-import { AuthenticationService } from '@/shared/infrastructure/auth';
 import {
   Context,
   Controller
@@ -16,8 +16,12 @@ import {
   http: 'post',
   path: '/login/'
 })
+@injectable()
 export class UserLoginController extends BaseController {
-  constructor() {
+  constructor(
+    @inject(TYPES.LoginUserUseCase)
+    private readonly loginUseCase: LoginUserUseCase
+  ) {
     super();
   }
 
@@ -29,10 +33,7 @@ export class UserLoginController extends BaseController {
           'OR:email,username'
         ]);
 
-      const response = await LoginUserUseCase.getInstance(
-        UserRepository,
-        AuthenticationService
-      ).execute(
+      const response = await this.loginUseCase.execute(
         {
           email: email ? new UserEmail(email) : undefined,
           username: username ? new UserUsername(username) : undefined

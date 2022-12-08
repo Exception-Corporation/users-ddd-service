@@ -1,3 +1,6 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
+
 import { DomainEventClass } from '@/shared/domain/event-bus/domain.event';
 import { DomainEventSubscriber } from '@/shared/domain/event-bus/domain.event.subscriber';
 
@@ -11,12 +14,13 @@ import { EventIdDto } from '@/user/v1/gateway/dtos/events/eventId.dto';
 import { Logger } from '@/shared/domain/logger';
 import { MailerService } from '@/shared/infrastructure/mailer';
 
+@injectable()
 export class UserEmailEvent
   implements DomainEventSubscriber<UserEmailDomainEvent>
 {
   constructor(
-    private readonly eventBus: EventBus,
-    private readonly logger: Logger
+    @inject(TYPES.EventBus) private readonly eventBus: EventBus,
+    @inject(TYPES.Logger) private readonly logger: Logger
   ) {}
 
   subscribedTo(): DomainEventClass[] {

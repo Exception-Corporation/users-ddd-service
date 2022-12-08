@@ -1,3 +1,6 @@
+import { inject } from 'inversify';
+import { provide } from '@/shared/infrastructure/d-injection/decorators/provider';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import {
@@ -8,18 +11,13 @@ import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
 
+@provide(TYPES.UpdateUserUseCase)
 export class UpdateUserUseCase extends UseCase {
-  private static instance: UpdateUserUseCase | undefined;
-  constructor(private userRepository: UserRepository) {
+  constructor(
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: UserRepository
+  ) {
     super();
-  }
-
-  static getInstance(userRepository: UserRepository) {
-    if (!this.instance) {
-      this.instance = new UpdateUserUseCase(userRepository);
-    }
-
-    return this.instance;
   }
 
   async execute(user: User, currentPassword: UserPassword): Promise<Response> {

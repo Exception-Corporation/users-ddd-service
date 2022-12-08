@@ -1,5 +1,6 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
-import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import { FindAllUsersUseCase } from '@/user/v1/application/find-all-user-by/use.case';
 import {
   Context,
@@ -13,8 +14,12 @@ import { BASIC } from '@/shared/infrastructure/http-framework/middlewares/securi
   path: '/getAll'
 })
 @GuardWithJwt(BASIC)
+@injectable()
 export class UserFindAllController extends BaseController {
-  constructor() {
+  constructor(
+    @inject(TYPES.FindAllUsersUseCase)
+    private readonly findUseCase: FindAllUsersUseCase
+  ) {
     super();
   }
 
@@ -24,9 +29,7 @@ export class UserFindAllController extends BaseController {
     searchBy = searchBy || '';
 
     try {
-      const response = await FindAllUsersUseCase.getInstance(
-        UserRepository
-      ).execute({
+      const response = await this.findUseCase.execute({
         searchBy: {
           firstname: searchBy,
           lastname: searchBy,

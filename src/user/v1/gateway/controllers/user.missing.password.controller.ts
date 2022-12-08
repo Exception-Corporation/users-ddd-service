@@ -1,9 +1,8 @@
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
-import { AuthenticationService } from '@/shared/infrastructure/auth';
 import { GetPasswordUseCase } from '@/user/v1/application/get-password/use.case';
-import { MainEventBus } from '@/shared/infrastructure/event-bus';
-import { UserRepository } from '@/user/v1/infrastructure/repositories';
 import {
   Context,
   Controller
@@ -13,8 +12,12 @@ import {
   http: 'post',
   path: '/missing/password/:email'
 })
+@injectable()
 export class UserMissingPasswordController extends BaseController {
-  constructor() {
+  constructor(
+    @inject(TYPES.GetPasswordUseCase)
+    private readonly getPasswordUseCase: GetPasswordUseCase
+  ) {
     super();
   }
 
@@ -22,11 +25,9 @@ export class UserMissingPasswordController extends BaseController {
     try {
       const { email } = ctx.params;
 
-      const response = await GetPasswordUseCase.getInstance(
-        MainEventBus,
-        AuthenticationService,
-        UserRepository
-      ).execute(new UserEmail(email));
+      const response = await this.getPasswordUseCase.execute(
+        new UserEmail(email)
+      );
 
       const { status, success, contain } = response.toPrimitives();
 

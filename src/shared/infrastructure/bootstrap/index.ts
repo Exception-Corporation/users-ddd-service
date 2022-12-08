@@ -1,32 +1,37 @@
-import { StartModule } from '@/shared/domain/interfaces/bootstrap';
-import { CacheService } from '@/shared/infrastructure/cache/redis.cache';
-import { PostgresDatabase } from '@/shared/infrastructure/database/postgresql/postgres.database';
-import { Application } from '@/shared/infrastructure/http-framework/express.server';
-import { MainLogger } from '@/shared/infrastructure/logger/main/';
-import { MainEventBus } from '@/shared/infrastructure/event-bus';
+import { injectable, inject } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
+import { StartModule } from '@/shared/domain/bootstrap';
+import { Server } from '@/shared/domain/http-framework/server.interface';
+import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import config from '@/shared/infrastructure/config';
-import { RequireService } from '@/shared/infrastructure/auto-files';
+import { Logger } from '@/shared/domain/logger';
+import { AppDependencies } from '@/shared/infrastructure/d-injection/config';
+import { AppContainer } from '@/shared/infrastructure/d-injection/container';
+import { ICacheServer } from '@/shared/domain/cache/cache.server';
+import { DatabaseConnection } from '@/shared/domain/database/database.interface';
+import { DomainEventSubscriber } from '@/shared/domain/event-bus/domain.event.subscriber';
+import { DomainEvent } from '@/shared/domain/event-bus/domain.event';
 
+@injectable()
 export class SharedBootstrap implements StartModule {
+  constructor(@inject(TYPES.Logger) private readonly logger: Logger) {}
   async init(): Promise<void> {
     try {
-      if (!config.test) {
-        const database = new PostgresDatabase(MainLogger);
+      if (!config.test.isDefined) {
+        await this.startDatabase();
 
-        await database.connect();
-
-        const cacheService = CacheService.getInstance(MainLogger);
-
-        await cacheService.cacheConnect(0);
+        await this.startCacheService();
 
         await this.startEventBus();
 
-        const server = new Application(MainLogger);
+        await this.startFramework();
 
-        await server.getApp().initialize();
+        return;
       }
+
+      new AppDependencies().register(AppContainer);
     } catch (error: any) {
-      MainLogger.error({
+      this.logger.error({
         type: 'BOOTSTRAP_ERROR',
         message: `[${SharedBootstrap.name}] Error ${
           error?.message || error.toString()
@@ -37,13 +42,31 @@ export class SharedBootstrap implements StartModule {
     }
   }
 
-  private async startEventBus(): Promise<void> {
-    const subscriberDefinitions = RequireService.getFiles(
-      'src/**/gateway/events/*.event.ts',
-      ['on', 'subscribedTo']
-    ).map((Subscriber: any) => new Subscriber(MainEventBus, MainLogger));
+  private async startCacheService(): Promise<void> {
+    const cacheService = AppContainer.get<ICacheServer>(TYPES.CacheService);
+    await cacheService.cacheConnect(0);
+  }
 
-    MainEventBus.addSubscribers(subscriberDefinitions);
-    MainEventBus.start();
+  private async startDatabase(): Promise<void> {
+    const databaseConnection = AppContainer.get<DatabaseConnection<unknown>>(
+      TYPES.DatabaseConnection
+    );
+    await databaseConnection.connect();
+  }
+
+  private async startFramework(): Promise<void> {
+    const framework = AppContainer.get<Server<unknown>>(TYPES.Framework);
+    framework.getApp().initialize();
+  }
+
+  private async startEventBus(): Promise<void> {
+    const eventBus = AppContainer.get<EventBus>(TYPES.EventBus);
+
+    const subscriberDefinitions = AppContainer.getAll<
+      DomainEventSubscriber<DomainEvent>
+    >(TYPES.DomainEventSubscriber);
+
+    eventBus.addSubscribers(subscriberDefinitions);
+    eventBus.start();
   }
 }

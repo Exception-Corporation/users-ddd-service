@@ -30,7 +30,8 @@ export default {
       host: process.env.POSTGRES_HOST,
       port: process.env.POSTGRES_PORT,
       database: process.env.POSTGRES_DB,
-      logging: process.env.PROJECT_MODE == 'development'
+      logging: process.env.PROJECT_MODE == 'development',
+      ORM_UP: process.env.ORM_UP
     }
   },
   database_test: {
@@ -70,7 +71,9 @@ export default {
       front: process.env.MAILER_FRONT
     }
   },
-  test: process.env.NODE_TEST,
+  test: {
+    isDefined: process.env.JEST_WORKER_ID !== undefined
+  },
   RateLimit: {
     duration: process.env.RATE_LIMIT_DURATION_MS,
     request: process.env.RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION

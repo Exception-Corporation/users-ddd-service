@@ -25,8 +25,10 @@ database
       })
       .catch((e) => {
         console.error('SAVE METHOD: ' + e);
+        process.exit(0);
       });
   })
   .catch((e) => {
     console.error('CONNECTION METHOD: ' + e);
+    process.exit(0);
   });

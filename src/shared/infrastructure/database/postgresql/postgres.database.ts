@@ -1,15 +1,21 @@
 import 'reflect-metadata';
+import { injectable, inject } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { DataSource } from 'typeorm';
-import { DatabaseConnection } from '@/shared/domain/interfaces/database.interface';
+import { DatabaseConnection } from '@/shared/domain/database/database.interface';
 import { Logger } from '@/shared/domain/logger';
 import postgresConfig from '@/shared/infrastructure/database/postgresql/config';
 import { PostgresConfig } from '@/shared/infrastructure/database/postgresql/config/types';
 
+@injectable()
 export class PostgresDatabase implements DatabaseConnection<DataSource> {
   private appDataSource: DataSource;
   private postgresConfig: PostgresConfig;
 
-  constructor(private logger: Logger, private port?: number) {
+  constructor(
+    @inject(TYPES.Logger) private readonly logger: Logger,
+    private port?: number
+  ) {
     this.postgresConfig = postgresConfig;
 
     if (this.port) this.postgresConfig.port = this.port;
@@ -24,13 +30,17 @@ export class PostgresDatabase implements DatabaseConnection<DataSource> {
     );
   }
 
+  async closeConnection(): Promise<void> {
+    await this.appDataSource.destroy();
+  }
+
   getConnection() {
     return this.appDataSource;
   }
 
-  async closeConnection(): Promise<void> {
-    await this.appDataSource.destroy();
+  static getConnectionToMigrate() {
+    return new DataSource(postgresConfig as any);
   }
 }
 
-export default new PostgresDatabase(console as any).getConnection();
+export default PostgresDatabase.getConnectionToMigrate();

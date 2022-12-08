@@ -1,4 +1,4 @@
-import { IEncrypt } from '@/shared/domain/interfaces/encrypt.interface';
+import { IEncrypt } from '@/shared/domain/encryption/encrypt.interface';
 import bcrypt from 'bcrypt';
 
 export class BcrypEncryption implements IEncrypt {
