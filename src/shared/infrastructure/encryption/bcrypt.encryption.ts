@@ -1,16 +1,9 @@
+import { injectable } from 'inversify';
 import { IEncrypt } from '@/shared/domain/encryption/encrypt.interface';
 import bcrypt from 'bcrypt';
 
+@injectable()
 export class BcrypEncryption implements IEncrypt {
-  private static instance: IEncrypt | undefined;
-  private constructor() {}
-
-  static getInstance() {
-    if (this.instance) return this.instance;
-    this.instance = new BcrypEncryption();
-    return this.instance;
-  }
-
   async encrypt(toEncrypt: string, saltRounds: number): Promise<string> {
     const newEncriptValue = await bcrypt.hash(toEncrypt, saltRounds);
     return newEncriptValue;

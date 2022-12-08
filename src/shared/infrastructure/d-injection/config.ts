@@ -24,6 +24,18 @@ import { ICacheServer } from '@/shared/domain/cache/cache.server';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import { JSONWebTokenAuth } from '@/shared/infrastructure/auth/json-web-token.auth';
 
+import {
+  NodeMailer,
+  options
+} from '@/shared/infrastructure/mailer/nodemailer.mailer';
+import { IMailer } from '@/shared/domain/mail/mailer.interface';
+
+import { DayJS, dateType } from '@/shared/infrastructure/dates/dayjs.date';
+import { IDates } from '@/shared/domain/dates/dates.interface';
+
+import { BcrypEncryption } from '@/shared/infrastructure/encryption/bcrypt.encryption';
+import { IEncrypt } from '@/shared/domain/encryption/encrypt.interface';
+
 export class AppDependencies {
   register(container: Container) {
     this.configLogger(container);
@@ -33,10 +45,31 @@ export class AppDependencies {
     this.configDatabase(container);
     this.configEventBus(container);
     this.configAuthentication(container);
+    this.configMailer(container);
+    this.configDates(container);
+    this.configEncryption(container);
   }
 
   private configLogger(container: Container) {
     container.bind<Logger>(TYPES.Logger).to(LoggerMock).inSingletonScope();
+  }
+
+  private configEncryption(container: Container) {
+    container
+      .bind<IEncrypt>(TYPES.IEncrypt)
+      .to(BcrypEncryption)
+      .inSingletonScope();
+  }
+
+  private configMailer(container: Container) {
+    container
+      .bind<IMailer<options>>(TYPES.IMailer)
+      .to(NodeMailer)
+      .inSingletonScope();
+  }
+
+  private configDates(container: Container) {
+    container.bind<IDates<dateType>>(TYPES.IDates).to(DayJS).inSingletonScope();
   }
 
   private configAuthentication(container: Container) {

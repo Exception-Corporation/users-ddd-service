@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
+import { TYPES as TYPES_SHARED } from '@/shared/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
@@ -9,7 +10,7 @@ import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password'
 import { UpdateUserUseCase } from '@/user/v1/application/update-user/use.case';
 import { FindUserUseCase } from '@/user/v1/application/find-user-by/use.case';
 import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
-import { EncryptionService } from '@/shared/infrastructure/encryption';
+import { IEncrypt } from '@/shared/domain/encryption/encrypt.interface';
 import {
   Controller,
   Context
@@ -28,7 +29,9 @@ export class UserUpdateController extends BaseController {
     @inject(TYPES.FindUserUseCase)
     private readonly findUseCase: FindUserUseCase,
     @inject(TYPES.UpdateUserUseCase)
-    private readonly updateUseCase: UpdateUserUseCase
+    private readonly updateUseCase: UpdateUserUseCase,
+    @inject(TYPES_SHARED.IEncrypt)
+    private readonly encryptionService: IEncrypt
   ) {
     super();
   }
@@ -54,7 +57,7 @@ export class UserUpdateController extends BaseController {
       const userPrimitive = user;
 
       if (
-        !(await EncryptionService.verifyEncrypValues(
+        !(await this.encryptionService.verifyEncrypValues(
           userTo?.verifyPassword || '',
           user.password
         )) &&
