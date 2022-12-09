@@ -7,10 +7,17 @@ const validateEnv = () => {
     PROJECT_PORT: port(),
     PROJECT_HOST: host(),
     PROJECT_MODE: str(),
+    PROJECT_NAME: str(),
+
+    SWAGGER_IS_PUBLIC: bool(),
+    SWAGGER_HTML_ENDPOINT: str(),
+    SWAGGER_JSON_ENDPOINT: str(),
+
     JWT_ACCESS_TOKEN_PRIVATE_KEY: str(),
     JWT_ACCESS_TOKEN_PUBLIC_KEY: str(),
     JWT_REFRESH_TOKEN_PRIVATE_KEY: str(),
     JWT_REFRESH_TOKEN_PUBLIC_KEY: str(),
+
     POSTGRES_DB: str(),
     POSTGRES_USER: str(),
     POSTGRES_ROL: str(),
@@ -22,6 +29,7 @@ const validateEnv = () => {
     PGADMIN_DEFAULT_PASSWORD: str(),
     PGADMIN_PORT: port(),
     ADMIN_PASSWORD: str(),
+
     REDIS_IS_SECURE: bool(),
     REDIS_HOSTNAME: host(),
     REDIS_PORT: port(),
@@ -40,6 +48,7 @@ const validateEnv = () => {
 
     RATE_LIMIT_DURATION_MS: str(),
     RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION: str(),
+
     RABBITMQ_DEFAULT_USER: str(),
     RABBITMQ_DEFAULT_PASS: str(),
     RABBITMQ_PORT: port(),

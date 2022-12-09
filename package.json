@@ -33,6 +33,10 @@
     "postgres"
   ],
   "dependencies": {
+    "@fastify/cors": "^8.2.0",
+    "@fastify/rate-limit": "^7.6.0",
+    "@fastify/static": "^6.6.0",
+    "@fastify/swagger": "^8.2.0",
     "amqp-ts": "^1.8.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
@@ -44,6 +48,7 @@
     "envalid": "^7.3.1",
     "express": "^4.17.2",
     "express-rate-limit": "^6.7.0",
+    "fastify": "^4.10.2",
     "inversify": "^6.0.1",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",

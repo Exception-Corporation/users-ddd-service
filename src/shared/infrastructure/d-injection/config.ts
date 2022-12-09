@@ -7,7 +7,7 @@ import { Logger } from '@/shared/domain/logger';
 import { LoggerMock } from '@/shared/infrastructure/logger/logger.mock';
 
 import { Server } from '@/shared/domain/http-framework/server.interface';
-import { ExpressServer } from '@/shared/infrastructure/http-framework/express.server';
+import { ExpressServer } from '@/shared/infrastructure/http-framework/express/express.server';
 
 import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import { RabbitMQEventBus } from '@/shared/infrastructure/event-bus/rabbitmq/rabbitmq.event.bus';

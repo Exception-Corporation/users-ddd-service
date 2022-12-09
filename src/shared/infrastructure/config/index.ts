@@ -11,7 +11,13 @@ export default {
   project: {
     port: process.env.PROJECT_PORT,
     host: process.env.PROJECT_HOST,
-    mode: process.env.PROJECT_MODE
+    mode: process.env.PROJECT_MODE,
+    name: process.env.PROJECT_NAME
+  },
+  swagger: {
+    isPublic: process.env.SWAGGER_IS_PUBLIC,
+    html: process.env.SWAGGER_HTML_ENDPOINT,
+    json: process.env.SWAGGER_JSON_ENDPOINT
   },
   authentication: {
     accessTokenExpiresIn: 15,
