@@ -50,9 +50,9 @@ export class UserUpdateController extends BaseController {
         CreateUserDTO & { active?: boolean; verifyPassword?: string }
       > = userDTO;
 
-      const { user } = (
-        await this.findUseCase.execute(new UserId(Number(id)))
-      ).toPrimitives().contain as { user: UserPrimitive };
+      const user = (
+        await this.findUseCase.getUserToUpdate(new UserId(Number(id)))
+      ).toPrimitives();
 
       const userPrimitive = user;
 

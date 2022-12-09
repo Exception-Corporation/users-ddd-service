@@ -21,6 +21,7 @@ const validateEnv = () => {
     PGADMIN_DEFAULT_EMAIL: email(),
     PGADMIN_DEFAULT_PASSWORD: str(),
     PGADMIN_PORT: port(),
+    ADMIN_PASSWORD: str(),
     REDIS_IS_SECURE: bool(),
     REDIS_HOSTNAME: host(),
     REDIS_PORT: port(),
@@ -35,6 +36,7 @@ const validateEnv = () => {
     MAILER_PORT: str(),
     MAILER_EMAIL: email(),
     MAILER_PASSWORD: str(),
+    MAILER_FRONT: str(),
 
     RATE_LIMIT_DURATION_MS: str(),
     RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION: str(),

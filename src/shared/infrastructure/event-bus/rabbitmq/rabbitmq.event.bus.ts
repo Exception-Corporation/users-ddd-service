@@ -5,6 +5,7 @@ import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import { DomainEventJSONDeserializer } from '@/shared/infrastructure/event-bus/rabbitmq/domain.event.json.deserializer';
 import { DomainEventMapping } from '@/shared/infrastructure/event-bus/rabbitmq/domain.event.mapping';
 import { Logger } from '@/shared/domain/logger';
+import { InternalError } from '@/shared/domain/errors/domain-errors/InternalError';
 
 type RabbitMQConfig = {
   user: string;
@@ -51,7 +52,7 @@ export class RabbitMQEventBus implements EventBus {
 
   async start(): Promise<void> {
     if (!this.deserializer) {
-      throw new Error(
+      throw new InternalError(
         `[${RabbitMQEventBus.name}] has not been properly initialized, deserializer is missing`
       );
     }

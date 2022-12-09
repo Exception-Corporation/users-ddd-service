@@ -67,6 +67,6 @@ export class SharedBootstrap implements StartModule {
     >(TYPES.DomainEventSubscriber);
 
     eventBus.addSubscribers(subscriberDefinitions);
-    eventBus.start();
+    await eventBus.start();
   }
 }

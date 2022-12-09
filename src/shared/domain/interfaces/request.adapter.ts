@@ -1,6 +1,7 @@
-export interface IRequestAdapter {
-  validateData<T extends object>(
-    request: T,
-    properties?: Array<string>
-  ): Promise<T>;
+export interface IRequestAdapter<S> {
+  validateData(
+    request: S,
+    properties?: Array<string>,
+    classType?: Function
+  ): Promise<S>;
 }

@@ -12,6 +12,7 @@ import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password'
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
+import HttpStatus from '@/shared/domain/errors/lib/HttpStatus';
 
 @provide(TYPES.LoginUserUseCase)
 export class LoginUserUseCase extends UseCase {
@@ -30,8 +31,8 @@ export class LoginUserUseCase extends UseCase {
   ): Promise<Response> {
     const user = await this.userRepository.getUserByLogin(
       {
-        email: email ? email.valueOf() : undefined,
-        username: username ? username.valueOf() : undefined
+        email: email?.valueOf(),
+        username: username?.valueOf()
       },
       password.valueOf()
     );
@@ -43,7 +44,7 @@ export class LoginUserUseCase extends UseCase {
 
     let response: ResponsePrimitive = {
       success: true,
-      status: 200,
+      status: HttpStatus.OK,
       contain: {
         access_token
       }

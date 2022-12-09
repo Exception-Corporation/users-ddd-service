@@ -8,6 +8,7 @@ import {
   ResponsePrimitive
 } from '@/user/v1/domain/response/response.entity';
 import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
+import HttpStatus from '@/shared/domain/errors/lib/HttpStatus';
 
 @provide(TYPES.CreateUserUseCase)
 export class CreateUserUseCase extends UseCase {
@@ -25,7 +26,7 @@ export class CreateUserUseCase extends UseCase {
 
     let response: ResponsePrimitive = {
       success: true,
-      status: 200,
+      status: HttpStatus.OK,
       contain: {
         user: userCreated.toPrimitives()
       }

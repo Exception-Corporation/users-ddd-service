@@ -10,6 +10,7 @@ import {
 import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
+import HttpStatus from '@/shared/domain/errors/lib/HttpStatus';
 
 @provide(TYPES.UpdateUserUseCase)
 export class UpdateUserUseCase extends UseCase {
@@ -28,12 +29,16 @@ export class UpdateUserUseCase extends UseCase {
 
     let response: ResponsePrimitive = {
       success: GlobalFunctions.safeVal(userCreated, true, false),
-      status: GlobalFunctions.safeVal(userCreated, 200, 404),
+      status: GlobalFunctions.safeVal(
+        userCreated,
+        HttpStatus.OK,
+        HttpStatus.NOT_FOUND
+      ),
       contain: GlobalFunctions.safeVal(
         userCreated,
         { message: 'User updated successfully' },
         {
-          error: 404,
+          error: HttpStatus.NOT_FOUND,
           message:
             'Something went wrong trying to update the user, please try again'
         }

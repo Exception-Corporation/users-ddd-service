@@ -20,7 +20,7 @@ export class UserCreateController extends BaseController {
     @inject(TYPES.CreateUserUseCase)
     private readonly createUserUseCase: CreateUserUseCase,
     @inject(TYPES.IRequestAdapter)
-    private readonly requestAdapter: IRequestAdapter
+    private readonly requestAdapter: IRequestAdapter<CreateUserDTO>
   ) {
     super();
   }
@@ -28,14 +28,11 @@ export class UserCreateController extends BaseController {
   async execute(ctx: Context) {
     try {
       const userToCreate: CreateUserDTO =
-        await this.requestAdapter.validateData<CreateUserDTO>(ctx.body.user, [
-          'firstname',
-          'lastname',
-          'username',
-          'email',
-          'age',
-          'password'
-        ]);
+        await this.requestAdapter.validateData(
+          ctx.body.user,
+          ['firstname', 'lastname', 'username', 'email', 'age', 'password'],
+          CreateUserDTO
+        );
 
       userToCreate.role = userToCreate.role || 'standard';
 
@@ -45,7 +42,8 @@ export class UserCreateController extends BaseController {
           id: 0,
           createdAt: Date.now().toString(),
           updatedAt: Date.now().toString(),
-          active: true
+          active: true,
+          role: userToCreate.role
         })
       );
 
