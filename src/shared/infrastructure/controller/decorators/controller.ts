@@ -1,6 +1,14 @@
+export type HttpMethods =
+  | 'post'
+  | 'put'
+  | 'patch'
+  | 'delete'
+  | 'get'
+  | 'options';
+
 export type ControllerParams = {
   path: string;
-  http: 'post' | 'put' | 'patch' | 'delete' | 'get' | 'options';
+  http: HttpMethods;
 };
 
 export type Context = {

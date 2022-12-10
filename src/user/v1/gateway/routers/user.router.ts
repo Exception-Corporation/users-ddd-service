@@ -1,16 +1,20 @@
 import { inject, injectable } from 'inversify';
-import { Request, Response, Router } from 'express';
 import { RouterC } from '@/shared/infrastructure/router/router.class';
 import Controllers from '@/user/v1/gateway/controllers';
 import { Logger } from '@/shared/domain/logger';
 import { ControllerClass } from '@/shared/infrastructure/controller/decorators/controller';
 import { Routes } from '@/shared/infrastructure/router/decorators/router.decorator';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
+import { Router } from '@/shared/infrastructure/http-framework/middlewares/shared/router';
+import {
+  Request,
+  Response
+} from '@/shared/infrastructure/http-framework/middlewares/shared/params';
 
 @Routes({ path: '/api/v1/users', Controllers })
 @injectable()
-export class UserRouter extends RouterC<Router> {
-  private router: Router = Router();
+export class UserRouter extends RouterC<Array<Router>> {
+  private router: Array<Router> = [];
 
   constructor(@inject(TYPES.Logger) protected logger: Logger) {
     super(logger);
@@ -26,8 +30,8 @@ export class UserRouter extends RouterC<Router> {
             params: req.params,
             query: req.query,
             headers: req.headers,
-            cookies: req.cookies,
-            path: req.path
+            cookies: {},
+            path: (req as any)?.path || (req as any)?.routerPath
           };
 
           const { status, response } = await Controller.execute(context);
@@ -36,11 +40,17 @@ export class UserRouter extends RouterC<Router> {
         }
       };
 
-      this.router[Controller.http](path, Controller.middlewares, handler);
+      this.router.push({
+        method: Controller.http,
+        url: path,
+        schema: {},
+        middlewares: Controller.middlewares,
+        handler
+      });
     });
   }
 
-  getRoutes(): Router {
+  getRoutes(): Array<Router> {
     return this.router;
   }
 }

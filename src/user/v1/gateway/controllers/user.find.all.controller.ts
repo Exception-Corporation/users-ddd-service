@@ -7,7 +7,7 @@ import {
   Controller
 } from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
-import { BASIC } from '@/shared/infrastructure/http-framework/middlewares/security/roles';
+import { BASIC } from '@/shared/infrastructure/http-framework/middlewares/shared/roles';
 
 @Controller({
   http: 'get',

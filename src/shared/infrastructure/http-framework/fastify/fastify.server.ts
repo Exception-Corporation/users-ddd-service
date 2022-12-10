@@ -15,8 +15,9 @@ import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
 import { WatchLogger } from '@/shared/infrastructure/logger/watch.logger';
 import { RequireService } from '@/shared/infrastructure/auto-files/';
+import { CacheDatabase } from '@/shared/infrastructure/http-framework/fastify/cache.memory';
+import { Router } from '@/shared/infrastructure/http-framework/middlewares/shared/router';
 
-const db = new Map();
 @injectable()
 export class FastifyServer implements Server<FastifyInstance> {
   private app: FastifyInstance;
@@ -32,7 +33,7 @@ export class FastifyServer implements Server<FastifyInstance> {
     this.app.register(rateLimit, {
       max: config.RateLimit.request,
       timeWindow: config.RateLimit.duration,
-      redis: db,
+      redis: CacheDatabase,
       skipOnError: false
     });
 
@@ -75,8 +76,13 @@ export class FastifyServer implements Server<FastifyInstance> {
     this.getRouters().forEach((Router) => {
       const router: any = AppContainer.resolve(Router);
 
-      router.getRoutes().forEach((route: any) => {
-        this.app.route(route);
+      router.getRoutes().forEach((route: Router) => {
+        route.url = `${router.path}${route.url}`;
+        this.app[route.method](
+          route.url,
+          { preHandler: route.middlewares },
+          route.handler
+        );
       });
     });
   }

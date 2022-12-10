@@ -14,7 +14,7 @@ import {
 
 @Controller({
   http: 'post',
-  path: '/login/'
+  path: '/login'
 })
 @injectable()
 export class UserLoginController extends BaseController {

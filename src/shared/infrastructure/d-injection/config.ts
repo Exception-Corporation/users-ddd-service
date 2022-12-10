@@ -7,7 +7,8 @@ import { Logger } from '@/shared/domain/logger';
 import { LoggerMock } from '@/shared/infrastructure/logger/logger.mock';
 
 import { Server } from '@/shared/domain/http-framework/server.interface';
-import { ExpressServer } from '@/shared/infrastructure/http-framework/express/express.server';
+//import { ExpressServer } from '@/shared/infrastructure/http-framework/express/express.server';
+import { FastifyServer } from '@/shared/infrastructure/http-framework/fastify/fastify.server';
 
 import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import { RabbitMQEventBus } from '@/shared/infrastructure/event-bus/rabbitmq/rabbitmq.event.bus';
@@ -105,7 +106,7 @@ export class AppDependencies {
       .bind<Server<unknown>>(TYPES.Framework)
       .toDynamicValue(
         (context: interfaces.Context) =>
-          new ExpressServer(context.container.get<Logger>(TYPES.Logger))
+          new FastifyServer(context.container.get<Logger>(TYPES.Logger))
       );
   }
 
