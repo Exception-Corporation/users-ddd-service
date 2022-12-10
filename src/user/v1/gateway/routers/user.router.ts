@@ -19,8 +19,6 @@ export class UserRouter extends RouterC<Array<Router>> {
   constructor(@inject(TYPES.Logger) protected logger: Logger) {
     super(logger);
 
-    this.router;
-
     Controllers.forEach((Controller: ControllerClass) => {
       const { path, handler } = {
         path: Controller.path.toString(),
