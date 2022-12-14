@@ -15,14 +15,17 @@ import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
 import { WatchLogger } from '@/shared/infrastructure/logger/watch.logger';
 import { RequireService } from '@/shared/infrastructure/auto-files/';
-import { CacheDatabase } from '@/shared/infrastructure/http-framework/fastify/cache.memory';
 import { Router } from '@/shared/infrastructure/http-framework/middlewares/shared/router';
+import { CacheIO } from '@/shared/domain/cache/cache.io.server';
 
 @injectable()
 export class FastifyServer implements Server<FastifyInstance> {
   private app: FastifyInstance;
 
-  constructor(@inject(TYPES.Framework) private readonly logger: Logger) {
+  constructor(
+    @inject(TYPES.Framework) private readonly logger: Logger,
+    @inject(TYPES.CacheIO) cacheService: CacheIO
+  ) {
     this.app = Fastify({ logger: true });
 
     // Middleware
@@ -33,7 +36,7 @@ export class FastifyServer implements Server<FastifyInstance> {
     this.app.register(rateLimit, {
       max: config.RateLimit.request,
       timeWindow: config.RateLimit.duration,
-      redis: CacheDatabase,
+      redis: cacheService.getConnection(),
       skipOnError: false
     });
 
@@ -69,7 +72,7 @@ export class FastifyServer implements Server<FastifyInstance> {
     WatchLogger.registerTracer();
 
     this.app.register(fastifyStatic, {
-      root: `${require('path').resolve()}/src/shared/infrastructure/layouts`
+      root: `${require('path').resolve()}/src/shared/infrastructure/layouts/`
     });
 
     //Load routers
@@ -80,14 +83,19 @@ export class FastifyServer implements Server<FastifyInstance> {
         route.url = `${router.path}${route.url}`;
         this.app[route.method](
           route.url,
-          { preHandler: route.middlewares },
+          {
+            preHandler: route.middlewares
+          },
           route.handler
         );
       });
     });
   }
 
-  getApp() {
+  async getApp() {
+    await this.app.ready();
+    (this.app as any).swagger();
+
     return {
       app: this.app,
       initialize: async () => {

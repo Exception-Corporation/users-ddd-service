@@ -3,7 +3,7 @@ import config from '@/shared/infrastructure/config';
 const { project, swagger } = config;
 
 export default {
-  routePrefix: `${swagger.html}`,
+  routePrefix: `/${swagger.html}`,
   exposeRoute: swagger.isPublic === 'true',
   swagger: {
     info: {

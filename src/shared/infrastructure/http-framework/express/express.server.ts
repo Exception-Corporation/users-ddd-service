@@ -42,7 +42,7 @@ export class ExpressServer implements Server<app> {
     });
   }
 
-  getApp() {
+  async getApp() {
     return {
       app: this.app,
       initialize: async () => {

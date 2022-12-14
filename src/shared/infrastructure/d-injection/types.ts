@@ -18,5 +18,7 @@ export const TYPES = {
 
   IDates: Symbol.for('IDates'),
 
-  IEncrypt: Symbol.for('IEncrypt')
+  IEncrypt: Symbol.for('IEncrypt'),
+
+  CacheIO: Symbol.for('CacheIO')
 };

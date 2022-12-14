@@ -1,4 +1,4 @@
 export interface Server<T> {
-  getApp(): { app: T; initialize: () => Promise<void> };
+  getApp(): Promise<{ app: T; initialize: () => Promise<void> }>;
   getRouters(): any;
 }
