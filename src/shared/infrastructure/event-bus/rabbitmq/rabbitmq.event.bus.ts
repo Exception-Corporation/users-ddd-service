@@ -77,7 +77,7 @@ export class RabbitMQEventBus implements EventBus {
             const subscribersExecutions = subscribers.map((subscriber) =>
               subscriber.on(event)
             );
-            await Promise.all(subscribersExecutions);
+            await Promise.allSettled(subscribersExecutions);
           }
         }
         message.ack();
@@ -118,7 +118,7 @@ export class RabbitMQEventBus implements EventBus {
       executions.push(this.exchange.send(message));
     });
 
-    await Promise.all(executions);
+    await Promise.allSettled(executions);
   }
 
   private setDomainEventMapping(domainEventMapping: DomainEventMapping): void {
