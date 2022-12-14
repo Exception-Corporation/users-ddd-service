@@ -9,6 +9,7 @@ import {
   Controller,
   Context
 } from '@/shared/infrastructure/controller/decorators/controller';
+import { Role } from '@/shared/infrastructure/http-framework/middlewares/shared/roles';
 
 @Controller({
   http: 'post',
@@ -34,7 +35,7 @@ export class UserCreateController extends BaseController {
           CreateUserDTO
         );
 
-      userToCreate.role = userToCreate.role || 'standard';
+      userToCreate.role = userToCreate.role || Role.STANDARD;
 
       const response = await this.createUserUseCase.execute(
         User.fromPrimitives({

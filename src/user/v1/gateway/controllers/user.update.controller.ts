@@ -54,8 +54,6 @@ export class UserUpdateController extends BaseController {
         await this.findUseCase.getUserToUpdate(new UserId(Number(id)))
       ).toPrimitives();
 
-      const userPrimitive = user;
-
       if (
         !(await this.encryptionService.verifyEncrypValues(
           userTo?.verifyPassword || '',
@@ -74,17 +72,17 @@ export class UserUpdateController extends BaseController {
           id: id,
           createdAt: Date.now().toString(),
           updatedAt: Date.now().toString(),
-          active: userTo.active || userPrimitive.active,
-          age: userTo.age || userPrimitive.age,
-          firstname: userTo.firstname || userPrimitive.firstname,
-          lastname: userTo.lastname || userPrimitive.lastname,
-          username: userTo.username || userPrimitive.username,
-          phone: userTo.phone || userPrimitive.phone,
-          email: userTo.email || userPrimitive.email,
-          password: userTo.password || userPrimitive.password,
-          role: userTo.role || userPrimitive.role
+          active: userTo.active || user.active,
+          age: userTo.age || user.age,
+          firstname: userTo.firstname || user.firstname,
+          lastname: userTo.lastname || user.lastname,
+          username: userTo.username || user.username,
+          phone: userTo.phone || user.phone,
+          email: userTo.email || user.email,
+          password: userTo.password || user.password,
+          role: userTo.role || user.role
         }),
-        new UserPassword(userPrimitive.password)
+        new UserPassword(user.password)
       );
 
       const { status, success, contain } = response.toPrimitives();
