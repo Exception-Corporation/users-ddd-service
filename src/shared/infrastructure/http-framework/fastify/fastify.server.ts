@@ -90,17 +90,21 @@ export class FastifyServer implements Server<FastifyInstance> {
         );
       });
     });
+
+    this.app.ready((err) => {
+      if (err) throw err;
+      console.log(
+        JSON.stringify((this.app as any).swagger({ exposeRoute: true }))
+      );
+    });
   }
 
   async getApp() {
-    await this.app.ready();
-    (this.app as any).swagger();
-
     return {
       app: this.app,
       initialize: async () => {
         const { project } = config;
-        this.app.listen(project.port, () => {
+        this.app.listen({ port: project.port }, () => {
           this.logger.info(
             `Server [Express] listen on port: [${project.host}:${project.port}] in mode: ${project.mode}`
           );
