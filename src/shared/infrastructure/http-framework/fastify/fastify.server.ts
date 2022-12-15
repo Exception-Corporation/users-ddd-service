@@ -85,7 +85,8 @@ export class FastifyServer implements Server<FastifyInstance> {
         this.app[route.method](
           route.url,
           {
-            preHandler: route.middlewares
+            preHandler: route.middlewares,
+            schema: route.schema
           },
           route.handler
         );
