@@ -30,6 +30,7 @@ export class FastifyServer implements Server<FastifyInstance> {
 
     // Middleware
     this.app.register(require('@fastify/swagger'), swagger);
+    this.app.register(require('@fastify/swagger-ui'), swagger);
     this.app.register(require('@fastify/cors'));
 
     // rateLimit per IP = max / duration * 1000 [req/s]
@@ -89,13 +90,6 @@ export class FastifyServer implements Server<FastifyInstance> {
           route.handler
         );
       });
-    });
-
-    this.app.ready((err) => {
-      if (err) throw err;
-      console.log(
-        JSON.stringify((this.app as any).swagger({ exposeRoute: true }))
-      );
     });
   }
 
