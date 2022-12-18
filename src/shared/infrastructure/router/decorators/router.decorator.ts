@@ -11,7 +11,7 @@ export function Routes({
     ControllerClass & { isAuth?: boolean; roles?: Array<string> }
   >;
 }) {
-  GlobalFunctions.verifyDuplicationValues(Controllers, ['http', 'path']);
+  GlobalFunctions.verifyDuplicateValues(Controllers, ['http', 'path']);
   const logger = new LoggerMock();
 
   return (target: Function) => {
