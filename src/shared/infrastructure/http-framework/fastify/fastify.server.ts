@@ -9,13 +9,13 @@ import fastifyStatic from '@fastify/static';
 import rateLimit from '@fastify/rate-limit';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { AppContainer } from '@/shared/infrastructure/d-injection/container';
-import swagger from '@/shared/infrastructure/http-framework/fastify/open.api';
+import swagger from '@/shared/infrastructure/http-framework/shared/open.api';
 import { Server } from '@/shared/domain/http-framework/server.interface';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
 import { WatchLogger } from '@/shared/infrastructure/logger/watch.logger';
 import { RequireService } from '@/shared/infrastructure/auto-files/';
-import { Router } from '@/shared/infrastructure/http-framework/middlewares/shared/router';
+import { Router } from '@/shared/infrastructure/http-framework/shared/router';
 import { CacheIO } from '@/shared/domain/cache/cache.io.server';
 
 @injectable()
@@ -29,8 +29,6 @@ export class FastifyServer implements Server<FastifyInstance> {
     this.app = Fastify({ logger: true });
 
     // Middleware
-    this.app.register(require('@fastify/swagger'), swagger);
-    this.app.register(require('@fastify/swagger-ui'), swagger);
     this.app.register(require('@fastify/cors'));
 
     // rateLimit per IP = max / duration * 1000 [req/s]
@@ -75,6 +73,11 @@ export class FastifyServer implements Server<FastifyInstance> {
     this.app.register(fastifyStatic, {
       root: `${require('path').resolve()}/src/shared/infrastructure/layouts/`
     });
+  }
+
+  async getApp() {
+    await this.app.register(require('@fastify/swagger'), swagger);
+    this.app.register(require('@fastify/swagger-ui'));
 
     //Load routers
     this.getRouters().forEach((Router) => {
@@ -92,16 +95,16 @@ export class FastifyServer implements Server<FastifyInstance> {
         );
       });
     });
-  }
 
-  async getApp() {
+    await this.app.ready();
+
     return {
       app: this.app,
       initialize: async () => {
         const { project } = config;
         this.app.listen({ port: project.port }, () => {
           this.logger.info(
-            `Server [Express] listen on port: [${project.host}:${project.port}] in mode: ${project.mode}`
+            `Server [Fastify] listen on port: [${project.host}:${project.port}] in mode: ${project.mode}`
           );
         });
       }

@@ -5,11 +5,11 @@ import { Logger } from '@/shared/domain/logger';
 import { ControllerClass } from '@/shared/infrastructure/controller/decorators/controller';
 import { Routes } from '@/shared/infrastructure/router/decorators/router.decorator';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
-import { Router } from '@/shared/infrastructure/http-framework/middlewares/shared/router';
+import { Router } from '@/shared/infrastructure/http-framework/shared/router';
 import {
   Request,
   Response
-} from '@/shared/infrastructure/http-framework/middlewares/shared/params';
+} from '@/shared/infrastructure/http-framework/shared/params';
 
 @Routes({ path: '/api/v1/users', Controllers })
 @injectable()
@@ -41,7 +41,7 @@ export class UserRouter extends RouterC<Array<Router>> {
       this.router.push({
         method: Controller.http,
         url: path,
-        schema: {},
+        schema: Controller.schema,
         middlewares: Controller.middlewares,
         handler
       });

@@ -18,6 +18,9 @@ export default {
     host: `http://${project.host}:${project.port}`,
     schemes: ['http'],
     consumes: ['application/json'],
-    produces: ['application/json']
+    produces: ['application/json'],
+    tags: [{ name: 'User', description: 'User Service Endpoints' }],
+    definitions: {},
+    securityDefinitions: {}
   }
 };

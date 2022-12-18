@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 import {
   Request,
   Response
-} from '@/shared/infrastructure/http-framework/middlewares/shared/params';
+} from '@/shared/infrastructure/http-framework/shared/params';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import {
