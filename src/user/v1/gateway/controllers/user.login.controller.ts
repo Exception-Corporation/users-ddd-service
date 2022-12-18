@@ -14,7 +14,7 @@ import {
 
 @Controller({
   http: 'post',
-  path: '/login/'
+  path: '/login'
 })
 @injectable()
 export class UserLoginController extends BaseController {
@@ -22,7 +22,7 @@ export class UserLoginController extends BaseController {
     @inject(TYPES.LoginUserUseCase)
     private readonly loginUseCase: LoginUserUseCase,
     @inject(TYPES.IRequestAdapter)
-    private readonly requestAdapter: IRequestAdapter
+    private readonly requestAdapter: IRequestAdapter<LoginUserDTO>
   ) {
     super();
   }
@@ -30,10 +30,11 @@ export class UserLoginController extends BaseController {
   async execute(ctx: Context) {
     try {
       const { email, username, password }: LoginUserDTO =
-        await this.requestAdapter.validateData<LoginUserDTO>(ctx.body.user, [
-          'password',
-          'OR:email,username'
-        ]);
+        await this.requestAdapter.validateData(
+          ctx.body.user,
+          ['password', 'OR:email,username'],
+          LoginUserDTO
+        );
 
       const response = await this.loginUseCase.execute(
         {

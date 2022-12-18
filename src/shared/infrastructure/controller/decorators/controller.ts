@@ -1,6 +1,14 @@
+export type HttpMethods =
+  | 'post'
+  | 'put'
+  | 'patch'
+  | 'delete'
+  | 'get'
+  | 'options';
+
 export type ControllerParams = {
   path: string;
-  http: 'post' | 'put' | 'patch' | 'delete' | 'get' | 'options';
+  http: HttpMethods;
 };
 
 export type Context = {
@@ -17,6 +25,7 @@ export type ControllerResponse = { status: number; response: any };
 export type ControllerClass = ControllerParams & {
   execute: (context: Context) => Promise<ControllerResponse>;
   middlewares: Array<any>;
+  schema: any;
 };
 
 export function Controller({ path, http }: ControllerParams) {
@@ -24,5 +33,6 @@ export function Controller({ path, http }: ControllerParams) {
     target.prototype.path = path;
     target.prototype.http = http;
     target.prototype.middlewares = target.prototype.middlewares || [];
+    target.prototype.schema = target.prototype.schema || {};
   };
 }

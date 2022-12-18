@@ -1,6 +1,9 @@
 import { injectable, inject } from 'inversify';
+import {
+  Request,
+  Response
+} from '@/shared/infrastructure/http-framework/shared/params';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
-import { NextFunction, Request, Response } from 'express';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import {
   SecurityMiddleware,
@@ -11,7 +14,7 @@ import { Logger } from '@/shared/domain/logger';
 
 @injectable()
 export class AutorizationRouter
-  implements SecurityMiddleware<Request, Response, NextFunction, any>
+  implements SecurityMiddleware<Request, Response, unknown, any>
 {
   constructor(
     @inject(TYPES.Logger) private readonly logger: Logger,
@@ -25,10 +28,10 @@ export class AutorizationRouter
    */
   isAuth(
     roles: Array<string>
-  ): MiddlewareResponse<Request, Response, NextFunction, any> {
-    return async (req: Request, res: Response, next: NextFunction) => {
+  ): MiddlewareResponse<Request, Response, unknown, any> {
+    return async (req: Request, res: Response) => {
       if (!roles.length) {
-        return next();
+        return;
       }
 
       if (!req.headers.authorization) {
@@ -53,7 +56,9 @@ export class AutorizationRouter
             .status(400)
             .send({ success: false, message: 'Permission deneged' });
 
-        req.body['auth'] = payload;
+        if (!req.body) req.body = {};
+
+        (req.body as any)['auth'] = payload;
       } catch (e: any) {
         this.logger.warn(e.toString());
 
@@ -65,8 +70,6 @@ export class AutorizationRouter
               : { success: false, message: e.toString() }
           );
       }
-
-      next();
     };
   }
 }

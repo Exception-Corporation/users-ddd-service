@@ -56,7 +56,7 @@ export class SharedBootstrap implements StartModule {
 
   private async startFramework(): Promise<void> {
     const framework = AppContainer.get<Server<unknown>>(TYPES.Framework);
-    framework.getApp().initialize();
+    (await framework.getApp()).initialize();
   }
 
   private async startEventBus(): Promise<void> {
@@ -67,6 +67,6 @@ export class SharedBootstrap implements StartModule {
     >(TYPES.DomainEventSubscriber);
 
     eventBus.addSubscribers(subscriberDefinitions);
-    eventBus.start();
+    await eventBus.start();
   }
 }

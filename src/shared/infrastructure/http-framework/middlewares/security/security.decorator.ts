@@ -1,4 +1,4 @@
-import { AutorizationRouter } from '@/shared/infrastructure/http-framework/middlewares/security/security.middleware';
+import { AutorizationRouter } from '@/shared/infrastructure/http-framework/fastify/middlewares/security.middleware';
 import { AppContainer } from '@/shared/infrastructure/d-injection/container';
 
 export function GuardWithJwt(roles: Array<string>) {

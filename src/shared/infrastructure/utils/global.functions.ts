@@ -42,25 +42,29 @@ export class GlobalFunctions {
     return data ? firstValue : secondValue;
   }
 
-  static verifyDuplicationValues<T>(
-    array: Array<T>,
-    properties: Array<keyof T>
-  ) {
-    const newArray = array.map((obj) => {
-      const newObj: any = {};
-
+  /**
+   * Verifies that all elements in the given array have unique values for the specified properties.
+   * Throws an error if there are duplicate values.
+   *
+   * @param array The array to check for duplicate values.
+   * @param properties The properties to check for duplicate values.
+   */
+  static verifyDuplicateValues<T>(array: T[], properties: (keyof T)[]) {
+    const values = array.map((obj) => {
+      const value: any = {};
       properties.forEach((property) => {
-        newObj[property] = obj[property];
+        value[property] = obj[property];
       });
 
-      return JSON.stringify(newObj);
+      return JSON.stringify(value);
     });
 
-    const arrayToValidate = [...new Set([...newArray])];
-
-    if (arrayToValidate.length !== newArray.length)
+    if (new Set(values).size !== values.length) {
       throw new InternalError(
-        'Duplicate controllers with the http and path values.'
+        `Duplicate objects in the array with this values: [${properties.join(
+          ','
+        )}]`
       );
+    }
   }
 }

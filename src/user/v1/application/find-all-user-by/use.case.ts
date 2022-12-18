@@ -8,6 +8,7 @@ import {
   ResponsePrimitive
 } from '@/user/v1/domain/response/response.entity';
 import { QueryParams } from '@/shared/domain/interfaces/QueryParams';
+import HttpStatus from '@/shared/domain/errors/lib/HttpStatus';
 
 @provide(TYPES.FindAllUsersUseCase)
 export class FindAllUsersUseCase extends UseCase {
@@ -29,7 +30,7 @@ export class FindAllUsersUseCase extends UseCase {
 
     let response: ResponsePrimitive = {
       success: true,
-      status: 200,
+      status: HttpStatus.OK,
       contain: {
         page: query.page,
         itemsByPage: query.pageSize,

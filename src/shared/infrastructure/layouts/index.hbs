@@ -1,0 +1,25 @@
+<html lang='en'>
+  <head>
+    <title>{{name}}</title>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <link rel='icon' sizes='any' href='favicon.ico' type='image/png' />
+  </head>
+  <body>
+    <div>
+      <img src='logo.png' />
+      <h1>{{name}}</h1>
+      <span>{{mode}}</span>
+      {{#if docs}}
+        <a href='{{docs}}'>swagger</a>
+      {{/if}}
+    </div>
+    <style>
+      body { margin: 0; font-family: sans-serif; } div { display: flex;
+      justify-content: center; align-items: center; flex-direction: column;
+      height: 100vh; } img { max-width: 180px; } h1, span { font-weight: 100; }
+      h1 { color: #333; margin: 8px; } span { color: #6f6f6f; } a { color:
+      #4e34e1; margin: 8px; font-weight: 600; }
+    </style>
+  </body>
+</html>

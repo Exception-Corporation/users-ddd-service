@@ -7,7 +7,8 @@ import { Logger } from '@/shared/domain/logger';
 import { LoggerMock } from '@/shared/infrastructure/logger/logger.mock';
 
 import { Server } from '@/shared/domain/http-framework/server.interface';
-import { ExpressServer } from '@/shared/infrastructure/http-framework/express.server';
+//import { ExpressServer } from '@/shared/infrastructure/http-framework/express/express.server';
+import { FastifyServer } from '@/shared/infrastructure/http-framework/fastify/fastify.server';
 
 import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import { RabbitMQEventBus } from '@/shared/infrastructure/event-bus/rabbitmq/rabbitmq.event.bus';
@@ -20,6 +21,9 @@ import { modules } from '@/index';
 
 import { CacheService } from '@/shared/infrastructure/cache/redis.cache';
 import { ICacheServer } from '@/shared/domain/cache/cache.server';
+
+import { RedisIOServer } from '@/shared/infrastructure/cache/redis.io.cache';
+import { CacheIO } from '@/shared/domain/cache/cache.io.server';
 
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import { JSONWebTokenAuth } from '@/shared/infrastructure/auth/json-web-token.auth';
@@ -48,6 +52,7 @@ export class AppDependencies {
     this.configMailer(container);
     this.configDates(container);
     this.configEncryption(container);
+    this.configCacheIOService(container);
   }
 
   private configLogger(container: Container) {
@@ -100,12 +105,25 @@ export class AppDependencies {
       .inSingletonScope();
   }
 
+  private configCacheIOService(container: Container) {
+    container
+      .bind<CacheIO>(TYPES.CacheIO)
+      .toDynamicValue(
+        (context: interfaces.Context) =>
+          new RedisIOServer(context.container.get<Logger>(TYPES.Logger))
+      )
+      .inSingletonScope();
+  }
+
   private configServer(container: Container) {
     container
       .bind<Server<unknown>>(TYPES.Framework)
       .toDynamicValue(
         (context: interfaces.Context) =>
-          new ExpressServer(context.container.get<Logger>(TYPES.Logger))
+          new FastifyServer(
+            context.container.get<Logger>(TYPES.Logger),
+            context.container.get<CacheIO>(TYPES.CacheIO)
+          )
       );
   }
 

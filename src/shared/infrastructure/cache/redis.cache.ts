@@ -10,7 +10,7 @@ export class CacheService implements ICacheServer {
   private clients: Array<RedisClientType | undefined> = [];
   private CACHE: typeof config.cache.redis;
 
-  constructor(@inject(TYPES.CacheService) private readonly logger: Logger) {
+  constructor(@inject(TYPES.Logger) private readonly logger: Logger) {
     this.CACHE = config.cache.redis;
   }
 

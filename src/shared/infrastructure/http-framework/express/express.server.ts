@@ -9,6 +9,7 @@ import { Server } from '@/shared/domain/http-framework/server.interface';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
 import { RequireService } from '@/shared/infrastructure/auto-files/';
+import { Router } from '@/shared/infrastructure/http-framework/shared/router';
 
 @injectable()
 export class ExpressServer implements Server<app> {
@@ -33,11 +34,15 @@ export class ExpressServer implements Server<app> {
 
     this.getRouters().forEach((Router) => {
       const router: any = AppContainer.resolve(Router);
-      this.app.use(router.path, router.getRoutes());
+
+      router.getRoutes().forEach((route: Router) => {
+        route.url = `${router.path}${route.url}`;
+        this.app[route.method](route.url, route.middlewares, route.handler);
+      });
     });
   }
 
-  getApp() {
+  async getApp() {
     return {
       app: this.app,
       initialize: async () => {

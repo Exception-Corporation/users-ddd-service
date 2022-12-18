@@ -23,7 +23,7 @@ export class UserEmailEvent
     @inject(TYPES_SHARED.IMailer)
     private readonly mailerService: IMailer<unknown>,
     @inject(TYPES.IRequestAdapter)
-    private readonly requestAdapter: IRequestAdapter
+    private readonly requestAdapter: IRequestAdapter<any>
   ) {}
 
   subscribedTo(): DomainEventClass[] {
@@ -31,34 +31,45 @@ export class UserEmailEvent
   }
 
   async on(domainEvent: UserEmailDomainEvent): Promise<void> {
-    this.logger.info(`listening User v1: event ${domainEvent.eventName}`);
+    try {
+      this.logger.info(`listening User v1: event ${domainEvent.eventName}`);
 
-    // Get Params
-    const body = {
-      data: domainEvent.getData()
-    };
+      // Get Params
+      const body = {
+        data: domainEvent.getData()
+      };
 
-    const data = await this.requestAdapter.validateData(body.data, [
-      'html',
-      'to',
-      'subject'
-    ]);
+      const data = await this.requestAdapter.validateData(body.data, [
+        'html',
+        'to',
+        'subject'
+      ]);
 
-    const { to, subject, html } = MailDto.fromJson(data).to().toPrimitives();
+      const { to, subject, html } = MailDto.fromJson(data).to().toPrimitives();
 
-    const eventId = EventIdDto.fromString(domainEvent.eventId);
+      const eventId = EventIdDto.fromString(domainEvent.eventId);
 
-    await this.mailerService.send({
-      to,
-      subject,
-      html
-    });
+      await this.mailerService.send({
+        to,
+        subject,
+        html
+      });
 
-    this.logger.success({
-      entityinfo: { class: UserEmailEvent.name },
-      level: 'ok',
-      module: UserEmailEvent.name,
-      result: `The mail was sent with the eventId: ${eventId.to().valueOf()}`
-    });
+      this.logger.success({
+        entityinfo: { class: UserEmailEvent.name },
+        level: 'ok',
+        module: UserEmailEvent.name,
+        result: `The mail was sent with the eventId: ${eventId.to().valueOf()}`
+      });
+    } catch (error: any) {
+      this.logger.error({
+        entityinfo: { class: UserEmailEvent.name },
+        level: 'error',
+        message: error.message ? error.message : error.toString(),
+        module: UserEmailEvent.name,
+        type: 'Domain Error',
+        params: domainEvent.getData()
+      });
+    }
   }
 }

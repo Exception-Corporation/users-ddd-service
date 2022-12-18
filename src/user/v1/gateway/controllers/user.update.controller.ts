@@ -2,9 +2,8 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { TYPES as TYPES_SHARED } from '@/shared/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
-import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
 import { UserId } from '@/user/v1/domain/user/value-objects/user.id';
-import { User, UserPrimitive } from '@/user/v1/domain/user/user.aggregate.root';
+import { User } from '@/user/v1/domain/user/user.aggregate.root';
 import { DTOPropertiesError } from '@/shared/domain/errors/domain-errors/DTOPropertiesError';
 import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { UpdateUserUseCase } from '@/user/v1/application/update-user/use.case';
@@ -16,7 +15,7 @@ import {
   Context
 } from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
-import { ALL_ROLES } from '@/shared/infrastructure/http-framework/middlewares/security/roles';
+import { ALL_ROLES } from '@/shared/infrastructure/http-framework/shared/roles';
 
 @Controller({
   http: 'put',
@@ -37,61 +36,76 @@ export class UserUpdateController extends BaseController {
   }
 
   async execute(ctx: Context) {
-    const id = Number(ctx.params.id);
-
-    const owner = Boolean(ctx.query.owner) || false;
-
-    const { user: userDTO, auth } = ctx.body;
-
     try {
+      const id = Number(ctx.params.id);
+      const owner = Boolean(ctx.query.owner) || false;
+      const { user: userDTO, auth } = ctx.body;
+
       if (!userDTO) throw new DTOPropertiesError(['user']);
 
-      const userTo: Partial<
-        CreateUserDTO & { active?: boolean; verifyPassword?: string }
-      > = userDTO;
-
-      const { user } = (
-        await this.findUseCase.execute(new UserId(Number(id)))
-      ).toPrimitives().contain as { user: UserPrimitive };
-
-      const userPrimitive = user;
-
-      if (
-        !(await this.encryptionService.verifyEncrypValues(
-          userTo?.verifyPassword || '',
-          user.password
-        )) &&
-        owner &&
-        auth.id == user.id
-      )
+      const user = await this.getUser(id);
+      const verifyPassword = userDTO?.verifyPassword || '';
+      const wrongPassword = await this.isWrongPassword(
+        verifyPassword,
+        user,
+        owner,
+        auth
+      );
+      if (wrongPassword)
         throw new AuthenticationError(
           'Wrong password: The current password is incorrect',
           true
         );
 
+      const updateUser = this.getUpdateUser(user, userDTO);
       const response = await this.updateUseCase.execute(
-        User.fromPrimitives({
-          id: id,
-          createdAt: Date.now().toString(),
-          updatedAt: Date.now().toString(),
-          active: userTo.active || userPrimitive.active,
-          age: userTo.age || userPrimitive.age,
-          firstname: userTo.firstname || userPrimitive.firstname,
-          lastname: userTo.lastname || userPrimitive.lastname,
-          username: userTo.username || userPrimitive.username,
-          phone: userTo.phone || userPrimitive.phone,
-          email: userTo.email || userPrimitive.email,
-          password: userTo.password || userPrimitive.password,
-          role: userTo.role || userPrimitive.role
-        }),
-        new UserPassword(userPrimitive.password)
+        updateUser,
+        new UserPassword(user.password)
       );
-
       const { status, success, contain } = response.toPrimitives();
 
       return { status, response: { success, ...contain } };
     } catch (error: any) {
       return this.mapperException(error, ctx.body, 'Users v1');
     }
+  }
+
+  private async getUser(id: number) {
+    return (
+      await this.findUseCase.getUserToUpdate(new UserId(id))
+    ).toPrimitives();
+  }
+
+  private async isWrongPassword(
+    verifyPassword: string,
+    user: any,
+    owner: boolean,
+    auth: any
+  ) {
+    return (
+      !(await this.encryptionService.verifyEncrypValues(
+        verifyPassword,
+        user.password
+      )) &&
+      owner &&
+      auth.id == user.id
+    );
+  }
+
+  private getUpdateUser(user: any, userDTO: any) {
+    return User.fromPrimitives({
+      id: user.id,
+      createdAt: Date.now().toString(),
+      updatedAt: Date.now().toString(),
+      active: userDTO.active || user.active,
+      age: userDTO.age || user.age,
+      firstname: userDTO.firstname || user.firstname,
+      lastname: userDTO.lastname || user.lastname,
+      username: userDTO.username || user.username,
+      phone: userDTO.phone || user.phone,
+      email: userDTO.email || user.email,
+      password: userDTO.password || user.password,
+      role: userDTO.role || user.role
+    });
   }
 }

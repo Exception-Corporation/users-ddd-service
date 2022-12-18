@@ -22,6 +22,6 @@ export const UserContainerModule = new ContainerModule(
 
     bind<UserRepository>(TYPES.UserRepository).to(UserPostgreseRepository);
 
-    bind<IRequestAdapter>(TYPES.IRequestAdapter).to(RequestAdapter);
+    bind<IRequestAdapter<unknown>>(TYPES.IRequestAdapter).to(RequestAdapter);
   }
 );
