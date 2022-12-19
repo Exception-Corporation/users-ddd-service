@@ -8,6 +8,8 @@ import NodemonPlugin from 'nodemon-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
+import TerserWebpackPlugin from 'terser-webpack-plugin';
+import HardSourceWebpackPlugin from 'hard-source-webpack-plugin';
 
 declare const process: any, __dirname: any;
 
@@ -24,6 +26,8 @@ const copyEnv: any = fs.existsSync('./.env')
       })
     ]
   : [];
+
+const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 
 const configuration: Configuration = {
   devtool: 'eval-cheap-module-source-map',
@@ -54,6 +58,24 @@ const configuration: Configuration = {
     ]
   },
   externals: [nodeExternals()],
+  optimization: {
+    minimizer: [
+      new TerserWebpackPlugin({
+        terserOptions: {
+          compress: {
+            unused: false,
+            drop_console: true,
+            collapse_vars: true,
+            reduce_vars: true
+          },
+          mangle: true,
+          output: {
+            comments: false
+          }
+        }
+      })
+    ]
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new ESLintPlugin({
@@ -63,6 +85,20 @@ const configuration: Configuration = {
       ignore: ['./node_modules'],
       verbose: true,
       delay: 500
+    }),
+    //new HardSourceWebpackPlugin(),
+    new ParallelUglifyPlugin({
+      uglifyJS: {
+        output: {
+          beautify: false,
+          comments: false
+        },
+        compress: {
+          drop_console: true,
+          collapse_vars: true,
+          reduce_vars: true
+        }
+      }
     }),
     ...copyEnv
   ],

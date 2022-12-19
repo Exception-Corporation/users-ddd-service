@@ -30,19 +30,7 @@ import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
       password: 'test',
       phone: '0000000000',
       role: 'optional'
-    },
-    users: [
-      {
-        firstname: 'Test',
-        lastname: ['123'],
-        username: 'Test',
-        email: 'test@test.com',
-        age: 0,
-        password: 'test',
-        phone: '0000000000',
-        role: 'optional'
-      }
-    ]
+    }
   },
   response: {
     200: {

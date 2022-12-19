@@ -6,8 +6,6 @@ export function FastifySchema(schema: SchemaType = {}) {
 
     schema.response = transformResponse(schema.response || {});
 
-    console.info(JSON.stringify(schema.body, null, 2));
-
     target.prototype.schema = schema;
   };
 }

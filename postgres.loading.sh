@@ -13,12 +13,16 @@ done
 >&2 echo "Postgres is up - executing command"
 
 until POSTGRES_HOST=$host yarn --silent db:migration:generate migrations/InitialConfig ; do
-  >&2 echo "Migration running"
+  >&2 echo "Migration creating"
   sleep 1
   break
 done
 
-POSTGRES_HOST=$host yarn --silent db:migrate 
+until POSTGRES_HOST=$host yarn --silent db:migrate  ; do
+  >&2 echo "Migration running"
+  sleep 1
+  break
+done
 
 until POSTGRES_HOST=$host yarn create:user ; do
   >&2 echo "Creating admin"
@@ -26,4 +30,8 @@ until POSTGRES_HOST=$host yarn create:user ; do
   break
 done
 
-yarn start:prod && tail -f /dev/null
+pm2 start ecosystem.yml
+
+while true; do
+    sleep 10
+done
