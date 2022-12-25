@@ -30,8 +30,4 @@ until POSTGRES_HOST=$host yarn create:user ; do
   break
 done
 
-pm2 start ecosystem.yml
-
-while true; do
-    sleep 10
-done
+pm2-runtime start ecosystem.yml

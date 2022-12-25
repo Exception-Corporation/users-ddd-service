@@ -1,3 +1,5 @@
+import { injectable, inject } from 'inversify';
+import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { Connection, Message, Exchange, Queue } from 'amqp-ts';
 import { DomainEvent } from '@/shared/domain/event-bus/domain.event';
 import { DomainEventSubscriber } from '@/shared/domain/event-bus/domain.event.subscriber';
@@ -18,6 +20,7 @@ type RabbitMQConfig = {
   interval: number;
 };
 
+@injectable()
 export class RabbitMQEventBus implements EventBus {
   private connection: Connection;
   private exchange: Exchange;
@@ -25,7 +28,10 @@ export class RabbitMQEventBus implements EventBus {
   private subscribers: Map<string, Array<DomainEventSubscriber<DomainEvent>>>;
   private deserializer?: DomainEventJSONDeserializer;
 
-  constructor(private readonly logger: Logger, config: RabbitMQConfig) {
+  constructor(
+    @inject(TYPES.Logger) private readonly logger: Logger,
+    config: RabbitMQConfig
+  ) {
     this.connection = new Connection(
       `amqp://${config.user}:${config.password}@${config.host}:${config.port}`,
       null,

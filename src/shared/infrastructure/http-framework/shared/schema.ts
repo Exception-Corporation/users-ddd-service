@@ -4,6 +4,7 @@ export type SchemaType = Partial<{
   description: string;
   tags: Array<string>;
   summary: string;
+  headers: any;
   body: { [key: string]: any };
   response: { [key: number]: any };
 }>;

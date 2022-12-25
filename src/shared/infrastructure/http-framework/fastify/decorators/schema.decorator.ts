@@ -4,6 +4,8 @@ export function FastifySchema(schema: SchemaType = {}) {
   return (target: Function) => {
     schema.body = transformBody(schema.body || {});
 
+    schema.headers = transformBody(schema.headers || {});
+
     schema.response = transformResponse(schema.response || {});
 
     target.prototype.schema = schema;

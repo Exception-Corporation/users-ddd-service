@@ -6,10 +6,10 @@ COPY . .
 # Install dependencies 
 RUN yarn global add pm2
 RUN pm2 install pm2-logrotate
-RUN yarn install --ignore-engines
+RUN yarn install -network-timeout 100000
 RUN yarn build
 
-EXPOSE 3000
+EXPOSE 4000
 
 RUN mkdir -p /app/logs
 
