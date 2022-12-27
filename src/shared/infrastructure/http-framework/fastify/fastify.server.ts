@@ -60,7 +60,9 @@ export class FastifyServer implements Server<FastifyInstance> {
     this.app.get('/', (_req: FastifyRequest, rep: FastifyReply) => {
       rep.type('text/html').send(
         appLayout({
-          name: config.project.name,
+          name:
+            config.project.name[0].toUpperCase() +
+            config.project.name.substring(1),
           mode: config.project.mode,
           docs: config.swagger.isPublic === 'true' ? config.swagger.html : false
         })

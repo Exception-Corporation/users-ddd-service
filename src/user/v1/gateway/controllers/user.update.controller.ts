@@ -16,12 +16,57 @@ import {
 } from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 import { ALL_ROLES } from '@/shared/infrastructure/http-framework/shared/roles';
+import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
 
 @Controller({
   http: 'put',
   path: '/update/:id'
 })
 @GuardWithJwt(ALL_ROLES)
+@schema({
+  description: 'Service to create new user',
+  tags: ['User'],
+  summary: 'Create service (User)',
+  headers: {
+    Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  },
+  params: {
+    id: 123
+  },
+  querystring: {
+    owner: 'true'
+  },
+  body: {
+    user: {
+      firstname: 'Test',
+      lastname: 'Test',
+      username: 'Test',
+      email: 'test@test.com',
+      age: 0,
+      password: 'test',
+      verifyPassword: 'test',
+      phone: '0000000000',
+      role: 'optional'
+    }
+  },
+  response: {
+    200: {
+      success: true,
+      message: 'User updated successfully'
+    },
+    404: {
+      success: false,
+      error: 404,
+      message: 'User not found'
+    },
+    400: {
+      success: false,
+      module: 'global',
+      type: 'API_UNSUPPORTED',
+      message: 'Unsupported: Wrong password: The current password is incorrect'
+    }
+  }
+})
 @injectable()
 export class UserUpdateController extends BaseController {
   constructor(

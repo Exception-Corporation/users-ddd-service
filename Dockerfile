@@ -6,7 +6,7 @@ COPY . .
 # Install dependencies 
 RUN yarn global add pm2
 RUN pm2 install pm2-logrotate
-RUN yarn install -network-timeout 100000
+RUN yarn install --network-timeout 100000
 RUN yarn build
 
 EXPOSE 4000

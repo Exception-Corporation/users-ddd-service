@@ -9,12 +9,42 @@ import {
 } from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 import { BASIC } from '@/shared/infrastructure/http-framework/shared/roles';
+import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
 
 @Controller({
   http: 'delete',
   path: '/delete/:id'
 })
 @GuardWithJwt(BASIC)
+@schema({
+  description: 'Service to delete user',
+  tags: ['User'],
+  summary: 'Delete service (User)',
+  headers: {
+    Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  },
+  params: {
+    id: 123
+  },
+  response: {
+    200: {
+      success: true,
+      message: 'User deleted successfully'
+    },
+    404: {
+      success: false,
+      error: 404,
+      message: 'User not found'
+    },
+    500: {
+      success: false,
+      module: 'global',
+      type: 'API_UNSUPPORTED',
+      message:
+        'Unsupported: INTERNAL DATABASE ERROR: QueryFailedError: invalid input syntax for type integer: "NaN"'
+    }
+  }
+})
 @injectable()
 export class UserDeleteController extends BaseController {
   constructor(

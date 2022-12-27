@@ -20,9 +20,6 @@ import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
   description: 'Service to create new user',
   tags: ['User'],
   summary: 'Create service (User)',
-  headers: {
-    Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
-  },
   body: {
     user: {
       firstname: 'Test',

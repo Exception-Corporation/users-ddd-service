@@ -8,12 +8,54 @@ import {
 } from '@/shared/infrastructure/controller/decorators/controller';
 import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
 import { BASIC } from '@/shared/infrastructure/http-framework/shared/roles';
+import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
 
 @Controller({
   http: 'get',
   path: '/getAll'
 })
 @GuardWithJwt(BASIC)
+@schema({
+  description: 'Service to get all users',
+  tags: ['User'],
+  summary: 'Get all service (User)',
+  headers: {
+    Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  },
+  querystring: {
+    pageSize: 3,
+    page: 1,
+    searchBy: 'q'
+  },
+  response: {
+    200: {
+      success: true,
+      page: 1,
+      itemsByPage: 8,
+      usersSize: 6,
+      totalUsers: 6,
+      totalPages: 1,
+      users: [
+        {
+          id: 1,
+          firstname: 'Test',
+          lastname: 'test',
+          username: 'test',
+          phone: '0000000',
+          email: 'test@gmail.com',
+          password:
+            '$2b$04$2XhAHRK6VnPqC7eYm2k78uoJKfsHVn.drNY6cwVH4MDVsSdBiNt7m',
+          role: 'standard',
+          age: 21,
+          active: true,
+          createdAt:
+            'Thu Dec 22 2022 18:45:03 GMT-0600 (Central Standard Time)',
+          updatedAt: 'Thu Dec 22 2022 18:45:03 GMT-0600 (Central Standard Time)'
+        }
+      ]
+    }
+  }
+})
 @injectable()
 export class UserFindAllController extends BaseController {
   constructor(

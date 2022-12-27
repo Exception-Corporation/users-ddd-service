@@ -7,10 +7,30 @@ import {
   Context,
   Controller
 } from '@/shared/infrastructure/controller/decorators/controller';
+import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
 
 @Controller({
   http: 'post',
   path: '/missing/password/:email'
+})
+@schema({
+  description: 'Service to delete user',
+  tags: ['User'],
+  summary: 'Delete service (User)',
+  params: {
+    email: 'test@test.com'
+  },
+  response: {
+    200: {
+      success: true,
+      access_token:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RuYW1lIjoiYWRtaW4iLCJsYXN0bmFtZSI6IjEuMCIsInVzZXJuYW1lIjoiYWRtaW4iLCJwaG9uZSI6IjAiLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInJvbGUiOiJyb290IiwiYWdlIjozMCwiZXhwIjoxNjcyMTY0MjEwLCJpYXQiOjE2NzIxMTAyMTB9.jR83bU5Zp32TU-OUJrKg34NeQ2MNmOcm2r0e8F7ppDs'
+    },
+    404: {
+      success: false,
+      message: 'Not found: User with email: test@gmail.com was not found'
+    }
+  }
 })
 @injectable()
 export class UserMissingPasswordController extends BaseController {

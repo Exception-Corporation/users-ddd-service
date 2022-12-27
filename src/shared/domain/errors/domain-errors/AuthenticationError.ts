@@ -2,7 +2,7 @@ import { DomainError } from '@/shared/domain/errors/lib/DomainError';
 import { DomainErrorCode } from '@/shared/domain/errors/lib/DomainErrorCode';
 
 export class AuthenticationError extends DomainError {
-  public domainErrorCode = DomainErrorCode.INTERNAL_ERROR;
+  public domainErrorCode = DomainErrorCode.INVALID_CREDENTIALS;
 
   constructor(message: string, wrongPassword?: boolean) {
     super(
