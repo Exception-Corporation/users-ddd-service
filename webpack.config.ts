@@ -1,23 +1,17 @@
 import path from 'path';
 import fs from 'fs';
 import { Configuration as WebpackConfiguration } from 'webpack';
-import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import nodeExternals from 'webpack-node-externals';
 import NodemonPlugin from 'nodemon-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import TerserWebpackPlugin from 'terser-webpack-plugin';
-import HardSourceWebpackPlugin from 'hard-source-webpack-plugin';
 
 declare const process: any, __dirname: any;
 
-interface Configuration extends WebpackConfiguration {
-  devServer?: WebpackDevServerConfiguration;
-}
-
-const { NODE_ENV = 'production' }: any = process.env;
+const mode: any = process.env.NODE_ENV ?? 'development';
 
 const copyEnv: any = fs.existsSync('./.env')
   ? [
@@ -29,11 +23,9 @@ const copyEnv: any = fs.existsSync('./.env')
 
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 
-const configuration: Configuration = {
+const configuration: WebpackConfiguration = {
+  mode,
   devtool: 'eval-cheap-module-source-map',
-  entry: [path.resolve(__dirname, 'src')],
-  mode: NODE_ENV,
-  watch: NODE_ENV === 'development',
   target: 'node',
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -44,10 +36,11 @@ const configuration: Configuration = {
     extensions: ['.tsx', '.ts', '.js'],
     plugins: [new TsconfigPathsPlugin()]
   },
+  stats: 'minimal',
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(ts|js)?$/,
         use: 'ts-loader',
         exclude: /node_modules/
       },
@@ -77,16 +70,13 @@ const configuration: Configuration = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
-    new ESLintPlugin({
-      extensions: ['.tsx', '.ts', '.js']
-    }),
+    new ForkTsCheckerWebpackPlugin(),
     new NodemonPlugin({
-      ignore: ['./node_modules'],
-      verbose: true,
-      delay: 500
+      ignore: ['src/**/*.spec.ts']
     }),
-    //new HardSourceWebpackPlugin(),
+    new ESLintPlugin({
+      extensions: ['.ts', '.js']
+    }),
     new ParallelUglifyPlugin({
       uglifyJS: {
         output: {
@@ -102,15 +92,7 @@ const configuration: Configuration = {
     }),
     ...copyEnv
   ],
-  stats: {
-    errorDetails: true,
-    children: true,
-    warnings: true
-  },
-  ignoreWarnings: [
-    /Critical dependency: require function is used/,
-    /Critical dependency: the request of a dependency/
-  ]
+  ignoreWarnings: [/Critical dependency:/]
 };
 
 export default configuration;
