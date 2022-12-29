@@ -17,18 +17,21 @@ export class JSONWebTokenAuth implements IAuthentication {
     this.expirationTime = config.authentication.accessTokenExpiresIn;
   }
 
-  async sign(
-    data: any,
-    propertiesToIgnore: Array<string> = []
+  async sign<T>(
+    data: T,
+    propertiesToIgnore: Array<keyof T> = []
   ): Promise<string> {
     try {
-      data = GlobalFunctions.getNewParams<any>(data, propertiesToIgnore);
+      const newData = GlobalFunctions.getNewParams<any>(
+        data,
+        propertiesToIgnore
+      );
 
       const token = await jwt.sign(
         {
-          ...data,
+          ...newData,
           exp: this.dateService.getData(
-            data.exp ? data.exp : this.expirationTime,
+            newData.exp ? newData.exp : this.expirationTime,
             'hours'
           )
         },

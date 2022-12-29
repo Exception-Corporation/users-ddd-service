@@ -14,7 +14,7 @@ import {
   Controller,
   Context
 } from '@/shared/infrastructure/controller/decorators/controller';
-import { GuardWithJwt } from '@/shared/infrastructure/http-framework/middlewares/security/security.decorator';
+import { GuardWithJwt } from '@/shared/infrastructure/http-framework/shared/middlewares/security/security.decorator';
 import { ALL_ROLES } from '@/shared/infrastructure/http-framework/shared/roles';
 import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
 

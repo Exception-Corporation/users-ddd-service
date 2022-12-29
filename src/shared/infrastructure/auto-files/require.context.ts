@@ -1,21 +1,21 @@
-import { IAutoFiles } from '@/shared/domain/auto-files/auto.files.interface';
+export class RequireContext {
+  static getFiles<S>(data: S, filters: Array<string> = []) {
+    return ((<any>require)?.id ? this.importAll(data) : []).filter(
+      (obj: any) => {
+        try {
+          if (!filters.length) return true;
 
-declare const require: any;
+          if (this._isClass(obj)) obj = new obj();
 
-export class RequireContext implements IAutoFiles<any> {
-  getFiles<S>(data: S, filters: Array<string> = []) {
-    return (require?.id ? this.importAll(data) : []).filter((obj: any) => {
-      try {
-        if (this._isClass(obj)) obj = new obj();
-
-        return !filters.find((filter) => obj[filter] === undefined);
-      } catch (_e: any) {
-        return false;
+          return !filters.find((filter) => obj[filter] === undefined);
+        } catch (_e: any) {
+          return false;
+        }
       }
-    });
+    );
   }
 
-  private importAll(paths: any) {
+  private static importAll(paths: any) {
     return paths
       .keys()
       .map(paths)
@@ -25,7 +25,7 @@ export class RequireContext implements IAutoFiles<any> {
       });
   }
 
-  private _isClass(definition: any) {
+  private static _isClass(definition: any) {
     return (
       typeof definition === 'function' &&
       /^class\s/.test(Function.prototype.toString.call(definition))

@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import { Server } from '@/shared/domain/http-framework/server.interface';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
-import { RequireService } from '@/shared/infrastructure/auto-files/';
+import { RequireContext } from '@/shared/infrastructure/auto-files/require.context';
 import { Router } from '@/shared/infrastructure/http-framework/shared/router';
 
 @injectable()
@@ -57,7 +57,7 @@ export class ExpressServer implements Server<app> {
   }
 
   getRouters(): Array<any> {
-    return RequireService.getFiles(
+    return RequireContext.getFiles(
       require.context('@/*', true, /^((?!!+).)*router.ts$/),
       ['path']
     );

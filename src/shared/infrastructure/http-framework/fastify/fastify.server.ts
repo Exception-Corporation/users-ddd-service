@@ -14,7 +14,7 @@ import { Server } from '@/shared/domain/http-framework/server.interface';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
 import { WatchLogger } from '@/shared/infrastructure/logger/watch.logger';
-import { RequireService } from '@/shared/infrastructure/auto-files/';
+import { RequireContext } from '@/shared/infrastructure/auto-files/require.context';
 import { Router } from '@/shared/infrastructure/http-framework/shared/router';
 import { CacheIO } from '@/shared/domain/cache/cache.io.server';
 
@@ -114,7 +114,7 @@ export class FastifyServer implements Server<FastifyInstance> {
   }
 
   getRouters(): Array<any> {
-    return RequireService.getFiles(
+    return RequireContext.getFiles(
       require.context('@/*', true, /^((?!!+).)*router.ts$/),
       ['path']
     );

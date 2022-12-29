@@ -1,5 +1,5 @@
 import config from '@/shared/infrastructure/config';
-import { RequireService } from '@/shared/infrastructure/auto-files/';
+import { RequireContext } from '@/shared/infrastructure/auto-files/require.context';
 
 const { postgres } = config.database;
 
@@ -16,7 +16,7 @@ export default {
   synchronize: false,
   entities: postgres.ORM_UP
     ? ['src/**/**.entity{.ts,.js}', 'build/**/**.entity{.ts,.js}']
-    : RequireService.getFiles(
+    : RequireContext.getFiles(
         require.context('@/*', true, /^((?!!+).)*entity.ts$/),
         ['entityModel']
       ),

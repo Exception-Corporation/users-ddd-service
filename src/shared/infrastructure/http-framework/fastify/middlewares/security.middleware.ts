@@ -1,8 +1,5 @@
 import { injectable, inject } from 'inversify';
-import {
-  Request,
-  Response
-} from '@/shared/infrastructure/http-framework/shared/params';
+import { FastifyRequest, FastifyReply } from 'fastify';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import {
@@ -14,7 +11,7 @@ import { Logger } from '@/shared/domain/logger';
 
 @injectable()
 export class AutorizationRouter
-  implements SecurityMiddleware<Request, Response, unknown, any>
+  implements SecurityMiddleware<FastifyRequest, FastifyReply, unknown, any>
 {
   constructor(
     @inject(TYPES.Logger) private readonly logger: Logger,
@@ -28,8 +25,8 @@ export class AutorizationRouter
    */
   isAuth(
     roles: Array<string>
-  ): MiddlewareResponse<Request, Response, unknown, any> {
-    return async (req: Request, res: Response) => {
+  ): MiddlewareResponse<FastifyRequest, FastifyReply, unknown, any> {
+    return async (req: FastifyRequest, res: FastifyReply) => {
       if (!roles.length) {
         return;
       }

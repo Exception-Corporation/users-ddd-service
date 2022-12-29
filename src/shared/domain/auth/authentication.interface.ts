@@ -1,4 +1,4 @@
 export interface IAuthentication {
-  sign(data: object, propertiesToIgnore?: Array<string>): Promise<string>;
+  sign<T>(data: T, propertiesToIgnore?: Array<keyof T>): Promise<string>;
   verify(token: string): Promise<object | string>;
 }
