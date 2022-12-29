@@ -15,7 +15,7 @@ export default {
       url: 'https://swagger.io',
       description: 'Find more info here'
     },
-    host: `http://${project.host}:${project.port}`,
+    host: `${project.host}:${project.port}`,
     schemes: ['http'],
     consumes: ['application/json'],
     produces: ['application/json'],

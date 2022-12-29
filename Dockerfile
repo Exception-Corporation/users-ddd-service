@@ -1,24 +1,21 @@
-# Base image
-FROM node:16
-
-# Creating a directory inside the base image and defining as the base directory
+# build and config environment
+FROM keymetrics/pm2:14-alpine
 WORKDIR /app
-
-# Copying the files of the root directory into the base directory
 COPY . .
 
-# Installing infrastructure dependencies
-#####
-
-# Installing the project dependencies
+# Install dependencies 
 RUN yarn global add pm2
-RUN yarn install --ignore-engines --network-timeout 100000
+RUN pm2 install pm2-logrotate
+RUN yarn install --network-timeout 100000
 RUN yarn build
 
-# Exposing the RestAPI port
 EXPOSE 4000
 
-#ARGS
+RUN mkdir -p /app/logs
 
-# Starting the pm2 process and keeping the docker container alive
+RUN ln -sf /proc/1/fd/1 /app/logs/info.log \
+    && ln -sf /proc/1/fd/2 /app/logs/error.log \
+    && ln -sf /proc/1/fd/1 /app/logs/debug.log
+
+# RUN
 CMD sh postgres.loading.sh postgres-users

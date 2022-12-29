@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import nodemailer, { SendMailOptions } from 'nodemailer';
 import { IMailer } from '@/shared/domain/mail/mailer.interface';
 import config from '@/shared/infrastructure/config';
-import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
+import { InternalError } from '@/shared/domain/errors/domain-errors/InternalError';
 
 export type options = SendMailOptions;
 
@@ -30,7 +30,7 @@ export class NodeMailer implements IMailer<SendMailOptions> {
         html: params.html
       });
     } catch (error: any) {
-      throw new AuthenticationError(error.toString());
+      throw new InternalError(error.toString());
     }
   }
 }

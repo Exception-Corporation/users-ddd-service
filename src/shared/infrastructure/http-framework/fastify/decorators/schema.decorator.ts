@@ -2,17 +2,23 @@ import { SchemaType } from '@/shared/infrastructure/http-framework/shared/schema
 
 export function FastifySchema(schema: SchemaType = {}) {
   return (target: Function) => {
-    schema.body = transformBody(schema.body || {});
+    schema.body = transformBody(schema.body);
 
-    schema.response = transformResponse(schema.response || {});
+    schema.headers = transformBody(schema.headers);
 
-    console.info(JSON.stringify(schema.body, null, 2));
+    schema.params = transformBody(schema.params);
+
+    schema.querystring = transformBody(schema.querystring);
+
+    schema.response = transformResponse(schema.response);
 
     target.prototype.schema = schema;
   };
 }
 
 function transformBody(body: any) {
+  if (!body) return;
+
   const result: any = {};
 
   for (const property in body) {
@@ -49,6 +55,8 @@ function transformBody(body: any) {
 }
 
 function transformResponse(response: any) {
+  if (!response) return;
+
   const result: any = {};
 
   for (const status in response) {

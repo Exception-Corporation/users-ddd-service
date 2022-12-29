@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import config from '@/shared/infrastructure/config';
 import { IDates } from '@/shared/domain/dates/dates.interface';
-import { AuthenticationError } from '@/shared/domain/errors/domain-errors/AuthenticationError';
+import { InternalError } from '@/shared/domain/errors/domain-errors/InternalError';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';
 import { GlobalFunctions } from '@/shared/infrastructure/utils/global.functions';
 
@@ -17,18 +17,21 @@ export class JSONWebTokenAuth implements IAuthentication {
     this.expirationTime = config.authentication.accessTokenExpiresIn;
   }
 
-  async sign(
-    data: any,
-    propertiesToIgnore: Array<string> = []
+  async sign<T>(
+    data: T,
+    propertiesToIgnore: Array<keyof T> = []
   ): Promise<string> {
     try {
-      data = GlobalFunctions.getNewParams<any>(data, propertiesToIgnore);
+      const newData = GlobalFunctions.getNewParams<any>(
+        data,
+        propertiesToIgnore
+      );
 
       const token = await jwt.sign(
         {
-          ...data,
+          ...newData,
           exp: this.dateService.getData(
-            data.exp ? data.exp : this.expirationTime,
+            newData.exp ? newData.exp : this.expirationTime,
             'hours'
           )
         },
@@ -37,7 +40,7 @@ export class JSONWebTokenAuth implements IAuthentication {
 
       return token;
     } catch (error: any) {
-      throw new AuthenticationError(error.toString());
+      throw new InternalError(error.toString());
     }
   }
 
@@ -47,7 +50,7 @@ export class JSONWebTokenAuth implements IAuthentication {
 
       return verifyResult;
     } catch (error: any) {
-      throw new AuthenticationError(error.toString());
+      throw new InternalError(error.toString());
     }
   }
 }

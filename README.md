@@ -20,7 +20,6 @@ Prerequisites:
 - [GET] `http://localhost:4000/api/v1/users/get/:id` Get one user by id
 - [POST] `http://localhost:4000/api/v1/users/` Create new normal user
 - [POST] `http://localhost:4000/api/v1/users/login` Get a token to authenticate in other services
-- [POST] `http://localhost:4000/api/v1/users/login` Get a token to authenticate in other services
 - [PUT] `http://localhost:4000/api/v1/users/update/:id` Update a user by id
 - [DELETE] `http://localhost:4000/api/v1/users/delete/:id` Delete a user by id
 
@@ -35,9 +34,9 @@ git clone git@github.com:Exception-Corporation/users-api.git
 cd users-api
 yarn
 yarn containers:up # run the docker-compose
-yarn containers:down # remove the containers
+yarn containers:down # remove the containers (ignore)
 sh postgres.loading.sh localhost
-yarn prod #compile typescript to javascript and run the api in production mode
+yarn start #compile typescript to javascript and run the api in production mode (Without pm2)
 yarn dev #run the api in development mode with nodemon
 ```
 
@@ -81,6 +80,7 @@ We use Docker as a utility tool, mainly for running a PostgresDB, which is the D
   - Validations with [Class Validator & Class Transformer]
   - Mainly used as dependency injection container
 - TypeScript
+- Inversify
 
 ## 🏘 How is the code organized?
 
