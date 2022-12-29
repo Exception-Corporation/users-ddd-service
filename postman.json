@@ -37,7 +37,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/getAll?pageSize=6&page=1&searchBy=juli",
+              "raw": "http://localhost:4000/api/v1/users/getAll?pageSize=8&page=1&searchBy=",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
@@ -45,7 +45,7 @@
               "query": [
                 {
                   "key": "pageSize",
-                  "value": "6"
+                  "value": "8"
                 },
                 {
                   "key": "page",
@@ -53,7 +53,7 @@
                 },
                 {
                   "key": "searchBy",
-                  "value": "juli"
+                  "value": ""
                 }
               ]
             }
@@ -62,6 +62,9 @@
         },
         {
           "name": "Get By Id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -75,12 +78,16 @@
             },
             "method": "GET",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/get/2",
+              "raw": "http://localhost:4000/api/v1/users/get/1",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "v1", "users", "get", "2"]
+              "path": ["api", "v1", "users", "get", "1"]
             }
           },
           "response": []
@@ -92,7 +99,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"user\": {\n        \"firstname\": \"Alejandro\",\n        \"lastname\": \"Ramirez\",\n        \"username\": \"Alejandro\",\n        \"email\": \"alejandro@gmail.com\",\n        \"age\": 19,\n        \"password\": \"alejandro123\"\n    }\n}",
+              "raw": "{\n    \"user\": {\n        \"firstname\": \"Denisse\",\n        \"lastname\": \"Coronado\",\n        \"username\": \"denisse\",\n        \"email\": \"denisse@gmail.com\",\n        \"age\": 21,\n        \"password\": \"Vega12$345\",\n        \"phone\": \"0000000\"\n    }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -100,14 +107,225 @@
               }
             },
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/",
+              "raw": "http://localhost:4000/api/v1/users",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "v1", "users", ""]
+              "path": ["api", "v1", "users"]
             }
           },
-          "response": []
+          "response": [
+            {
+              "name": "ERROR 500",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"user\": {\n        \"firstname\": \"Irlanda\",\n        \"lastname\": \"Castillo Vega\",\n        \"username\": \"irlancacv\",\n        \"email\": \"irlanda@gmail.com\",\n        \"age\": 22,\n        \"password\": \"Vega12$345\",\n        \"phone\": \"8341667076\",\n        \"role\": \"visitor\"\n    }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:4000/api/v1/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "4000",
+                  "path": ["api", "v1", "users"]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "x-ratelimit-limit",
+                  "value": "1000"
+                },
+                {
+                  "key": "x-ratelimit-remaining",
+                  "value": "998"
+                },
+                {
+                  "key": "x-ratelimit-reset",
+                  "value": "31"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "210"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 18 Dec 2022 05:48:22 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"module\": \"global\",\n    \"type\": \"API_UNSUPPORTED\",\n    \"message\": \"Unsupported: INTERNAL DATABASE ERROR: QueryFailedError: duplicate key value violates unique constraint \\\"UQ_78a916df40e02a9deb1c4b75edb\\\"\"\n}"
+            },
+            {
+              "name": "ERROR 400",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"user\": {\n        \"firstname\": \"Irlanda\",\n        \"lastname\": \"Castillo Vega\",\n        \"username\": \"irlancacv\",\n        \"email\": \"irlanda@gmail.com\",\n        \"age\": 22,\n        \"password\": \"Vega12$345\",\n        \"role\": \"visitor\"\n    }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:4000/api/v1/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "4000",
+                  "path": ["api", "v1", "users"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "x-ratelimit-limit",
+                  "value": "1000"
+                },
+                {
+                  "key": "x-ratelimit-remaining",
+                  "value": "999"
+                },
+                {
+                  "key": "x-ratelimit-reset",
+                  "value": "60"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "247"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 18 Dec 2022 05:49:37 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"module\": \"global\",\n    \"type\": \"API_BAD_REQUEST\",\n    \"message\": \"Bad request: DTO is not correct, invalid properties: [An instance of CreateUserDTO has failed the validation: - property phone has failed the following constraints: isString]\"\n}"
+            },
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"user\": {\n        \"firstname\": \"Yadira\",\n        \"lastname\": \"Vega Martinez\",\n        \"username\": \"yady\",\n        \"email\": \"yadira@gmail.com\",\n        \"age\": 40,\n        \"password\": \"Vega12$345\",\n        \"phone\": \"8341515191\",\n        \"role\": \"visitor\"\n    }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:4000/api/v1/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "4000",
+                  "path": ["api", "v1", "users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "x-ratelimit-limit",
+                  "value": "1000"
+                },
+                {
+                  "key": "x-ratelimit-remaining",
+                  "value": "998"
+                },
+                {
+                  "key": "x-ratelimit-reset",
+                  "value": "23"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "407"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 18 Dec 2022 05:50:14 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"user\": {\n        \"id\": 14,\n        \"firstname\": \"Yadira\",\n        \"lastname\": \"Vega Martinez\",\n        \"username\": \"yady\",\n        \"phone\": \"8341515191\",\n        \"email\": \"yadira@gmail.com\",\n        \"password\": \"$2b$04$mpGGoASjMT31tgs3fKSq5.pLNQqMDqFR9YBoEkSOcSttn7PnMMjkO\",\n        \"role\": \"visitor\",\n        \"age\": 40,\n        \"active\": true,\n        \"createdAt\": \"Sun Dec 18 2022 05:50:14 GMT-0600 (hora estándar central)\",\n        \"updatedAt\": \"Sun Dec 18 2022 05:50:14 GMT-0600 (hora estándar central)\"\n    }\n}"
+            }
+          ]
         },
         {
           "name": "Delete user by id",
@@ -123,20 +341,13 @@
               ]
             },
             "method": "DELETE",
-            "header": [
-              {
-                "key": "",
-                "value": "",
-                "type": "text",
-                "disabled": true
-              }
-            ],
+            "header": [],
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/delete/3",
+              "raw": "http://localhost:4000/api/v1/users/delete/21",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "v1", "users", "delete", "3"],
+              "path": ["api", "v1", "users", "delete", "21"],
               "query": [
                 {
                   "key": "",
@@ -146,7 +357,212 @@
               ]
             }
           },
-          "response": []
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:4000/api/v1/users/delete/21",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "4000",
+                  "path": ["api", "v1", "users", "delete", "21"],
+                  "query": [
+                    {
+                      "key": "",
+                      "value": null,
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "x-ratelimit-limit",
+                  "value": "1000"
+                },
+                {
+                  "key": "x-ratelimit-remaining",
+                  "value": "993"
+                },
+                {
+                  "key": "x-ratelimit-reset",
+                  "value": "6"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "54"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 27 Dec 2022 02:49:15 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"User deleted successfully\"\n}"
+            },
+            {
+              "name": "404",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:4000/api/v1/users/delete/210",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "4000",
+                  "path": ["api", "v1", "users", "delete", "210"],
+                  "query": [
+                    {
+                      "key": "",
+                      "value": null,
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "x-ratelimit-limit",
+                  "value": "1000"
+                },
+                {
+                  "key": "x-ratelimit-remaining",
+                  "value": "999"
+                },
+                {
+                  "key": "x-ratelimit-reset",
+                  "value": "60"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "56"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 27 Dec 2022 02:49:40 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"error\": 404,\n    \"message\": \"User not found\"\n}"
+            },
+            {
+              "name": "500",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:4000/api/v1/users/delete/abc",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "4000",
+                  "path": ["api", "v1", "users", "delete", "abc"],
+                  "query": [
+                    {
+                      "key": "",
+                      "value": null,
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "x-ratelimit-limit",
+                  "value": "1000"
+                },
+                {
+                  "key": "x-ratelimit-remaining",
+                  "value": "998"
+                },
+                {
+                  "key": "x-ratelimit-reset",
+                  "value": "49"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "175"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 27 Dec 2022 02:49:51 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=72"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"module\": \"global\",\n    \"type\": \"API_UNSUPPORTED\",\n    \"message\": \"Unsupported: INTERNAL DATABASE ERROR: QueryFailedError: invalid input syntax for type integer: \\\"NaN\\\"\"\n}"
+            }
+          ]
         },
         {
           "name": "Update by id",
@@ -172,7 +588,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"user\": {\n        \"age\": 33\n    }\n}",
+              "raw": "{\n    \"user\": {\n        \"password\": \"admin\"\n    }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -180,11 +596,58 @@
               }
             },
             "url": {
-              "raw": "http://localhost:4000/api/v1/users/update/5",
+              "raw": "http://localhost:4000/api/v1/users/update/1",
               "protocol": "http",
               "host": ["localhost"],
               "port": "4000",
-              "path": ["api", "v1", "users", "update", "5"]
+              "path": ["api", "v1", "users", "update", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update by id OWNER",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user\": {\n        \"password\": \"Vega12$345\",\n        \"verifyPassword\": \"Vega12$345\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/users/update/1?owner=true",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "v1", "users", "update", "1"],
+              "query": [
+                {
+                  "key": "owner",
+                  "value": "true"
+                }
+              ]
             }
           },
           "response": []
@@ -211,7 +674,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"user\": {\n        \"username\": \"Brayan01\",\n        \"password\": \"brayan123\"\n    }\n}",
+              "raw": "{\n    \"user\": {\n        \"username\": \"admin\",\n        \"password\": \"admin\"\n    }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -224,6 +687,28 @@
               "host": ["localhost"],
               "port": "4000",
               "path": ["api", "v1", "users", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Recover password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/api/v1/users/missing/password/vayne.edgar271@gmail.com",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "missing",
+                "password",
+                "vayne.edgar271@gmail.com"
+              ]
             }
           },
           "response": []
