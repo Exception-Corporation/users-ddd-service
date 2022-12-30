@@ -26,7 +26,7 @@ export class FastifyServer implements Server<FastifyInstance> {
     @inject(TYPES.Framework) private readonly logger: Logger,
     @inject(TYPES.CacheIO) cacheService: CacheIO
   ) {
-    this.app = Fastify({ logger: true });
+    this.app = Fastify({ logger: true, trustProxy: true });
 
     // Middleware
     this.app.register(require('@fastify/cors'));
@@ -104,7 +104,7 @@ export class FastifyServer implements Server<FastifyInstance> {
       app: this.app,
       initialize: async () => {
         const { project } = config;
-        this.app.listen({ port: project.port }, () => {
+        this.app.listen({ port: project.port, host: '0.0.0.0' }, () => {
           this.logger.info(
             `Server [Fastify] listen on port: [${project.host}:${project.port}] in mode: ${project.mode}`
           );
