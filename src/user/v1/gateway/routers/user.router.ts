@@ -28,7 +28,7 @@ export class UserRouter extends RouterC<Array<Router>> {
             params: req.params,
             query: req.query,
             headers: req.headers,
-            cookies: {},
+            cookies: (req as any)?.cookies || {},
             path: (req as any)?.path || (req as any)?.routerPath
           };
 
