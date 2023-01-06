@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { createClient, RedisClientType } from 'redis';
 import { ICacheServer } from '@/shared/domain/cache/cache.server';

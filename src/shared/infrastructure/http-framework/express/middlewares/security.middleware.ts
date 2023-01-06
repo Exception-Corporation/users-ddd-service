@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@container';
 import { NextFunction, Request, Response } from 'express';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';

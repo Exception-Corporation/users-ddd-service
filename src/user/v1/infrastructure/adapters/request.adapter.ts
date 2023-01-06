@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable } from '@container';
 import { ClassType, transformAndValidate } from 'class-transformer-validator';
 import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
 import { DTOPropertiesError } from '@/shared/domain/errors/domain-errors/DTOPropertiesError';

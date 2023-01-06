@@ -1,5 +1,5 @@
 import { RequireContext } from '@/shared/infrastructure/auto-files/require.context';
-import { AppContainer } from '@/shared/infrastructure/d-injection/container';
+import { container } from '@/shared/infrastructure/container';
 
 const Controllers = RequireContext.getFiles(
   require.context('@/*', true, /^(?=.*\user.\bv1\b)(?=.*\bcontroller.ts\b).*$/),
@@ -7,5 +7,5 @@ const Controllers = RequireContext.getFiles(
 );
 
 export default Controllers.map((Controller: any) =>
-  AppContainer.resolve(Controller)
+  container.resolve(Controller)
 );

@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable } from '@container';
 import jwt from 'jsonwebtoken';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import config from '@/shared/infrastructure/config';

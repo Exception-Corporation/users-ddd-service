@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { StartModule } from '@/shared/domain/bootstrap';
 import { Server } from '@/shared/domain/http-framework/server.interface';
@@ -6,7 +6,7 @@ import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
 import { AppDependencies } from '@/shared/infrastructure/d-injection/config';
-import { AppContainer } from '@/shared/infrastructure/d-injection/container';
+import { container } from '@/shared/infrastructure/container';
 import { ICacheServer } from '@/shared/domain/cache/cache.server';
 import { DatabaseConnection } from '@/shared/domain/database/database.interface';
 import { DomainEventSubscriber } from '@/shared/domain/event-bus/domain.event.subscriber';
@@ -29,7 +29,7 @@ export class SharedBootstrap implements StartModule {
         return;
       }
 
-      new AppDependencies().register(AppContainer);
+      new AppDependencies(container).register();
     } catch (error: any) {
       this.logger.error({
         type: 'BOOTSTRAP_ERROR',
@@ -43,26 +43,26 @@ export class SharedBootstrap implements StartModule {
   }
 
   private async startCacheService(): Promise<void> {
-    const cacheService = AppContainer.get<ICacheServer>(TYPES.CacheService);
+    const cacheService = container.get<ICacheServer>(TYPES.CacheService);
     await cacheService.cacheConnect(0);
   }
 
   private async startDatabase(): Promise<void> {
-    const databaseConnection = AppContainer.get<DatabaseConnection<unknown>>(
+    const databaseConnection = container.get<DatabaseConnection<unknown>>(
       TYPES.DatabaseConnection
     );
     await databaseConnection.connect();
   }
 
   private async startFramework(): Promise<void> {
-    const framework = AppContainer.get<Server<unknown>>(TYPES.Framework);
+    const framework = container.get<Server<unknown>>(TYPES.Framework);
     (await framework.getApp()).initialize();
   }
 
   private async startEventBus(): Promise<void> {
-    const eventBus = AppContainer.get<EventBus>(TYPES.EventBus);
+    const eventBus = container.get<EventBus>(TYPES.EventBus);
 
-    const subscriberDefinitions = AppContainer.getAll<
+    const subscriberDefinitions = container.getAll<
       DomainEventSubscriber<DomainEvent>
     >(TYPES.DomainEventSubscriber);
 

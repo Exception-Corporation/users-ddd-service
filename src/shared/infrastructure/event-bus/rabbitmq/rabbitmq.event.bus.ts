@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { Connection, Message, Exchange, Queue } from 'amqp-ts';
 import { DomainEvent } from '@/shared/domain/event-bus/domain.event';

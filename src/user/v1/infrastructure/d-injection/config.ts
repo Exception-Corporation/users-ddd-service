@@ -1,4 +1,4 @@
-import { ContainerModule, interfaces } from 'inversify';
+import { IDependencyContainer } from '@/shared/domain/container/dependency.container';
 
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { TYPES as TYPES_SHARED } from '@/shared/infrastructure/d-injection/types';
@@ -13,15 +13,30 @@ import { UserPostgreseRepository } from '@/user/v1/infrastructure/repositories/u
 import { RequestAdapter } from '@/user/v1/infrastructure/adapters/request.adapter';
 import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
 
-export const UserContainerModule = new ContainerModule(
-  (bind: interfaces.Bind, _unbind: interfaces.Unbind) => {
+export class UserContainerModule {
+  constructor(private container: IDependencyContainer) {}
+
+  register() {
     // event-subscribers
-    bind<DomainEventSubscriber<DomainEvent>>(
-      TYPES_SHARED.DomainEventSubscriber
-    ).to(UserEmailEvent);
+    this.container.bind<DomainEventSubscriber<DomainEvent>>(
+      TYPES_SHARED.DomainEventSubscriber,
+      'to',
+      UserEmailEvent,
+      []
+    );
 
-    bind<UserRepository>(TYPES.UserRepository).to(UserPostgreseRepository);
+    this.container.bind<UserRepository>(
+      TYPES.UserRepository,
+      'to',
+      UserPostgreseRepository,
+      []
+    );
 
-    bind<IRequestAdapter<unknown>>(TYPES.IRequestAdapter).to(RequestAdapter);
+    this.container.bind<IRequestAdapter<unknown>>(
+      TYPES.IRequestAdapter,
+      'to',
+      RequestAdapter,
+      []
+    );
   }
-);
+}

@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@container';
 import Fastify, {
   FastifyInstance,
   FastifyRequest,
@@ -8,7 +8,7 @@ import Fastify, {
 import fastifyStatic from '@fastify/static';
 import rateLimit from '@fastify/rate-limit';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
-import { AppContainer } from '@/shared/infrastructure/d-injection/container';
+import { container } from '@/shared/infrastructure/container';
 import swagger from '@/shared/infrastructure/http-framework/shared/open.api';
 import { Server } from '@/shared/domain/http-framework/server.interface';
 import config from '@/shared/infrastructure/config';
@@ -83,7 +83,7 @@ export class FastifyServer implements Server<FastifyInstance> {
 
     //Load routers
     this.getRouters().forEach((Router) => {
-      const router: any = AppContainer.resolve(Router);
+      const router: any = container.resolve(Router);
 
       router.getRoutes().forEach((route: Router) => {
         route.url = `${router.path}${route.url}`;
