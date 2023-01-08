@@ -129,8 +129,7 @@ interface AccountRepository {
 
 ```typescript
 import 'reflect-metadata';
-import { injectable, Container, inject } from 'inversify';
-import { provide, buildProviderModule } from 'inversify-binding-decorators';
+import { injectable, container, inject } from '@container';
 
 interface Weapon {
   hit(): string;
@@ -171,9 +170,6 @@ class Main {
     console.log(this.shuriken.throw());
   }
 }
-
-const container = new Container();
-container.load(buildProviderModule());
 
 const main = container.resolve(Main);
 main.get();
