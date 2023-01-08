@@ -1,6 +1,5 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject, container } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
-import { AppContainer } from '@/shared/infrastructure/d-injection/container';
 import express, { Application as app } from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
@@ -33,7 +32,7 @@ export class ExpressServer implements Server<app> {
     this.app.use('/', apiLimiter);
 
     this.getRouters().forEach((Router) => {
-      const router: any = AppContainer.resolve(Router);
+      const router: any = container.resolve(Router);
 
       router.getRoutes().forEach((route: Router) => {
         route.url = `${router.path}${route.url}`;

@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable } from '@container';
 import redis, { Redis } from 'ioredis';
 import { Logger } from '@/shared/domain/logger';
 import { CacheIO } from '@/shared/domain/cache/cache.io.server';

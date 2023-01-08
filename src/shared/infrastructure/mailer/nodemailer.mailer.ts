@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable } from '@container';
 import nodemailer, { SendMailOptions } from 'nodemailer';
 import { IMailer } from '@/shared/domain/mail/mailer.interface';
 import config from '@/shared/infrastructure/config';

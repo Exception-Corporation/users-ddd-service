@@ -1,5 +1,4 @@
-import { inject } from 'inversify';
-import { provide } from '@/shared/infrastructure/d-injection/decorators/provider';
+import { inject, provide } from '@container';
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { TYPES as TYPES_SHARED } from '@/shared/infrastructure/d-injection/types';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
@@ -25,10 +24,15 @@ export class LoginUserUseCase extends UseCase {
     super();
   }
 
-  async execute(
-    { email, username }: { email?: UserEmail; username?: UserUsername },
-    password: UserPassword
-  ): Promise<Response> {
+  async execute({
+    email,
+    username,
+    password
+  }: {
+    email: UserEmail | undefined;
+    username: UserUsername | undefined;
+    password: UserPassword;
+  }): Promise<Response> {
     const user = await this.userRepository.getUserByLogin(
       {
         email: email?.valueOf(),

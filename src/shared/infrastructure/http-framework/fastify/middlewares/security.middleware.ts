@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@container';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { IAuthentication } from '@/shared/domain/auth/authentication.interface';

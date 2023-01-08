@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { Like } from 'typeorm';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';

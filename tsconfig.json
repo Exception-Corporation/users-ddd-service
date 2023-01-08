@@ -21,7 +21,8 @@
     "baseUrl": ".",
     "types": ["reflect-metadata", "node", "webpack", "webpack-env", "jest"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@container": ["src/shared/infrastructure/container/shared/decorators.ts"]
     }
   },
   "include": ["src/**/*"],

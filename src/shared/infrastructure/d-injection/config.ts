@@ -1,4 +1,4 @@
-import { Container, interfaces } from 'inversify';
+import { IDependencyContainer } from '@/shared/domain/container/dependency.container';
 
 import config from '@/shared/infrastructure/config';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
@@ -41,122 +41,142 @@ import { BcrypEncryption } from '@/shared/infrastructure/encryption/bcrypt.encry
 import { IEncrypt } from '@/shared/domain/encryption/encrypt.interface';
 
 export class AppDependencies {
-  register(container: Container) {
-    this.configLogger(container);
-    this.configModule(container);
-    this.configCacheService(container);
-    this.configServer(container);
-    this.configDatabase(container);
-    this.configEventBus(container);
-    this.configAuthentication(container);
-    this.configMailer(container);
-    this.configDates(container);
-    this.configEncryption(container);
-    this.configCacheIOService(container);
+  constructor(private container: IDependencyContainer) {}
+
+  register() {
+    this.configLogger();
+    this.configModule();
+    this.configCacheService();
+    this.configServer();
+    this.configDatabase();
+    this.configEventBus();
+    this.configAuthentication();
+    this.configMailer();
+    this.configDates();
+    this.configEncryption();
+    this.configCacheIOService();
   }
 
-  private configLogger(container: Container) {
-    container.bind<Logger>(TYPES.Logger).to(LoggerMock).inSingletonScope();
+  private configLogger() {
+    this.container.bind<Logger>(
+      TYPES.Logger,
+      'to',
+      LoggerMock,
+      [],
+      'singleton'
+    );
   }
 
-  private configEncryption(container: Container) {
-    container
-      .bind<IEncrypt>(TYPES.IEncrypt)
-      .to(BcrypEncryption)
-      .inSingletonScope();
+  private configEncryption() {
+    this.container.bind<IEncrypt>(
+      TYPES.IEncrypt,
+      'to',
+      BcrypEncryption,
+      [],
+      'singleton'
+    );
   }
 
-  private configMailer(container: Container) {
-    container
-      .bind<IMailer<options>>(TYPES.IMailer)
-      .to(NodeMailer)
-      .inSingletonScope();
+  private configMailer() {
+    this.container.bind<IMailer<options>>(
+      TYPES.IMailer,
+      'to',
+      NodeMailer,
+      [],
+      'singleton'
+    );
   }
 
-  private configDates(container: Container) {
-    container.bind<IDates<dateType>>(TYPES.IDates).to(DayJS).inSingletonScope();
+  private configDates() {
+    this.container.bind<IDates<dateType>>(
+      TYPES.IDates,
+      'to',
+      DayJS,
+      [],
+      'singleton'
+    );
   }
 
-  private configAuthentication(container: Container) {
-    container
-      .bind<IAuthentication>(TYPES.IAuthentication)
-      .to(JSONWebTokenAuth)
-      .inSingletonScope();
+  private configAuthentication() {
+    this.container.bind<IAuthentication>(
+      TYPES.IAuthentication,
+      'to',
+      JSONWebTokenAuth,
+      [],
+      'singleton'
+    );
   }
 
-  private configModule(container: Container) {
+  private configModule() {
     for (const Module of modules) {
-      container
-        .bind<StartModule>(TYPES.StartModule)
-        .toDynamicValue(
-          (context: interfaces.Context) =>
-            new Module(context.container.get<Logger>(TYPES.Logger))
-        );
+      this.container.bind<StartModule>(TYPES.StartModule, 'dynamic', Module, [
+        TYPES.Logger
+      ]);
     }
   }
 
-  private configCacheService(container: Container) {
-    container
-      .bind<ICacheServer>(TYPES.CacheService)
-      .toDynamicValue(
-        (context: interfaces.Context) =>
-          new CacheService(context.container.get<Logger>(TYPES.Logger))
-      )
-      .inSingletonScope();
+  private configCacheService() {
+    this.container.bind<ICacheServer>(
+      TYPES.CacheService,
+      'dynamic',
+      CacheService,
+      [TYPES.Logger],
+      'singleton'
+    );
   }
 
-  private configCacheIOService(container: Container) {
-    container
-      .bind<CacheIO>(TYPES.CacheIO)
-      .toDynamicValue(
-        (context: interfaces.Context) =>
-          new RedisIOServer(context.container.get<Logger>(TYPES.Logger))
-      )
-      .inSingletonScope();
+  private configCacheIOService() {
+    this.container.bind<CacheIO>(
+      TYPES.CacheIO,
+      'dynamic',
+      RedisIOServer,
+      [TYPES.Logger],
+      'singleton'
+    );
   }
 
-  private configServer(container: Container) {
-    container
-      .bind<Server<unknown>>(TYPES.Framework)
-      .toDynamicValue(
-        (context: interfaces.Context) =>
-          new FastifyServer(
-            context.container.get<Logger>(TYPES.Logger),
-            context.container.get<CacheIO>(TYPES.CacheIO)
-          )
-      );
+  private configServer() {
+    this.container.bind<Server<unknown>>(
+      TYPES.Framework,
+      'dynamic',
+      FastifyServer,
+      [TYPES.Logger, TYPES.CacheIO],
+      'singleton'
+    );
   }
 
-  private configDatabase(container: Container) {
-    container
-      .bind<DatabaseConnection<unknown>>(TYPES.DatabaseConnection)
-      .toDynamicValue(
-        (context: interfaces.Context) =>
-          new PostgresDatabase(context.container.get<Logger>(TYPES.Logger))
-      );
+  private configDatabase() {
+    this.container.bind<DatabaseConnection<unknown>>(
+      TYPES.DatabaseConnection,
+      'dynamic',
+      PostgresDatabase,
+      [TYPES.Logger],
+      'singleton'
+    );
   }
 
-  private configEventBus(container: Container) {
-    container
-      .bind<EventBus>(TYPES.EventBus)
-      .toDynamicValue((context: interfaces.Context) => {
-        const { user, password, host, port, queue, exchange } =
-          config.buses.rabbitmq;
+  private configEventBus() {
+    const { user, password, host, port, queue, exchange } =
+      config.buses.rabbitmq;
 
-        return new RabbitMQEventBus(
-          context.container.get<Logger>(TYPES.Logger),
-          {
-            user,
-            password,
-            host,
-            port,
-            queue,
-            exchange,
-            retries: 5,
-            interval: 60
-          }
-        );
-      })
-      .inSingletonScope();
+    this.container.bind<EventBus>(
+      TYPES.EventBus,
+      'dynamic',
+      RabbitMQEventBus,
+      [
+        TYPES.Logger,
+        {
+          user,
+          password,
+          host,
+          port,
+          queue,
+          exchange,
+          retries: 5,
+          interval: 60
+        }
+      ],
+      'singleton'
+    );
   }
 }

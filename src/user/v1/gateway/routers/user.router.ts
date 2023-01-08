@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable } from '@container';
 import { RouterC } from '@/shared/infrastructure/router/router.class';
 import Controllers from '@/user/v1/gateway/controllers';
 import { Logger } from '@/shared/domain/logger';
@@ -28,7 +28,7 @@ export class UserRouter extends RouterC<Array<Router>> {
             params: req.params,
             query: req.query,
             headers: req.headers,
-            cookies: {},
+            cookies: (req as any)?.cookies || {},
             path: (req as any)?.path || (req as any)?.routerPath
           };
 

@@ -9,7 +9,9 @@ RUN pm2 install pm2-logrotate
 RUN yarn install --network-timeout 100000
 RUN yarn build
 
-EXPOSE 4000
+ARG PORT
+
+EXPOSE $PORT
 
 RUN mkdir -p /app/logs
 

@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable } from '@container';
 import { WatchLogger } from '@/shared/infrastructure/logger/watch.logger';
 import { DomainErrorToHttpStatus } from '@/shared/domain/errors/lib/DomainErrorToHttpStatus';
 import { DomainError } from '@/shared/domain/errors/lib/DomainError';

@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable } from '@container';
 import { logError, logSuccess, Logger } from '@/shared/domain/logger';
 
 @injectable()

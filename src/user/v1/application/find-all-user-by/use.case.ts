@@ -1,5 +1,4 @@
-import { inject } from 'inversify';
-import { provide } from '@/shared/infrastructure/d-injection/decorators/provider';
+import { inject, provide } from '@container';
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { UseCase } from '@/shared/infrastructure/use-cases/UseCase';
 import { UserRepository } from '@/user/v1/domain/repositories/user.repository';

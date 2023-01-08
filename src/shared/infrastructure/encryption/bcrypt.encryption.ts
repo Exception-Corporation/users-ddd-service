@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable } from '@container';
 import { IEncrypt } from '@/shared/domain/encryption/encrypt.interface';
 import bcrypt from 'bcrypt';
 

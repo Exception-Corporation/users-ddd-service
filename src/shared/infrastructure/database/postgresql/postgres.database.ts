@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { injectable, inject } from 'inversify';
+import { injectable, inject } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { DataSource } from 'typeorm';
 import { DatabaseConnection } from '@/shared/domain/database/database.interface';

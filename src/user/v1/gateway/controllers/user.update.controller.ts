@@ -1,4 +1,4 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable } from '@container';
 import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { TYPES as TYPES_SHARED } from '@/shared/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';

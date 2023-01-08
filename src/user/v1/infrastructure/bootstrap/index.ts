@@ -1,10 +1,7 @@
-import { inject, injectable } from 'inversify';
+import { inject, injectable, container } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { StartModule } from '@/shared/domain/bootstrap';
 import { Logger } from '@/shared/domain/logger';
-
-import { AppContainer } from '@/shared/infrastructure/d-injection/container';
-
 import { UserContainerModule } from '@/user/v1/infrastructure/d-injection/config';
 
 export const moduleName = 'user/v1';
@@ -16,7 +13,7 @@ export class UserBootstrap implements StartModule {
   async init(): Promise<void> {
     try {
       // independency injection
-      AppContainer.load(UserContainerModule);
+      new UserContainerModule(container).register();
 
       this.logger.info(`[${moduleName}] Module started`);
     } catch (error) {
