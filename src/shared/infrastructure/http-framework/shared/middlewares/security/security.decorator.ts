@@ -1,5 +1,5 @@
+import { container } from '@container';
 import { AutorizationRouter } from '@/shared/infrastructure/http-framework/fastify/middlewares/security.middleware';
-import { container } from '@/shared/infrastructure/container';
 
 export function GuardWithJwt(roles: Array<string>) {
   return (target: Function) => {

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { container } from '@/shared/infrastructure/container';
+import { container } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { AppDependencies } from '@/shared/infrastructure/d-injection/config';
 import { StartModule } from '@/shared/domain/bootstrap';

@@ -1,4 +1,3 @@
-import { container } from '@/shared/infrastructure/container';
 import { IDependencyContainer } from '@/shared/domain/container/dependency.container';
 
 import config from '@/shared/infrastructure/config';

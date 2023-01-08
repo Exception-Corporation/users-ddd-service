@@ -1,5 +1,4 @@
-import { inject, injectable } from '@container';
-import { container } from '@/shared/infrastructure/container';
+import { inject, injectable, container } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { StartModule } from '@/shared/domain/bootstrap';
 import { Logger } from '@/shared/domain/logger';

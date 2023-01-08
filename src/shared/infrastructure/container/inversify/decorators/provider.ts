@@ -1,4 +1,4 @@
-import { container } from '@/shared/infrastructure/container';
+import { container } from '@container';
 
 export function provide(type: any) {
   return (target: any) => {

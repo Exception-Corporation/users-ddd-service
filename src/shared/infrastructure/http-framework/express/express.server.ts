@@ -1,6 +1,5 @@
-import { injectable, inject } from '@container';
+import { injectable, inject, container } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
-import { container } from '@/shared/infrastructure/container';
 import express, { Application as app } from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';

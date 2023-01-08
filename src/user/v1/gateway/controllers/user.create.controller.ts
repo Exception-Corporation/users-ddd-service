@@ -3,13 +3,11 @@ import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
 import { CreateUserDTO } from '@/user/v1/gateway/dtos/create.user.dto';
-import { User } from '@/user/v1/domain/user/user.aggregate.root';
 import { CreateUserUseCase } from '@/user/v1/application/create-user/use.case';
 import {
   Controller,
   Context
 } from '@/shared/infrastructure/controller/decorators/controller';
-import { Role } from '@/shared/infrastructure/http-framework/shared/roles';
 import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
 
 @Controller({
@@ -87,17 +85,8 @@ export class UserCreateController extends BaseController {
           CreateUserDTO
         );
 
-      userToCreate.role = userToCreate.role || Role.STANDARD;
-
       const response = await this.createUserUseCase.execute(
-        User.fromPrimitives({
-          ...userToCreate,
-          id: 0,
-          createdAt: Date.now().toString(),
-          updatedAt: Date.now().toString(),
-          active: true,
-          role: userToCreate.role
-        })
+        CreateUserDTO.toDomain(userToCreate)
       );
 
       const { status, success, contain } = response.toPrimitives();

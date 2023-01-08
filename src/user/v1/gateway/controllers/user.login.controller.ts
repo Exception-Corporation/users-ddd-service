@@ -3,9 +3,6 @@ import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { IRequestAdapter } from '@/shared/domain/interfaces/request.adapter';
 import { LoginUserDTO } from '@/user/v1/gateway/dtos/login.user.dto';
-import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
-import { UserUsername } from '@/user/v1/domain/user/value-objects/user.username';
-import { UserPassword } from '@/user/v1/domain/user/value-objects/user.password';
 import { LoginUserUseCase } from '@/user/v1/application/login-user/use.case';
 import {
   Context,
@@ -62,19 +59,14 @@ export class UserLoginController extends BaseController {
 
   async execute(ctx: Context) {
     try {
-      const { email, username, password }: LoginUserDTO =
-        await this.requestAdapter.validateData(
-          ctx.body.user,
-          ['password', 'OR:email,username'],
-          LoginUserDTO
-        );
+      const login: LoginUserDTO = await this.requestAdapter.validateData(
+        ctx.body.user,
+        ['password', 'OR:email,username'],
+        LoginUserDTO
+      );
 
       const response = await this.loginUseCase.execute(
-        {
-          email: email ? new UserEmail(email) : undefined,
-          username: username ? new UserUsername(username) : undefined
-        },
-        new UserPassword(password)
+        LoginUserDTO.toDomain(login)
       );
 
       const { status, success, contain } = response.toPrimitives();

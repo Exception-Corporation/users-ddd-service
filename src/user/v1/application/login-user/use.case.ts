@@ -24,10 +24,15 @@ export class LoginUserUseCase extends UseCase {
     super();
   }
 
-  async execute(
-    { email, username }: { email?: UserEmail; username?: UserUsername },
-    password: UserPassword
-  ): Promise<Response> {
+  async execute({
+    email,
+    username,
+    password
+  }: {
+    email: UserEmail | undefined;
+    username: UserUsername | undefined;
+    password: UserPassword;
+  }): Promise<Response> {
     const user = await this.userRepository.getUserByLogin(
       {
         email: email?.valueOf(),

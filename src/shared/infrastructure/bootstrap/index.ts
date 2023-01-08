@@ -1,4 +1,4 @@
-import { injectable, inject } from '@container';
+import { injectable, inject, container } from '@container';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
 import { StartModule } from '@/shared/domain/bootstrap';
 import { Server } from '@/shared/domain/http-framework/server.interface';
@@ -6,7 +6,6 @@ import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import config from '@/shared/infrastructure/config';
 import { Logger } from '@/shared/domain/logger';
 import { AppDependencies } from '@/shared/infrastructure/d-injection/config';
-import { container } from '@/shared/infrastructure/container';
 import { ICacheServer } from '@/shared/domain/cache/cache.server';
 import { DatabaseConnection } from '@/shared/domain/database/database.interface';
 import { DomainEventSubscriber } from '@/shared/domain/event-bus/domain.event.subscriber';

@@ -1,4 +1,4 @@
-import { injectable, inject } from '@container';
+import { injectable, inject, container } from '@container';
 import Fastify, {
   FastifyInstance,
   FastifyRequest,
@@ -8,7 +8,6 @@ import Fastify, {
 import fastifyStatic from '@fastify/static';
 import rateLimit from '@fastify/rate-limit';
 import { TYPES } from '@/shared/infrastructure/d-injection/types';
-import { container } from '@/shared/infrastructure/container';
 import swagger from '@/shared/infrastructure/http-framework/shared/open.api';
 import { Server } from '@/shared/domain/http-framework/server.interface';
 import config from '@/shared/infrastructure/config';
