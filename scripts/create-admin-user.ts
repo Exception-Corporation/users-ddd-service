@@ -11,7 +11,7 @@ declare const process: any;
   try {
     await database.connect();
 
-    UserModel.save({
+    await UserModel.save({
       firstname: 'admin',
       lastname: '1.0',
       username: 'admin',
