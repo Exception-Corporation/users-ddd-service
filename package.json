@@ -18,7 +18,7 @@
     "db:migration:generate": "yarn --silent typeorm migration:generate",
     "start:prod": "pm2 start ecosystem.yml",
     "prepare": "husky install",
-    "create:user": "ORM_UP=1 --silent ts-node -r tsconfig-paths/register scripts/create-admin-user.ts",
+    "create:user": "ORM_UP=1 ts-node -r tsconfig-paths/register scripts/create-admin-user.ts --silent",
     "build:prod": "docker build -f Dockerfile -t edgarcv99/users-api .",
     "publisher": "docker login && docker push edgarcv99/users-api"
   },
