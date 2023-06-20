@@ -5,7 +5,7 @@ set -e
 
 # Declare function to check if Postgres is available
 check_postgres_availability() {
-  until POSTGRES_HOST=$postgres_host yarn typeorm query 'SELECT datname FROM pg_database' ; do
+  until POSTGRES_HOST=$postgres_host POSTGRES_PORT=5432 yarn typeorm query 'SELECT datname FROM pg_database' ; do
     >&2 echo "Postgres is unavailable - sleeping"
     sleep 1
   done
@@ -13,7 +13,7 @@ check_postgres_availability() {
 
 # Declare function to create initial database configuration
 create_initial_config() {
-  until POSTGRES_HOST=$postgres_host yarn --silent db:migration:generate migrations/InitialConfig ; do
+  until POSTGRES_HOST=$postgres_host POSTGRES_PORT=5432 yarn --silent db:migration:generate migrations/InitialConfig ; do
     >&2 echo "Migration creating"
     sleep 1
     break
@@ -22,7 +22,7 @@ create_initial_config() {
 
 # Declare function to run database migrations
 run_database_migrations() {
-  until POSTGRES_HOST=$postgres_host yarn --silent db:migrate  ; do
+  until POSTGRES_HOST=$postgres_host POSTGRES_PORT=5432 yarn --silent db:migrate  ; do
     >&2 echo "Migration running"
     sleep 1
     break
@@ -31,7 +31,7 @@ run_database_migrations() {
 
 # Declare function to create admin user
 create_admin_user() {
-  until POSTGRES_HOST=$postgres_host yarn create:user ; do
+  until POSTGRES_HOST=$postgres_host POSTGRES_PORT=5432 yarn create:user ; do
     >&2 echo "Creating admin"
     sleep 1
     break
