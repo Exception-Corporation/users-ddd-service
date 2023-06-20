@@ -13,4 +13,7 @@ apps:
       REDIS_HOSTNAME: redis-users
       POSTGRES_HOST: postgres-users
       RABBITMQ_HOST: rabbitmq-users
+      RABBITMQ_PORT: 5673
+      POSTGRES_PORT: 5433
+      REDIS_PORT: 6380
       PROJECT_MODE: production
