@@ -24,9 +24,9 @@ import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
 })
 @GuardWithJwt(ALL_ROLES)
 @schema({
-  description: 'Service to create new user',
+  description: 'Service to update new user',
   tags: ['User'],
-  summary: 'Create service (User)',
+  summary: 'Update service (User)',
   headers: {
     Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
   },
