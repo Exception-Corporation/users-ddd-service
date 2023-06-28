@@ -14,9 +14,9 @@ import { schema } from '@/shared/infrastructure/http-framework/shared/schema';
   path: '/missing/password/:email'
 })
 @schema({
-  description: 'Service to delete user',
+  description: 'Service to get password',
   tags: ['User'],
-  summary: 'Delete service (User)',
+  summary: 'Get Password service (User)',
   params: {
     email: 'test@test.com'
   },
