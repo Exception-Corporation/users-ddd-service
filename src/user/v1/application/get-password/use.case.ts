@@ -14,7 +14,6 @@ import { UserRepository } from '@/user/v1/domain/repositories/user.repository';
 import { UserNotFound } from '@/shared/domain/errors/domain-errors/UserNotFound';
 import { EventBus } from '@/shared/domain/event-bus/event.bus';
 import { SendEmailDomainEvent } from '@/user/v1/domain/events/send.emai.event';
-import config from '@/shared/infrastructure/config';
 import HttpStatus from '@/shared/domain/errors/lib/HttpStatus';
 
 @provide(TYPES.GetPasswordUseCase)
@@ -28,7 +27,7 @@ export class GetPasswordUseCase extends UseCase {
     super();
   }
 
-  async execute(email: UserEmail): Promise<Response> {
+  async execute(email: UserEmail, url: string): Promise<Response> {
     const emailTo = email.valueOf();
 
     const userFound = await this.repository.findById(0, emailTo);
@@ -40,7 +39,7 @@ export class GetPasswordUseCase extends UseCase {
       emailTo
     );
 
-    await this.publish(emailTo, access_token);
+    await this.publish(emailTo, access_token, url);
 
     let response: ResponsePrimitive = {
       success: true,
@@ -67,17 +66,14 @@ export class GetPasswordUseCase extends UseCase {
     });
   }
 
-  private async publish(email: string, token: string) {
+  private async publish(email: string, token: string, url: string) {
     await this.eventBus.publish([
       new SendEmailDomainEvent(
         Identifier.random().valueOf(),
         {
           to: email,
-          subject: 'Recover password in CRM',
-          html: missingPassword(
-            email,
-            `${config.mailer.nodemailer.front}?token=${token}`
-          )
+          subject: 'Recover password in DE Bagstore',
+          html: missingPassword(email, `${url}?token=${token}`)
         },
         new Date()
       )

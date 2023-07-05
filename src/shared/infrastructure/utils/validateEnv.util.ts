@@ -44,7 +44,6 @@ const validateEnv = () => {
     MAILER_PORT: str(),
     MAILER_EMAIL: email(),
     MAILER_PASSWORD: str(),
-    MAILER_FRONT: str(),
 
     RATE_LIMIT_DURATION_MS: str(),
     RATE_LIMIT_MAX_REQUESTS_WITHIN_DURATION: str(),

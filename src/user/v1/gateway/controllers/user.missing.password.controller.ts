@@ -3,6 +3,7 @@ import { TYPES } from '@/user/v1/infrastructure/d-injection/types';
 import { BaseController } from '@/shared/infrastructure/controller/base.controller';
 import { UserEmail } from '@/user/v1/domain/user/value-objects/user.email';
 import { GetPasswordUseCase } from '@/user/v1/application/get-password/use.case';
+import { DTOPropertiesError } from '@/shared/domain/errors/domain-errors/DTOPropertiesError';
 import {
   Context,
   Controller
@@ -44,9 +45,13 @@ export class UserMissingPasswordController extends BaseController {
   async execute(ctx: Context) {
     try {
       const { email } = ctx.params;
+      const { url } = ctx.body;
+
+      if (!url) throw new DTOPropertiesError(['url']);
 
       const response = await this.getPasswordUseCase.execute(
-        new UserEmail(email)
+        new UserEmail(email),
+        url
       );
 
       const { status, success, contain } = response.toPrimitives();
